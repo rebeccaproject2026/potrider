@@ -2,15 +2,15 @@ import { useLocation } from "react-router-dom";
 import { Bell } from "lucide-react";
 
 const routeTitleMap = {
-  "/pt": "Dashboard",
-  "/pt/orders": "Orders",
-  "/pt/tracking": "Tracking",
-  "/pt/inventory": "Inventory",
-  "/pt/finances": "Finances",
-  "/pt/customers": "Customers",
-  "/pt/ai-agent": "AI Agent",
-  "/pt/marketing": "Marketing",
-  "/pt/staff": "Staff",
+  "/": "Dashboard",
+  "/orders": "Orders",
+  "/tracking": "Tracking",
+  "/inventory": "Inventory",
+  "/finances": "Finances",
+  "/customers": "Customers",
+  "/ai-agent": "AI Agent",
+  "/marketing": "Marketing",
+  "/staff": "Staff",
 };
 
 const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {

@@ -16,14 +16,14 @@ import settingIocon from "../assets/images/settings.svg";
 import portriderLogo from "../assets/images/potrider-logo.svg";
 
 const navItems = [
-  { to: "/pt", label: "Dashboard", Icon: dashboardIocon },
-  { to: "/pt/orders", label: "Orders", Icon: ordersIocon },
-  { to: "/pt/tracking", label: "Tracking", Icon: trackingIocon },
-  { to: "/pt/inventory", label: "Inventory", Icon: inventoryIocon },
-  { to: "/pt/finances", label: "Finances", Icon: financeIocon },
-  { to: "/pt/customers", label: "Customers", Icon: customersIocon },
-  { to: "/pt/ai-agent", label: "AI Agent", Icon: aiagentIocon },
-  { to: "/pt/marketing", label: "Marketing", Icon: marketingIocon },
+  { to: "/", label: "Dashboard", Icon: dashboardIocon },
+  { to: "/orders", label: "Orders", Icon: ordersIocon },
+  { to: "/tracking", label: "Tracking", Icon: trackingIocon },
+  { to: "/inventory", label: "Inventory", Icon: inventoryIocon },
+  { to: "/finances", label: "Finances", Icon: financeIocon },
+  { to: "/customers", label: "Customers", Icon: customersIocon },
+  { to: "/ai-agent", label: "AI Agent", Icon: aiagentIocon },
+  { to: "/marketing", label: "Marketing", Icon: marketingIocon },
 ];
 
 const Sidebar = ({ sidebar, setSidebar }) => {
@@ -61,7 +61,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             <NavLink
               key={to}
               to={to}
-              end={to === "/pt"}
+              end={to === "/"}
               onClick={handleNavClick}
               className={({ isActive }) =>
                 `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
@@ -99,7 +99,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
           {staffOpen && (
             <div className="ml-8 mt-1 space-y-1 text-sm">
               <NavLink
-                to="/pt/staff/ai-admin"
+                to="/staff/ai-admin"
                 className={({ isActive }) =>
                   `block px-3 py-1.5 rounded ${
                     isActive
@@ -112,7 +112,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               </NavLink>
 
               <NavLink
-                to="/pt/staff/add-driver"
+                to="/staff/add-driver"
                 className={({ isActive }) =>
                   `block px-3 py-1.5 rounded ${
                     isActive
@@ -125,7 +125,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               </NavLink>
 
               <NavLink
-                to="/pt/staff/drivers"
+                to="/staff/drivers"
                 className={({ isActive }) =>
                   `block px-3 py-1.5 rounded ${
                     isActive
@@ -144,7 +144,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         <div className="px-2 text-gray-600 font-medium space-y-1 pt-2 pb-2">
           {/* support menu */}
           <NavLink
-            to="/pt/support"
+            to="/support"
             onClick={handleNavClick}
             className={({ isActive }) =>
               `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
@@ -160,7 +160,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
 
           {/* setting menu */}
           <NavLink
-            to="/pt/setting"
+            to="/setting"
             onClick={handleNavClick}
             className={({ isActive }) =>
               `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
