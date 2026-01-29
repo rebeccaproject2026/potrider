@@ -30,7 +30,7 @@ const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {
           ☰
         </button>
 
-        <h1 className="text-base sm:text-lg font-bold text-gray-700">
+        <h1 className="text-base sm:text-lg font-semibold text-[#212121]">
           {routeTitleMap[activeTitle]}
         </h1>
       </div>

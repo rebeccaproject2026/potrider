@@ -26,7 +26,7 @@ const navItems = [
   { to: "/marketing", label: "Marketing", Icon: marketingIocon },
 ];
 
-const Sidebar = ({ sidebar, setSidebar }) => {
+const Sidebar = ({ setSidebar }) => {
   const [staffOpen, setStaffOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -56,7 +56,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         </div>
 
         {/* Main nav */}
-        <div className="px-2 text-gray-600 font-medium space-y-1 flex-1 overflow-y-auto">
+        <div className="px-2 space-y-1 text-[#212121]  flex-1 overflow-y-auto">
           {navItems.map(({ to, label, Icon }) => (
             <NavLink
               key={to}
@@ -64,10 +64,10 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               end={to === "/"}
               onClick={handleNavClick}
               className={({ isActive }) =>
-                `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
-                  isActive && activeMenu === null
-                    ? "bg-green-500 text-white"
-                    : "text-gray-600 hover:bg-green-100"
+                `px-3 py-2 flex items-center gap-3 rounded-sm transition-colors ${isActive && activeMenu === null
+                  ? "bg-[var(--color-primary)] text-white"
+                  : "text-[#212121] font-medium tracking-wide hover:bg-[var(--color-primary-soft)]"
+
                 }`
               }
             >
@@ -79,11 +79,10 @@ const Sidebar = ({ sidebar, setSidebar }) => {
           {/* staff manu */}
           <button
             onClick={handleStaffClick}
-            className={`w-full px-3 py-1.5 flex items-center justify-between rounded transition-colors ${
-              activeMenu === "staff"
-                ? "bg-green-500 text-white"
-                : "text-gray-600 hover:bg-green-100"
-            }`}
+            className={`w-full px-3 py-2 flex items-center justify-between rounded-sm transition-colors ${activeMenu === "staff"
+              ? "bg-[var(--color-primary)] text-white"
+              : "text-[#212121] hover:bg-green-100"
+              }`}
           >
             <div className="flex items-center gap-3">
               <img src={staffIocon} className="w-5 h-5" alt="Staff" />
@@ -101,10 +100,9 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               <NavLink
                 to="/staff/ai-admin"
                 className={({ isActive }) =>
-                  `block px-3 py-1.5 rounded ${
-                    isActive
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-green-100"
+                  `block px-3 py-1.5 rounded ${isActive
+                    ? "bg-green-100 text-green-700"
+                    : "text-[#212121] font-medium hover:bg-green-100"
                   }`
                 }
               >
@@ -114,10 +112,9 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               <NavLink
                 to="/staff/add-driver"
                 className={({ isActive }) =>
-                  `block px-3 py-1.5 rounded ${
-                    isActive
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-green-100"
+                  `block px-3 py-1.5 rounded ${isActive
+                    ? "bg-green-100 text-green-700"
+                    : "text-[#212121] font-medium hover:bg-green-100"
                   }`
                 }
               >
@@ -127,10 +124,9 @@ const Sidebar = ({ sidebar, setSidebar }) => {
               <NavLink
                 to="/staff/drivers"
                 className={({ isActive }) =>
-                  `block px-3 py-1.5 rounded ${
-                    isActive
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-green-100"
+                  `block px-3 py-1.5 rounded ${isActive
+                    ? "bg-green-100 text-green-700"
+                    : "text-[#212121] font-medium hover:bg-green-100"
                   }`
                 }
               >
@@ -141,16 +137,15 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         </div>
 
         {/* Bottom Menu Items */}
-        <div className="px-2 text-gray-600 font-medium space-y-1 pt-2 pb-2">
+        <div className="px-2 text-[#212121] font-medium space-y-1 pt-2 pb-2">
           {/* support menu */}
           <NavLink
             to="/support"
             onClick={handleNavClick}
             className={({ isActive }) =>
-              `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
-                isActive && activeMenu === null
-                  ? "bg-green-500 text-white"
-                  : "text-gray-600 hover:bg-green-100"
+              `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${isActive && activeMenu === null
+                ? "bg-green-500 text-white"
+                : "text-[#212121] hover:bg-green-100"
               }`
             }
           >
@@ -163,10 +158,9 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             to="/setting"
             onClick={handleNavClick}
             className={({ isActive }) =>
-              `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${
-                isActive && activeMenu === null
-                  ? "bg-green-500 text-white"
-                  : "text-gray-600 hover:bg-green-100"
+              `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${isActive && activeMenu === null
+                ? "bg-green-500 text-white"
+                : "text-[#212121] hover:bg-green-100"
               }`
             }
           >

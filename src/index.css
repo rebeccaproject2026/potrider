@@ -1,1 +1,36 @@
 @import "tailwindcss";
+@import "./styles/variable.css";
+@import "./styles/fonts.css";
+@import "mapbox-gl/dist/mapbox-gl.css";
+
+/* =========================
+   🎨 TAILWIND CSS v4 CONFIGURATION
+   ========================= */
+@theme {
+  /* Configure default sans-serif font family to use Montserrat */
+  /* This makes all Tailwind utilities (text-base, font-medium, font-semibold, etc.) use Montserrat */
+  --font-family-sans: var(--font-family-base);
+  
+  /* Create custom font-base utility class (use: font-base in your components) */
+  /* Example: <div className="font-base">This uses Montserrat</div> */
+  --font-family-base: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* =========================
+   GLOBAL FONT APPLICATION
+   ========================= */
+* {
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: var(--line-height-base);
+  margin: 0;
+  padding: 0;
+}
