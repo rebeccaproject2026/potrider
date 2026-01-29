@@ -33,7 +33,7 @@ const Layout = () => {
         />
 
         {/* Page content */}
-        <div className="flex-1 p-2 bg-[#F4F7FB] overflow-auto">
+        <div className="flex-1 p-2 bg-[#F2F2F2] overflow-auto">
           <Outlet />
         </div>
       </div>
