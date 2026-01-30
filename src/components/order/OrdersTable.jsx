@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, Search, Download, Eye, Trash2 } from "lucide-react";
 import * as XLSX from "xlsx";
-import Select from "./Select";
+import Select from "../Select";
 
 /**
  * Reusable Orders Table Component

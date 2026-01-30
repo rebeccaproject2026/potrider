@@ -2,8 +2,8 @@ import { useCallback, useState, useMemo } from "react";
 import ordersIcon from "../../assets/images/orders.svg";
 import { Icon } from "@iconify/react";
 import DatePickerMap from "../../components/DatePickerMap";
-import OrdersTable from "../../components/OrdersTable";
-import OrderAnalytics from "../../components/OrderAnalytics";
+import OrdersTable from "../../components/order/OrdersTable";
+import OrderAnalytics from "../../components/order/OrderAnalytics";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
@@ -320,7 +320,7 @@ const Order = () => {
 
 
   return (
-    <div className="min-w-0 max-w-full p-2 md:p-4 overflow-x-hidden">
+    <div className="min-w-0 max-w-full  overflow-x-hidden">
       {/* Header - fixed */}
       <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <DatePickerMap

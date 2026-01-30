@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import Chart from "react-apexcharts";
 import { X, ArrowUp, ArrowDown, Minus } from "lucide-react";
-import { getDateRange } from "../utils/dateUtils";
+import { getDateRange } from "../../utils/dateUtils";
 
 /**
  * Reusable Order Analytics Component

@@ -15,10 +15,16 @@ const routeTitleMap = {
 
 const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {
   const location = useLocation();
+  const pathname = location.pathname;
 
-  const activeTitle = Object.keys(routeTitleMap).find(
-    (path) => location.pathname === path,
-  );
+  // Order details: /orders/:orderId
+  const isOrderDetails = /^\/orders\/[^/]+$/.test(pathname);
+
+  const activeTitle = isOrderDetails
+    ? "Order Details"
+    : Object.keys(routeTitleMap).find((path) => pathname === path);
+
+  const displayTitle = isOrderDetails ? "Order Details" : routeTitleMap[activeTitle];
 
   return (
     <nav className="w-full px-4 sm:px-6 h-16 flex items-center justify-between bg-white">
@@ -31,7 +37,7 @@ const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {
         </button>
 
         <h1 className="text-base sm:text-lg font-semibold text-[#212121]">
-          {routeTitleMap[activeTitle]}
+          {displayTitle}
         </h1>
       </div>
 

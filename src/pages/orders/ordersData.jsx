@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Eye, Trash2 } from "lucide-react";
 
 /**
@@ -9,12 +10,12 @@ export const getOrdersColumns = (onView, onDelete) => [
     accessorKey: "orderId",
     header: "Order#",
     cell: (info) => (
-      <a
-        href="#"
+      <Link
+        to={`/orders/${info.getValue()}`}
         className="text-[12px] text-blue-600 hover:underline font-medium"
       >
         {info.getValue()}
-      </a>
+      </Link>
     ),
   },
   {

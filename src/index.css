@@ -111,3 +111,63 @@ body {
   background: rgba(0, 0, 0, .5);
 }
 
+/* =========================
+   ORDER DETAILS PAGE
+   ========================= */
+.order-details-custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ced4da;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  background: white;
+}
+.order-details-custom-checkbox:checked {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+.order-details-custom-checkbox:checked::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 20px;
+}
+.order-details-custom-checkbox:disabled {
+  cursor: default;
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
+}
+.order-details-custom-checkbox:disabled::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 20px;
+}
+
+/* Order tracking panel: fixed slide-in on mobile */
+@media (max-width: 1279px) {
+  .order-details-col-right.order-details-tracking-open {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 380px;
+    z-index: 50;
+    border-radius: 0;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+  }
+}
+
