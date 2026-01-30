@@ -5,11 +5,11 @@ import DashboardHeader from "../../components/DashboardHeader.jsx";
 
 const Layout = () => {
   const [sidebar, setSidebar] = useState(false);
-  let user = true;
+  // let user = true;
 
   return (
-    <div className="flex h-screen w-full">
-      <div className="hidden sm:block">
+    <div className="flex h-screen w-full overflow-hidden">
+      <div className="hidden sm:block flex-shrink-0">
         <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
       </div>
 
@@ -25,15 +25,15 @@ const Layout = () => {
         </div>
       )}
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 min-w-0 overflow-x-hidden overflow-y-auto hide-scrollbar">
         <DashboardHeader
           sidebar={sidebar}
           setSidebar={setSidebar}
           userName="Akash"
         />
 
-        {/* Page content */}
-        <div className="flex-1 p-2 bg-[#F2F2F2] overflow-auto">
+        {/* Page content: prevent horizontal overflow, allow vertical scroll */}
+        <div className="flex-1 min-w-0 min-h-0 p-2 bg-[#F2F2F2] overflow-x-hidden">
           <Outlet />
         </div>
       </div>

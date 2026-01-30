@@ -16,7 +16,7 @@ const InventoryHealth = ({ data, onViewAll }) => {
   return (
     <div className="bg-white rounded-sm shadow p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-[#000000]">Inventory</h2>
+        <h2 className="text-base font-semibold text-[#000000]">Inventory</h2>
         <button
           onClick={onViewAll}
           className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"

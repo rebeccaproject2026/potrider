@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import DatePickerMap from "../../components/DatePickerMap";
 import DashboardChart from "../../components/dashboard/DashboardChart";
 import InventoryHealth from "../../components/dashboard/InventoryHealth";
 import OrderHealth from "../../components/dashboard/OrderHealth";
@@ -17,7 +17,8 @@ const Dashboard = () => {
     fullName: "Chillin Cheetah",
   };
 
-  const [timePeriod] = useState("This Month");
+  // eslint-disable-next-line no-unused-vars
+  const [dateRange, setDateRange] = useState({ start: null, end: null });
 
   // Top stat cards data
   const topStats = [
@@ -259,10 +260,10 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold text-[#212121] mb-4 md:mb-0">
           👋 Hi, {user.fullName}
         </h1>
-        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-          {timePeriod}
-          <ChevronDown className="w-4 h-4" />
-        </button>
+        <DatePickerMap
+          defaultItem={2}
+          onUpdate={(range) => setDateRange({ start: range.start, end: range.end })}
+        />
       </div>
 
       {/* Top Stats Grid */}

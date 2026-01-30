@@ -26,11 +26,88 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+html, body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: 400;
   line-height: var(--line-height-base);
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
+
+body {
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* =========================
+   ANALYTICS SLIDER STYLING
+   ========================= */
+.charts-slider-1 {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
+
+.charts-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.charts-title-1 {
+  font-weight: 600;
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+
+.charts-closer {
+  color: #666;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.charts-closer:hover {
+  color: #333;
+}
+
+.first-card {
+  border: 1px solid #ddd;
+  background-color: #f2f2f2;
+  border-radius: 15px;
+}
+
+.second-card {
+  margin-top: 16px;
+  background: #F8F9FA;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}
+
+/* Analytics backdrop: semi-transparent light grey like image (not black, not white) */
+.analytics-backdrop {
+  background: rgba(0, 0, 0, .5);
+}
+

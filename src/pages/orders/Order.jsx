@@ -1,21 +1,61 @@
-import { useState, useMemo } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useState, useMemo } from "react";
 import ordersIcon from "../../assets/images/orders.svg";
 import { Icon } from "@iconify/react";
+import DatePickerMap from "../../components/DatePickerMap";
+import OrdersTable from "../../components/OrdersTable";
+import OrderAnalytics from "../../components/OrderAnalytics";
+import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
-  const [timePeriod, setTimePeriod] = useState("This Month");
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [dateRange, setDateRange] = useState({ start: null, end: null });
+  const [filters, setFilters] = useState({
+    driver: "",
+    orderMethod: "",
+    orderStatus: "",
+    orderType: "",
+    paymentMethod: "",
+    paymentStatus: "",
+  });
+
+  // Analytics state
+  const [analyticsState, setAnalyticsState] = useState({
+    isOpen: false,
+    title: "",
+    data: [],
+    headers: [],
+    keys: {},
+  });
+
+  // Handlers - defined first
+  const handleView = useCallback((row) => {
+    console.log("View order:", row);
+    // Add your view logic here
+  }, []);
+
+  const handleDelete = useCallback((row) => {
+    console.log("Delete order:", row);
+    // Add your delete logic here
+  }, []);
+
+  const handleFilterChange = useCallback((filterName, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [filterName]: value,
+    }));
+  }, []);
+
+  const handleSearch = useCallback((value) => {
+    console.log("Search:", value);
+    // Search is handled internally by OrdersTable
+  }, []);
+
+  // Get columns and data - after handlers are defined
+  const columns = useMemo(
+    () => getOrdersColumns(handleView, handleDelete),
+    [handleView, handleDelete]
+  );
+  const tableData = useMemo(() => getOrdersData(), []);
 
   // Orders summary data
   const ordersSummary = {
@@ -72,35 +112,41 @@ const Order = () => {
   };
 
   // Instore section
-  const instoreOrders = {
-    shipping: {
-      title: "New Orders",
-      orders: 25,
-      amount: "$20,235.99",
-      change: "-8%",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-500",
-      icon: ordersIcon,
-    },
-    delivered: {
-      title: "Delivered",
-      orders: 5,
-      amount: "$899.62",
-      change: "+10%",
-      bgColor: "bg-green-50",
-      borderColor: "border-green-500",
-      icon: ordersIcon,
-    },
-    cancelled: {
-      title: "Cancelled",
-      orders: 5,
-      amount: "$899.62",
-      change: "+10%",
-      bgColor: "bg-red-50",
-      borderColor: "border-red-500",
-      icon: ordersIcon,
-    },
-  };
+  // const instoreOrders = {
+  //   shipping: {
+  //     title: "New Orders",
+  //     color: "#0066FF",
+  //     iconsBg: "#E3EEFF",
+  //     orders: 25,
+  //     amount: "$20,235.99",
+  //     change: "-8%",
+  //     bgColor: "bg-blue-50",
+  //     borderColor: "border-blue-500",
+  //     icon: ordersIcon,
+  //   },
+  //   delivered: {
+  //     title: "Delivered",
+  //     orders: 5,
+  //     amount: "$899.62",
+  //     change: "+10%",
+  //     color: "#109F22",
+  //     iconsBg: "#D4FFDA",
+  //     bgColor: "bg-green-50",
+  //     borderColor: "border-green-500",
+  //     icon: ordersIcon,
+  //   },
+  //   cancelled: {
+  //     title: "Cancelled",
+  //     orders: 5,
+  //     amount: "$899.62",
+  //     change: "+10%",
+  //     color: "#F44336",
+  //     iconsBg: "#FEECEB",
+  //     bgColor: "bg-red-50",
+  //     borderColor: "border-red-500",
+  //     icon: ordersIcon,
+  //   },
+  // };
 
   // Delivery section
   const deliveryOrders = {
@@ -109,6 +155,8 @@ const Order = () => {
       orders: 25,
       amount: "$20,235.99",
       change: "-8%",
+      color: "#0066FF",
+      iconsBg: "#E3EEFF",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-500",
       icon: ordersIcon,
@@ -118,6 +166,8 @@ const Order = () => {
       orders: 10,
       amount: "$1,320.15",
       change: "+5%",
+      color: "#FF9800",
+      iconsBg: "#FFF5E5",
       bgColor: "bg-orange-50",
       borderColor: "border-orange-500",
       icon: ordersIcon,
@@ -127,6 +177,8 @@ const Order = () => {
       orders: 15,
       amount: "$1,320.15",
       change: "+5%",
+      color: "#9C27B0",
+      iconsBg: "#F9DFFE",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-500",
       icon: ordersIcon,
@@ -136,261 +188,160 @@ const Order = () => {
       orders: 5,
       amount: "$899.62",
       change: "+10%",
+      color: "#109F22",
+      iconsBg: "#D4FFDA",
       bgColor: "bg-green-50",
       borderColor: "border-green-500",
       icon: ordersIcon,
     },
   };
 
-  // Sample table data
-  const tableData = [
-    {
-      id: "1",
-      orderId: "1754305282",
-      customer: "Frank Niya",
-      phone: "(416) 558-9584",
-      price: "$210.00",
-      cash: "$0.00",
-      coupon: "FREE-PREROLLS",
-      eap: "BAT",
-      courier: "Sergei Savchenko",
-      grand: "$105 Saved $31",
-      paymentMethod: "Cash On Delivery",
-      paymentStatus: "Pending",
-      method: "Online",
-      type: "Delivery Same Day",
-      city: "Oakville, Ontario",
-      date: "26 August, 2025 08:41 PM",
-      deliveryStatus: "Ordered",
-    },
-    {
-      id: "2",
-      orderId: "1754305282",
-      customer: "Frank Niya",
-      phone: "(416) 558-9584",
-      price: "$210.00",
-      cash: "$0.00",
-      coupon: "FREE-PREROLLS",
-      eap: "BAT",
-      courier: "Sergei Savchenko",
-      grand: "$105 Saved $31",
-      paymentMethod: "Cash On Delivery",
-      paymentStatus: "Pending",
-      method: "Online",
-      type: "Delivery Same Day",
-      city: "Oakville, Ontario",
-      date: "26 August, 2025 08:41 PM",
-      deliveryStatus: "Ordered",
-    },
-    {
-      id: "3",
-      orderId: "1754305282",
-      customer: "Frank Niya",
-      phone: "(416) 558-9584",
-      price: "$210.00",
-      cash: "$0.00",
-      coupon: "FREE-PREROLLS",
-      eap: "$21",
-      courier: "Sergei Savchenko",
-      grand: "$105",
-      paymentMethod: "Cash On Delivery",
-      paymentStatus: "Pending",
-      method: "Online",
-      type: "Delivery Same Day",
-      city: "Oakville, Ontario",
-      date: "26 August, 2025 08:41 PM",
-      deliveryStatus: "Ordered",
-    },
-  ];
+  const handleDateUpdate = useCallback((range) => {
+    setDateRange((prev) => {
+      if (
+        prev.start === range.start &&
+        prev.end === range.end
+      ) {
+        return prev; // prevent re-render
+      }
+      return {
+        start: range.start,
+        end: range.end,
+      };
+    });
+  }, []);
 
-  const columns = [
-    {
-      accessorKey: "orderId",
-      header: "Order#",
-      cell: (info) => <span className="text-xs">{info.getValue()}</span>,
-      size: 80,
-    },
-    {
-      accessorKey: "customer",
-      header: "Details",
-      cell: (info) => (
-        <div>
-          <div className="font-medium text-xs">
-            {info.row.original.customer}
-          </div>
-          <div className="text-xs text-gray-500">{info.row.original.phone}</div>
-        </div>
-      ),
-      size: 120,
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: (info) => <span className="text-xs">{info.getValue()}</span>,
-      size: 70,
-    },
-    {
-      accessorKey: "coupon",
-      header: "Coupon",
-      cell: (info) => (
-        <span className="text-xs truncate">{info.getValue()}</span>
-      ),
-      size: 100,
-    },
-    {
-      accessorKey: "courier",
-      header: "Courier",
-      cell: (info) => (
-        <span className="text-xs truncate">{info.getValue()}</span>
-      ),
-      size: 100,
-    },
-    {
-      accessorKey: "grand",
-      header: "Grand Total",
-      cell: (info) => <span className="text-xs">{info.getValue()}</span>,
-      size: 90,
-    },
-    {
-      accessorKey: "paymentMethod",
-      header: "Payment",
-      cell: (info) => (
-        <span className="text-xs truncate">{info.getValue()}</span>
-      ),
-      size: 100,
-    },
-    {
-      accessorKey: "paymentStatus",
-      header: "Status",
-      cell: (info) => (
-        <span className="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap">
-          {info.getValue()}
-        </span>
-      ),
-      size: 80,
-    },
-    {
-      accessorKey: "type",
-      header: "Type",
-      cell: (info) => (
-        <span className="text-xs truncate">{info.getValue()}</span>
-      ),
-      size: 90,
-    },
-    {
-      accessorKey: "city",
-      header: "City",
-      cell: (info) => (
-        <span className="text-xs truncate">{info.getValue()}</span>
-      ),
-      size: 100,
-    },
-    {
-      accessorKey: "date",
-      header: "Date",
-      cell: (info) => <span className="text-xs">{info.getValue()}</span>,
-      size: 120,
-    },
-    {
-      accessorKey: "deliveryStatus",
-      header: "Delivery",
-      cell: (info) => (
-        <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap">
-          {info.getValue()}
-        </span>
-      ),
-      size: 80,
-    },
-    {
-      accessorKey: "id",
-      header: "Action",
-      cell: () => (
-        <button className="text-blue-500 hover:text-blue-700 text-lg">⋯</button>
-      ),
-      size: 50,
-    },
-  ];
+  const handleOpenAnalytics = useCallback((item) => {
+    // Prepare analytics data based on item title
+    // Map item title to delivery status
+    const statusMap = {
+      "New Orders": "Ordered",
+      "Processing": "Processing",
+      "Shipped": "Shipped",
+      "In-Transit": "In-Transit",
+      "Delivered": "Delivered",
+      "Packed": "Packed",
+      "Out for Delivery": "Out For Delivery",
+    };
 
-  const table = useReactTable({
-    data: tableData,
-    columns,
-    state: {
-      sorting,
-      columnFilters,
-      globalFilter,
-    },
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-  });
+    // Filter data by status and add date fields for analytics
+    const filteredData = tableData
+      .filter((order) => {
+        return order.deliveryStatus === statusMap[item.title];
+      })
+      .map((order) => {
+        // Parse date string to Date object for filtering
+        let orderDate = new Date();
+        if (order.date) {
+          // Parse "29 January, 2026" format
+          const parsedDate = new Date(order.date);
+          if (!isNaN(parsedDate.getTime())) {
+            orderDate = parsedDate;
+          }
+        }
+
+        return {
+          ...order,
+          createdAt: orderDate.toISOString(),
+          updatedAt: orderDate.toISOString(),
+        };
+      });
+
+    setAnalyticsState({
+      isOpen: true,
+      title: item.title,
+      data: filteredData,
+      headers: ["Order Id", "Order Created", "Amount"],
+      keys: {
+        idKey: "id",
+        firstKey: "orderId",
+        secondKey: "date",
+        thirdKey: "grandTotal",
+      },
+    });
+  }, [tableData]);
+
+  const handleCloseAnalytics = useCallback(() => {
+    setAnalyticsState((prev) => ({ ...prev, isOpen: false }));
+  }, []);
 
   const OrderCard = ({ item }) => (
-    <div
-      className={`rounded-md p-2.5 flex items-center gap-2.5 bg-white min-w-0`}
-    >
-      <div className="shrink-0">
-        <Icon
-          icon="solar:documents-outline"
-          width="22"
-          height="22"
-          color={item.color}
-          style={{
-            backgroundColor: item.iconsBg,
-            padding: "1px",
-            borderRadius: "12px",
-          }}
-        />
+    <div className="bg-white rounded-md border border-gray-200 p-3 flex items-center justify-between gap-3 min-w-0">
+      {/* Left */}
+      <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
+          <p
+            className="text-[13px] font-semibold truncate mb-2"
+            style={{ color: item.color }}
+          >
+            {item.title} ({item.orders})
+          </p>
+          <div
+            className="w-9 h-9 flex items-center justify-center rounded-lg shrink-0"
+            style={{ backgroundColor: item.iconsBg }}
+          >
+            <Icon
+              icon="solar:documents-outline"
+              width="18"
+              height="18"
+              color={item.color}
+            />
+          </div>
+          <button className="text-[12px] text-[#3F4753] font-bold underline hover:underline mt-2">
+            View Orders
+          </button>
+        </div>
       </div>
-      <div className="grow min-w-0">
-        <p
-          className="text-xs font-semibold mb-0.5 truncate"
-          style={{ color: item.color }}
-        >
-          {item.title} ({item.orders})
-        </p>
-        <p className="text-base font-bold text-gray-900 truncate">
+
+      {/* Right */}
+      <div className="min-w-0 flex-shrink-0">
+        <p className="text-base font-bold text-gray-900 mb-0.5">
           {item.amount}
         </p>
-      </div>
-      <div className="shrink-0 text-right">
-        {/* <p className="text-xs text-gray-600 whitespace-nowrap">{item.orders}</p> */}
-        <p
-          className={`text-xs font-semibold ${
-            item.change.startsWith("+") ? "text-green-600" : "text-red-600"
-          }`}
+        <span
+          className={`text-xs font-semibold flex justify-end ${item.change.startsWith("+")
+            ? "text-green-600"
+            : "text-red-600"
+            }`}
         >
           {item.change}
-        </p>
+        </span>
+        <div className="flex justify-end">
+          <button
+            onClick={() => handleOpenAnalytics(item)}
+            className="text-[10px] text-[#3F4753] font-bold underline hover:underline mt-6"
+          >
+            Analytics
+          </button>
+        </div>
       </div>
     </div>
   );
 
+
   return (
-    <div className="p-2 md:p-4 min-h-screen">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
-          Orders
-        </h1>
+    <div className="min-w-0 max-w-full p-2 md:p-4 overflow-x-hidden">
+      {/* Header - fixed */}
+      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+        <DatePickerMap
+          defaultItem={2}
+          onUpdate={handleDateUpdate}
+        />
+
         <div className="flex gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-            {timePeriod}
-            <ChevronDown className="w-4 h-4" />
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-semibold">
+          <button className="flex items-center gap-2 px-2 py-2.5 bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm">
             + Create Order
           </button>
         </div>
       </div>
 
-      {/* Shipping Section */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Shipping</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      {/* Shipping Section - fixed */}
+      <div className="flex-shrink-0 mb-4 min-w-0">
+        <h2 className="text-sm font-semibold text-[#000000] mb-2 ml-1">
+          Shipping
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 min-w-0">
           {Object.values({
             0: ordersSummary.shipping,
             1: ordersSummary.processing,
@@ -404,153 +355,45 @@ const Order = () => {
       </div>
 
       {/* Instore Section */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Instore</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* <div className="mb-4">
+        <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Instore</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 min-w-0">
           {Object.values(instoreOrders).map((item, idx) => (
             <OrderCard key={idx} item={item} />
           ))}
         </div>
-      </div>
+      </div> */}
 
-      {/* Delivery Section */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Delivery</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Delivery Section - fixed */}
+      <div className="flex-shrink-0 mb-4 min-w-0">
+        <h2 className="text-sm font-semibold text-gray-800 mb-2">Delivery</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
           {Object.values(deliveryOrders).map((item, idx) => (
             <OrderCard key={idx} item={item} />
           ))}
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={globalFilter ?? ""}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-      </div>
+      {/* Orders Table Component */}
+      <OrdersTable
+        data={tableData}
+        columns={columns}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onSearch={handleSearch}
+        onView={handleView}
+        onDelete={handleDelete}
+      />
 
-      {/* Filters */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Driver</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Order Method</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Order Status</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Order Type</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Payment Method</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-          <option>Payment Status</option>
-        </select>
-      </div>
-
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-2 py-2 text-left text-xs font-semibold text-gray-700 whitespace-nowrap"
-                    >
-                      <button
-                        onClick={header.column.getToggleSortingHandler()}
-                        className="hover:text-gray-900 flex items-center gap-1"
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </button>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={cell.id}
-                        className="px-2 py-2 text-xs text-gray-800 whitespace-nowrap"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={columns.length}
-                    className="px-2 py-2 text-center text-gray-500 text-xs"
-                  >
-                    No orders found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination */}
-        <div className="flex items-center justify-between px-3 py-2 border-t border-gray-200 bg-gray-50">
-          <div className="text-xs text-gray-600">
-            Showing{" "}
-            {table.getState().pagination.pageIndex *
-              table.getState().pagination.pageSize +
-              1}{" "}
-            to{" "}
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
-              tableData.length,
-            )}{" "}
-            of {tableData.length} results
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-              className="p-1.5 border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              className="p-1.5 border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Order Analytics Component */}
+      <OrderAnalytics
+        title={analyticsState.title}
+        data={analyticsState.data}
+        headers={analyticsState.headers}
+        keys={analyticsState.keys}
+        isOpen={analyticsState.isOpen}
+        onClose={handleCloseAnalytics}
+      />
     </div>
   );
 };
