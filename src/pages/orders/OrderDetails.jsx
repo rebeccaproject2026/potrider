@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Trash2, X, Save, Check } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 // Delivery process steps (order matters)
 const DELIVERY_STEPS = [
@@ -144,13 +147,10 @@ const OrderDetails = () => {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-2">
             <div>
               <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                <Link
-                  to="/orders"
-                  className="text-gray-600 hover:text-gray-900"
-                  title="Back to Orders"
-                >
-                  <ArrowLeft className="w-5 h-5" />
+                <Link to="/orders" className="text-gray-600 hover:text-gray-900">
+                  <Icon icon="material-symbols:arrow-left-alt-rounded" className="w-6 h-6 " />
                 </Link>
+
                 Order Number: {order.orderId}
               </h2>
               <p className="text-sm text-gray-600 mt-1">Date: {order.date}</p>
@@ -158,9 +158,10 @@ const OrderDetails = () => {
             <button
               type="button"
               onClick={() => setShowDeleteModal(true)}
-              className="inline-flex items-center gap-1 px-3 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700"
+              className="inline-flex items-center gap-1 px-3 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-sm hover:bg-red-700"
             >
-              <Trash2 className="w-4 h-4" />
+              <Icon icon="mdi:trash-can" className="w-5 h-5" />
+
               Delete Order
             </button>
           </div>
@@ -182,19 +183,19 @@ const OrderDetails = () => {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <a href="#" className="text-sm font-medium text-blue-600 hover:underline">
+                <a href="#" className="text-base font-semibold text-[#000] underline">
                   {item.name}
                 </a>
-                <p className="text-xs text-gray-500">Qty: {item.qty}</p>
+                <p className="text-sm text-gray-500">Qty: {item.qty}</p>
               </div>
-              <div className="flex gap-8 text-sm">
+              <div className="flex gap-12 text-sm">
                 <span className="text-gray-600">
                   Items<br />
-                  <span className="font-medium text-gray-900">{item.items}</span>
+                  <span className="font-medium flex justify-center text-gray-900">{item.items}</span>
                 </span>
                 <span className="text-gray-600">
                   Price<br />
-                  <span className="font-medium text-gray-900">{item.price}</span>
+                  <span className="font-medium text-sm text-gray-900">{item.price}</span>
                 </span>
                 <span className="text-gray-600">
                   Total<br />
@@ -208,7 +209,7 @@ const OrderDetails = () => {
           <div className="space-y-1 text-sm ">
             <div className="flex justify-between items-center mb-2">
               <strong>Subtotal</strong>
-              <div className="flex gap-6">
+              <div className="flex gap-10">
                 <span className="font-semibold">{order.subtotalItems}</span>
                 <span className="font-semibold">{order.subtotalAmount}</span>
               </div>
@@ -276,15 +277,15 @@ const OrderDetails = () => {
           className={`order-details-col-right shrink-0 w-full xl:max-w-[380px] bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden ${trackingOpen ? "order-details-tracking-open block" : "hidden"
             } xl:block`}
         >
-          <div className="bg-[#0066FF] text-white px-3 py-2 flex justify-between items-center">
-            <h3 className="text-base font-semibold">Order Tracking</h3>
+          <div className="bg-[var(--color-secondary)] text-white px-3 py-3.5 flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Order Tracking</h3>
             <button
               type="button"
               onClick={() => setTrackingOpen(false)}
               className="xl:hidden p-1 hover:bg-white/20 rounded"
               aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <Icon icon="mdi:close" className="w-5 h-5" />
             </button>
           </div>
           <div className="p-3 border-b border-gray-200">
@@ -295,9 +296,9 @@ const OrderDetails = () => {
             </span>
           </div>
           <div className="p-3">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3">Delivery Process</h4>
-            <div className="relative pl-6">
-              <div className="absolute left-[11px] top-0 bottom-0 w-px bg-gray-200" />
+            <h4 className="text-sm font-semibold text-gray-900 mb-4">Delivery Process</h4>
+            <div className="relative ">
+              {/* <div className="absolute left-[11px] top-0 bottom-0 w-px bg-gray-200" /> */}
               {DELIVERY_STEPS.map((step, idx) => (
                 <div key={step.key} className="relative flex items-start gap-3 pb-4 last:pb-0">
                   <div className="relative z-10 flex items-center justify-center mt-0.5">
@@ -320,7 +321,7 @@ const OrderDetails = () => {
                     <p className="text-sm text-gray-500">{step.description}</p>
                     {stepChecked[step.key] && step.key === "Ordered" && order.completedAt && (
                       <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                        <Check className="w-3 h-3" />
+                        <Icon icon="mdi:check-circle-outline" className="w-3 h-3" />
                         Completed on {order.completedAt}
                       </p>
                     )}
@@ -329,22 +330,22 @@ const OrderDetails = () => {
               ))}
             </div>
           </div>
-          <div className="p-3 pt-0 flex flex-wrap justify-end gap-2 border-t border-gray-200">
+          <div className="p-3 pt-4 flex flex-wrap justify-end gap-2 border-t border-gray-200">
             <button
               type="button"
               onClick={handleCancelOrder}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700"
+              className="inline-flex items-center gap-2 px-3 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-sm hover:bg-red-700"
             >
-              <Save className="w-4 h-4" />
+              <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
               Cancel Order
             </button>
             <button
               type="button"
               onClick={handleSaveChanges}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-[#0066FF] text-white text-sm font-medium rounded hover:bg-blue-700 disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-3 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
             >
-              <Save className="w-4 h-4" />
+              <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
               Save Changes
             </button>
           </div>

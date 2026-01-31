@@ -41,10 +41,10 @@ const TopSellingProducts = ({ data, onViewAll }) => {
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#333333] truncate">{product.name}</p>
+              <p className="text-sm font-semibold text-[#333333] truncate">{product.name}</p>
             </div>
             <div className="text-right flex-shrink-0">
-              <p className="text-sm font-medium text-[#333333]">{product.price}</p>
+              <p className="text-sm font-semibold text-[#333333]">{product.price}</p>
             </div>
           </div>
         ))}

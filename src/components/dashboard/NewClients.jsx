@@ -48,7 +48,7 @@ const NewClients = ({ data, onViewAll }) => {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900">{client.name}</p>
+              <p className="text-sm font-semibold text-gray-900">{client.name}</p>
               <p className="text-xs font-[450] text-[#6B7280]">{client.orders} Orders</p>
             </div>
             <div className="text-right flex-shrink-0">

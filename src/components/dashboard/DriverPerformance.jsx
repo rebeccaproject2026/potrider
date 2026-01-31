@@ -83,11 +83,11 @@ const DriverPerformance = ({ data, onViewAll }) => {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#333333]">{driver.name}</p>
+              <p className="text-sm font-semibold text-[#333333]">{driver.name}</p>
               <p className="text-xs text-[#6B7280]">{driver.onlineHours} online</p>
             </div>
             <div className="text-right flex-shrink-0">
-              <p className="text-sm font-medium text-[#333333]">{driver.deliveries} deliveries</p>
+              <p className="text-sm font-semibold text-[#333333]">{driver.deliveries} deliveries</p>
               <p className="text-xs text-[#3F4753]">{driver.collected} collected</p>
             </div>
           </div>
