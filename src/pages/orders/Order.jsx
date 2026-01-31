@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import DatePickerMap from "../../components/DatePickerMap";
 import OrdersTable from "../../components/order/OrdersTable";
 import OrderAnalytics from "../../components/order/OrderAnalytics";
+import OrderDetailsDrawer from "./OrderDetailsDrawer";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
@@ -27,10 +28,18 @@ const Order = () => {
     keys: {},
   });
 
+  // Order details drawer state
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
+
   // Handlers - defined first
   const handleView = useCallback((row) => {
-    console.log("View order:", row);
-    // Add your view logic here
+    setSelectedOrder(row ?? null);
+    setIsOrderDrawerOpen(true);
+  }, []);
+
+  const handleCloseOrderDrawer = useCallback(() => {
+    setIsOrderDrawerOpen(false);
   }, []);
 
   const handleDelete = useCallback((row) => {
@@ -393,6 +402,13 @@ const Order = () => {
         keys={analyticsState.keys}
         isOpen={analyticsState.isOpen}
         onClose={handleCloseAnalytics}
+      />
+
+      {/* Order Details Drawer – opens on Eye icon click */}
+      <OrderDetailsDrawer
+        isOpen={isOrderDrawerOpen}
+        onClose={handleCloseOrderDrawer}
+        selectedOrder={selectedOrder}
       />
     </div>
   );
