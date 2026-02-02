@@ -9,6 +9,7 @@ import Marketing from "./pages/marketing/Marketing";
 import Staff from "./pages/staff/Staff";
 import Order from "./pages/orders/Order";
 import OrderDetails from "./pages/orders/OrderDetails";
+import CreateOrder from "./pages/orders/CreateOrder";
 import Tracking from "./pages/tracking/Tracking";
 import AIAgents from "./pages/aiagents/AIAgents";
 import Support from "./pages/support/Support";
@@ -29,6 +30,7 @@ function App() {
 
           <Route path="inventory" element={<Inventory />} />
           <Route path="orders" element={<Order />} />
+          <Route path="orders/create" element={<CreateOrder />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
           <Route path="tracking" element={<Tracking />} />
           <Route path="finances" element={<Finances />} />

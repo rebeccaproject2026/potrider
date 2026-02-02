@@ -1,4 +1,5 @@
 import { useCallback, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import ordersIcon from "../../assets/images/orders.svg";
 import { Icon } from "@iconify/react";
 import DatePickerMap from "../../components/DatePickerMap";
@@ -8,6 +9,7 @@ import OrderDetailsDrawer from "./OrderDetailsDrawer";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
+  const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
   const [dateRange, setDateRange] = useState({ start: null, end: null });
   const [filters, setFilters] = useState({
@@ -338,12 +340,36 @@ const Order = () => {
         />
 
         <div className="flex gap-4">
-          <button className="flex items-center gap-2 px-2 py-2.5 bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm">
+          <button
+            onClick={() => navigate("/orders/create")}
+            className="flex items-center gap-2 px-2 py-2.5 bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
+          >
             + Create Order
           </button>
         </div>
       </div>
 
+
+
+      {/* Instore Section */}
+      {/* <div className="mb-4">
+        <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Instore</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 min-w-0">
+          {Object.values(instoreOrders).map((item, idx) => (
+            <OrderCard key={idx} item={item} />
+          ))}
+        </div>
+      </div> */}
+
+      {/* Delivery Section - fixed */}
+      <div className="flex-shrink-0 mb-4 min-w-0">
+        <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Delivery</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
+          {Object.values(deliveryOrders).map((item, idx) => (
+            <OrderCard key={idx} item={item} />
+          ))}
+        </div>
+      </div>
       {/* Shipping Section - fixed */}
       <div className="flex-shrink-0 mb-4 min-w-0">
         <h2 className="text-sm font-semibold text-[#000000] mb-2 ml-1">
@@ -362,27 +388,6 @@ const Order = () => {
           ))}
         </div>
       </div>
-
-      {/* Instore Section */}
-      {/* <div className="mb-4">
-        <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Instore</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 min-w-0">
-          {Object.values(instoreOrders).map((item, idx) => (
-            <OrderCard key={idx} item={item} />
-          ))}
-        </div>
-      </div> */}
-
-      {/* Delivery Section - fixed */}
-      <div className="flex-shrink-0 mb-4 min-w-0">
-        <h2 className="text-sm font-semibold text-gray-800 mb-2">Delivery</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
-          {Object.values(deliveryOrders).map((item, idx) => (
-            <OrderCard key={idx} item={item} />
-          ))}
-        </div>
-      </div>
-
       {/* Orders Table Component */}
       <OrdersTable
         data={tableData}

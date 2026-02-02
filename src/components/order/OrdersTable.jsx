@@ -270,41 +270,46 @@ const OrdersTable = ({
         </div>
 
         {/* Bottom row: Filter dropdowns starting with Driver */}
-        <div className="flex flex-wrap items-center gap-2 mt-2">
+        <div className="flex items-center gap-2 col-span-2">
           <Select
             value={filters.driver || ""}
             onChange={(e) => onFilterChange?.("driver", e.target.value)}
             options={filterOptions.driver}
             placeholder="Drivers"
-            minWidth="185px"
+            className="w-10"
+            minWidth="10%"
           />
           <Select
             value={filters.orderMethod || ""}
             onChange={(e) => onFilterChange?.("orderMethod", e.target.value)}
             options={filterOptions.orderMethod}
             placeholder="Order Method"
-            minWidth="200px"
+            className="w-full"
+            minWidth="10%"
           />
           <Select
             value={filters.orderStatus || ""}
             onChange={(e) => onFilterChange?.("orderStatus", e.target.value)}
             options={filterOptions.orderStatus}
             placeholder="Order Status"
-            minWidth="200px"
+            className="w-full"
+            minWidth="10%"
           />
           <Select
             value={filters.orderType || ""}
             onChange={(e) => onFilterChange?.("orderType", e.target.value)}
             options={filterOptions.orderType}
             placeholder="Order Type"
-            minWidth="200px"
+            className="w-full"
+            minWidth="10%"
           />
           <Select
             value={filters.paymentMethod || ""}
             onChange={(e) => onFilterChange?.("paymentMethod", e.target.value)}
             options={filterOptions.paymentMethod}
             placeholder="Payment Method"
-            minWidth="200px"
+            className="w-full"
+            minWidth="10%"
           />
           <div className="flex items-center gap-2">
             <Select
@@ -312,7 +317,7 @@ const OrdersTable = ({
               onChange={(e) => onFilterChange?.("paymentStatus", e.target.value)}
               options={filterOptions.paymentStatus}
               placeholder="Payment Status"
-              minWidth="200px"
+              minWidth="10%"
             />
             <button
               onClick={handleExportToExcel}

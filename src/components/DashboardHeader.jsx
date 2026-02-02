@@ -17,14 +17,21 @@ const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {
   const location = useLocation();
   const pathname = location.pathname;
 
-  // Order details: /orders/:orderId
-  const isOrderDetails = /^\/orders\/[^/]+$/.test(pathname);
+  // Order details: /orders/:orderId (exclude /orders/create)
+  const isCreateOrder = pathname === "/orders/create";
+  const isOrderDetails = /^\/orders\/[^/]+$/.test(pathname) && !isCreateOrder;
 
-  const activeTitle = isOrderDetails
-    ? "Order Details"
-    : Object.keys(routeTitleMap).find((path) => pathname === path);
+  const activeTitle = isCreateOrder
+    ? "Create Order"
+    : isOrderDetails
+      ? "Order Details"
+      : Object.keys(routeTitleMap).find((path) => pathname === path);
 
-  const displayTitle = isOrderDetails ? "Order Details" : routeTitleMap[activeTitle];
+  const displayTitle = isCreateOrder
+    ? "Create Order"
+    : isOrderDetails
+      ? "Order Details"
+      : routeTitleMap[activeTitle];
 
   return (
     <nav className="w-full px-4 sm:px-6 h-16 flex items-center justify-between bg-white">

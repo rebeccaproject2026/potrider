@@ -2,6 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import Select from "../../components/Select";
 import PastOrderCard from "../../components/order/PastOrderCard";
+import StatsCards from "../../components/order/StatsCards";
+import ProductsTable from "../../components/order/productsTable";
 
 const DELIVERY_STEPS = [
   { key: "Ordered", label: "Ordered", description: "Order is in Ordered stage" },
@@ -460,55 +462,50 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
 
 
 
-            {/* Below address: Customer Stats + Most Bought Products + Past Orders heading */}
-            <p className="text-lg font-semibold text-[#000] mb-1">{customerName}&apos;s Stats</p>
-            <hr className=" border-gray-400" />
-            <p className="text-sm font-medium text-[#212529bf] mb-3 mt-2">Last ordered on {STATIC_LAST_ORDERED}</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mb-4">
-              {STATIC_CUSTOMER_STATS.map(({ label, value }) => (
-                <div key={label} className="border border-gray-200 rounded-sm bg-white p-2.5">
-                  <p className="text-xs text-[#212529] font-semibold">{label}</p>
-                  <p className="text-base font-bold text-gray-900 mt-0.5">{value}</p>
-                </div>
-              ))}
+            {/* Below address: Stats (title built in) + Most Bought (title built in) + Past Orders */}
+            <StatsCards
+              title={`${customerName}'s Stats`}
+              subtitle={`Last ordered on ${STATIC_LAST_ORDERED}`}
+              showDivider
+              stats={STATIC_CUSTOMER_STATS}
+              className="mb-1"
+            />
+
+            <div className="mt-5">
+              <ProductsTable
+                title={`${customerName}'s 5 Most Bought Products`}
+                showDivider
+                columns={[
+                  { key: "no", header: "No.", align: "left" },
+                  {
+                    key: "productName",
+                    header: "Product Name",
+                    align: "left",
+                    render: (row) => (
+                      <a href="#" className="text-[var(--color-secondary)] text-[12px] underline font-extralight">
+                        {row.productName}
+                      </a>
+                    ),
+                  },
+                  { key: "totalQty", header: "Total Qty", align: "right" },
+                  { key: "amountSpent", header: "Amount Spent", align: "right" },
+                  {
+                    key: "action",
+                    header: "Action",
+                    align: "left",
+                    render: () => (
+                      <a href="#" className="text-[var(--color-secondary)] hover:underline text-xs font-semibold">
+                        View Recent Order
+                      </a>
+                    ),
+                  },
+                ]}
+                data={STATIC_MOST_BOUGHT}
+                className="mb-4"
+              />
             </div>
 
-            <p className="text-lg font-semibold text-gray-900 mb-2 mt-5">{customerName}&apos;s 5 Most Bought Products</p>
-            <hr className=" border-gray-400" />
-            <div className="overflow-x-auto  mb-4">
-              <table className="w-full text-sm min-w-[400px]">
-                <thead>
-                  <tr className="border-b border-gray-200  text-left h-12">
-                    <th className="py-2 px-2 font-medium text-gray-700">No.</th>
-                    <th className="py-2 px-2 font-medium text-gray-700">Product Name</th>
-                    <th className="py-2 px-2 font-medium text-gray-700 text-right">Total Qty</th>
-                    <th className="py-2 px-2 font-medium text-gray-700 text-right">Amount Spent</th>
-                    <th className="py-2 px-2 font-medium text-gray-700">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {STATIC_MOST_BOUGHT.map((row) => (
-                    <tr key={row.no} className="border-b border-gray-100 last:border-0">
-                      <td className="py-2.5 px-2 text-gray-900">{row.no}</td>
-                      <td className="py-2.5 px-2">
-                        <a href="#" className="text-[var(--color-secondary)] text-[12px] underline font-extralight">
-                          {row.productName}
-                        </a>
-                      </td>
-                      <td className="py-2.5 px-2 text-right text-gray-700">{row.totalQty}</td>
-                      <td className="py-2.5 px-2 text-right text-gray-700">{row.amountSpent}</td>
-                      <td className="py-2.5 px-2">
-                        <a href="#" className="text-[var(--color-secondary)] hover:underline text-xs font-semibold">
-                          View Recent Order
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <p className="text-lg font-semibold text-gray-900 mb-2">{customerName}&apos;s Past Orders</p>
+            <p className="text-lg font-semibold text-black mb-1">{customerName}&apos;s Past Orders</p>
             <hr className="border-gray-400 mb-3" />
             {STATIC_PAST_ORDERS.map((pastOrder) => (
               <PastOrderCard key={pastOrder.orderId} order={pastOrder} />
