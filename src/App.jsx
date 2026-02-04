@@ -3,8 +3,10 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Layout from "./pages/layout/Layout";
 import Inventory from "./pages/inventory/Inventory";
+import AddInventory from "./pages/inventory/AddInventory";
 import Finances from "./pages/finances/Finances";
 import Customers from "./pages/customers/Customers";
+import AddCustomer from "./pages/customers/AddCustomer";
 import Marketing from "./pages/marketing/Marketing";
 import Staff from "./pages/staff/Staff";
 import Order from "./pages/orders/Order";
@@ -29,12 +31,14 @@ function App() {
           <Route index element={<Dashboard />} />
 
           <Route path="inventory" element={<Inventory />} />
+          <Route path="inventory/add" element={<AddInventory />} />
           <Route path="orders" element={<Order />} />
           <Route path="orders/create" element={<CreateOrder />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
           <Route path="tracking" element={<Tracking />} />
           <Route path="finances" element={<Finances />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="customers/add" element={<AddCustomer />} />
           <Route path="marketing" element={<Marketing />} />
           <Route path="ai-agent" element={<AIAgents />} />
 

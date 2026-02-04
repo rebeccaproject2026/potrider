@@ -18,6 +18,8 @@ const routeTitleMap = {
 
 const specificPathTitles = {
   "/orders/create": "Create Order",
+  "/inventory/add": "Add Inventory",
+  "/customers/add": "Add Customer",
   "/staff/ai-admin": "AI Administrator",
   "/staff/add-driver": "Add Driver",
   "/staff/drivers": "Drivers",

@@ -11,12 +11,15 @@ const Input = ({
   rightIcon,
   className = "",
   labelClassName = "",
+  compact = false,
   ...rest
 }) => {
-  const baseInputClass =
-    "w-full px-3 py-3 text-sm border rounded-sm bg-white text-[0000] font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ";
+  const paddingY = compact ? "py-2" : "py-3";
+  const baseInputClass = `w-full px-3 ${paddingY} text-sm border rounded-sm bg-white text-[0000] font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent `;
   const borderClass = error ? "border-red-500" : "border-[#DDDDDD]";
-  const inputClass = `${baseInputClass} ${borderClass} ${rightIcon ? "pr-10" : ""} ${className}`.trim();
+  const inputClass = `${baseInputClass} ${borderClass} ${
+    rightIcon ? "pr-10" : ""
+  } ${className}`.trim();
 
   const inputEl = (
     <input
@@ -37,7 +40,9 @@ const Input = ({
       {label && (
         <label
           htmlFor={id}
-          className={`block text-sm font-semibold text-[#212121] mb-1 ${labelClassName}`.trim()}
+          className={`block text-sm font-semibold text-[#212121] ${
+            compact ? "mb-0.5" : "mb-1"
+          } ${labelClassName}`.trim()}
         >
           {label}
         </label>

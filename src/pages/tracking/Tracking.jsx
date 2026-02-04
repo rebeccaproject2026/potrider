@@ -570,7 +570,7 @@ const Tracking = () => {
       </div>
 
       {/* Map section */}
-      <div className="flex-1 min-h-[420px] flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="flex-1 min-h-[560px] flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         {/* Row above map: status filters + Delivery/Shipping toggle */}
         <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b border-gray-200 bg-gray-50">
           <div className="flex flex-wrap gap-2">
@@ -622,7 +622,7 @@ const Tracking = () => {
         </div>
 
         {/* Map container with overlays */}
-        <div className="relative flex-1 min-h-[380px]">
+        <div className="relative flex-1 min-h-[520px]">
           {/* Map / Satellite toggle – top left of map */}
           <div className="absolute top-3 left-3 z-10 flex rounded-md overflow-hidden border border-gray-200 bg-white shadow-sm">
             <button
@@ -691,25 +691,65 @@ const Tracking = () => {
             </div>
           </div>
 
-          {/* Online Drivers – bottom left */}
-          <div className="absolute bottom-4 left-3 z-10 bg-white rounded-lg border border-gray-200 shadow-md px-3 py-2.5">
-            <div className="flex items-center gap-2">
-              <span className="flex w-8 h-8 items-center justify-center rounded-full bg-[#D4FFDA] text-[#109F22]">
-                <Icon icon="mdi:truck-delivery-outline" className="w-5 h-5" />
-              </span>
-              <span className="text-sm font-semibold text-gray-900">
-                Online Drivers 925
-              </span>
+          {/* Left bottom: stacked buttons + speech-bubble label (matches reference) */}
+          <div className="absolute bottom-4 left-3 z-10 flex items-start gap-3">
+            {/* Left stack */}
+            <div className="flex flex-col gap-3">
+              {/* Online drivers icon button */}
+              <button
+                type="button"
+                className="w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center"
+                aria-label="Online drivers"
+              >
+                <span className="w-10 h-10 rounded-full bg-[#D4FFDA] flex items-center justify-center">
+                  <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
+                </span>
+              </button>
+
+              {/* Secondary icon button */}
+              <button
+                type="button"
+                className="w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center"
+                aria-label="Secondary"
+              >
+                <span className="w-10 h-10 rounded-full bg-[#FEECEB] flex items-center justify-center">
+                  <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
+                </span>
+              </button>
+
+              {/* Layers thumbnail button */}
+              <button
+                type="button"
+                className="relative w-10 h-10 rounded-2xl overflow-hidden border border-gray-200 shadow-md"
+                aria-label="Layers"
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(34, 197, 94, 0.35) 40%, rgba(180, 83, 9, 0.9) 100%)",
+                  }}
+                />
+                <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_30%_40%,rgba(255,255,255,0.6),transparent_45%)]" />
+                <div className="absolute left-2 bottom-2 flex items-center gap-1 text-white">
+                  <Icon icon="mdi:layers-outline" className="w-4 h-4" />
+                  <span className="text-[11px] font-medium">Layers</span>
+                </div>
+              </button>
             </div>
-            <div className="flex gap-1 mt-2">
+
+            {/* Speech bubble label aligned with first button */}
+            <div className="relative mt-2 bg-white rounded-xl border border-gray-200 shadow-md px-4 py-2">
               <span
-                className="w-2 h-2 rounded-full bg-[#109F22]"
-                title="Online"
+                className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-white drop-shadow-[0_0_1px_rgba(0,0,0,0.2)]"
+                aria-hidden
               />
-              <span
-                className="w-2 h-2 rounded-full bg-gray-300"
-                title="Offline"
-              />
+              <div className="flex items-baseline gap-3">
+                <span className="text-sm font-medium text-gray-900">
+                  Online Drivers
+                </span>
+                <span className="text-sm font-bold text-gray-900">925</span>
+              </div>
             </div>
           </div>
 

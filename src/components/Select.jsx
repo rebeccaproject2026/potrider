@@ -46,6 +46,7 @@ const Select = ({
   getOptionImage = (o) => o.image ?? o.avatar ?? "",
   getOptionMeta = (o) => o.meta ?? "",
   minWidth = "100px",
+  compact = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,14 +55,21 @@ const Select = ({
 
   const isValueOnChangeMode = value !== undefined && onChange;
   const isMulti = multiple || Array.isArray(value);
-  const selectedValues = isMulti && Array.isArray(value) ? value : value != null && value !== "" ? [value] : [];
+  const selectedValues =
+    isMulti && Array.isArray(value)
+      ? value
+      : value != null && value !== ""
+      ? [value]
+      : [];
   const displayTitle = isValueOnChangeMode ? placeholder : title;
 
   const getDisplayOption = () => {
     if (isMulti) {
       if (selectedValues.length === 0) return "";
       if (selectedValues.length === 1) {
-        const opt = options.find((o) => getOptionValue(o) === selectedValues[0]);
+        const opt = options.find(
+          (o) => getOptionValue(o) === selectedValues[0]
+        );
         return opt ? getOptionLabel(opt) : String(selectedValues[0]);
       }
       return `${selectedValues.length} items selected`;
@@ -103,8 +111,8 @@ const Select = ({
 
   const filteredOptions = showSearch
     ? options.filter((item) =>
-      getOptionLabel(item)?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+        getOptionLabel(item)?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     : options;
 
   useEffect(() => {
@@ -140,7 +148,10 @@ const Select = ({
   const renderOptionContent = (item, index) => {
     const label = getOptionLabel(item);
     const image = showAvatar ? getOptionImage(item) : null;
-    const isHighlighted = highlightedIndex === index || (!isMulti && displayOption === label) || (isMulti && isSelected(item));
+    const isHighlighted =
+      highlightedIndex === index ||
+      (!isMulti && displayOption === label) ||
+      (isMulti && isSelected(item));
     const priceRange = item.priceRange ?? item.price ?? "";
     const stockStatus = item.stockStatus ?? "";
     const meta = showProductInfo ? getOptionMeta(item) : "";
@@ -149,7 +160,9 @@ const Select = ({
       return (
         <div
           className={`flex items-start gap-3 px-3 py-2.5 cursor-pointer border-b border-gray-100 last:border-0 transition ${
-            isHighlighted ? "bg-blue-600 text-white" : "bg-white text-gray-900 hover:bg-gray-50"
+            isHighlighted
+              ? "bg-blue-600 text-white"
+              : "bg-white text-gray-900 hover:bg-gray-50"
           }`}
           onClick={() => handleSelectOption(item)}
         >
@@ -167,21 +180,41 @@ const Select = ({
           {showAvatar && (
             <div className="w-10 h-10 rounded shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
               {image ? (
-                <img src={image} alt={label} className="w-full h-full object-cover" />
+                <img
+                  src={image}
+                  alt={label}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-gray-400 text-lg">📦</span>
               )}
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className={`font-bold text-sm ${isHighlighted ? "text-white" : "text-gray-900"}`}>{label}</p>
+            <p
+              className={`font-bold text-sm ${
+                isHighlighted ? "text-white" : "text-gray-900"
+              }`}
+            >
+              {label}
+            </p>
             {showProductInfo && (priceRange || stockStatus) && (
-              <p className={`text-xs mt-0.5 ${isHighlighted ? "text-blue-100" : "text-gray-600"}`}>
+              <p
+                className={`text-xs mt-0.5 ${
+                  isHighlighted ? "text-blue-100" : "text-gray-600"
+                }`}
+              >
                 {priceRange} {stockStatus ? `(${stockStatus})` : ""}
               </p>
             )}
             {showProductInfo && meta && (
-              <p className={`text-xs mt-1 truncate ${isHighlighted ? "text-blue-100" : "text-gray-400"}`}>{meta}</p>
+              <p
+                className={`text-xs mt-1 truncate ${
+                  isHighlighted ? "text-blue-100" : "text-gray-400"
+                }`}
+              >
+                {meta}
+              </p>
             )}
           </div>
         </div>
@@ -191,8 +224,11 @@ const Select = ({
     return (
       <li
         onClick={() => handleSelectOption(item)}
-        className={`px-2.5 py-2 cursor-pointer border-b border-gray-100 last:border-0 transition flex items-center gap-2 ${isHighlighted ? "bg-blue-100 font-medium" : "hover:bg-gray-100"
-          } ${displayOption === label ? "bg-gray-200 font-medium" : ""} ${highlightedIndex === index ? "bg-blue-100" : ""}`}
+        className={`px-2.5 py-2 cursor-pointer border-b border-gray-100 last:border-0 transition flex items-center gap-2 ${
+          isHighlighted ? "bg-blue-100 font-medium" : "hover:bg-gray-100"
+        } ${displayOption === label ? "bg-gray-200 font-medium" : ""} ${
+          highlightedIndex === index ? "bg-blue-100" : ""
+        }`}
       >
         {showCheckbox !== false && isMulti && (
           <input
@@ -218,13 +254,19 @@ const Select = ({
         type="button"
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
-        className="head-dr-dropdown form-select w-full min-h-[38px] px-2.5 py-3 text-[13px] border bg-white border-[#DDDDDD] rounded-sm text-[#0000] font-medium focus:outline-none cursor-pointer shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600"
+        className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border bg-white border-[#DDDDDD] rounded-sm text-[#0000] font-medium focus:outline-none cursor-pointer shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${
+          compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
+        }`}
       >
         <span className="overflow-hidden whitespace-nowrap text-sm flex-1 text-left text-gray-600">
           {displayOption || displayTitle}
         </span>
         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none flex items-center justify-center">
-          {isOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          {isOpen ? (
+            <ChevronUp className="w-3.5 h-3.5" />
+          ) : (
+            <ChevronDown className="w-3.5 h-3.5" />
+          )}
         </span>
       </button>
 
@@ -233,7 +275,9 @@ const Select = ({
           {showSearch && (
             <div className="p-2 border-b border-gray-200 shrink-0">
               {searchLabel && (
-                <label className="block text-xs font-medium text-gray-700 mb-1">{searchLabel}</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  {searchLabel}
+                </label>
               )}
               <input
                 type="text"
@@ -253,10 +297,14 @@ const Select = ({
             <div className="text-[13px] text-gray-700 max-h-60 overflow-y-auto flex-1 min-h-0">
               {filteredOptions.length > 0 ? (
                 filteredOptions.map((item, index) => (
-                  <div key={getOptionValue(item) ?? index}>{renderOptionContent(item, index)}</div>
+                  <div key={getOptionValue(item) ?? index}>
+                    {renderOptionContent(item, index)}
+                  </div>
                 ))
               ) : (
-                <div className="px-2.5 py-2 text-gray-400">No results found</div>
+                <div className="px-2.5 py-2 text-gray-400">
+                  No results found
+                </div>
               )}
             </div>
           ) : (

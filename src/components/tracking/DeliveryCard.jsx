@@ -19,21 +19,16 @@ const STATUS_COLORS = {
   },
 };
 
+const BAR_COLORS = {
+  pending: "bg-[#0066FF]",
+  inProgress: "bg-[#FF9800]",
+  delivered: "bg-[#109F22]",
+  cancelled: "bg-[#F44336]",
+};
+
 /**
- * Reusable delivery card for Tracking page – driver info, ETA, status, address, order breakdown.
- * Matches the order-page style and the tracking map overlay design.
- * @param {Object} props
- * @param {string} props.driverName - Driver display name
- * @param {string} [props.avatar] - Optional image URL for driver avatar
- * @param {boolean} [props.isOnline=true] - Online/Offline badge
- * @param {string} props.eta - ETA text e.g. "20 Jan 2025 at 11:00pm"
- * @param {string} props.status - "Pending" | "In-progress" | "Delivered" | "Cancelled"
- * @param {string} props.address - Delivery address
- * @param {number} props.totalOrders - Total order count
- * @param {Object} [props.breakdown] - { pending, inProgress, delivered, cancelled } counts
- * @param {string} [props.className] - Extra wrapper class (e.g. for map positioning)
- * @param {Function} [props.onShare] - Share button click
- * @param {Function} [props.onChat] - Chat button click
+ * Reusable delivery card for Tracking map – matches reference: driver, ETA, status, address, total orders stacked bar + legend.
+ * Slightly reduced size for a cleaner map overlay.
  */
 const DeliveryCard = ({
   driverName,
@@ -55,15 +50,22 @@ const DeliveryCard = ({
     cancelled = 0,
   } = breakdown;
   const statusStyle = STATUS_COLORS[status] || STATUS_COLORS.Pending;
+  const total = pending + inProgress + delivered + cancelled || 1;
+  const segments = [
+    { key: "pending", count: pending, color: BAR_COLORS.pending },
+    { key: "inProgress", count: inProgress, color: BAR_COLORS.inProgress },
+    { key: "delivered", count: delivered, color: BAR_COLORS.delivered },
+    { key: "cancelled", count: cancelled, color: BAR_COLORS.cancelled },
+  ].filter((s) => s.count > 0);
 
   return (
     <div
-      className={`bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden w-full max-w-[320px] ${className}`}
+      className={`bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden w-full max-w-[260px] ${className}`}
     >
-      <div className="p-3">
-        {/* Driver row: avatar, name, badge, share/chat */}
-        <div className="flex items-start gap-2.5 mb-2">
-          <div className="w-10 h-10 rounded-full shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
+      <div className="p-2.5">
+        {/* Driver row: avatar, name + badge, share/chat icons */}
+        <div className="flex items-start gap-2 mb-1.5">
+          <div className="w-8 h-8 rounded-full shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
             {avatar ? (
               <img
                 src={avatar}
@@ -71,7 +73,7 @@ const DeliveryCard = ({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-gray-500 text-sm font-semibold">
+              <span className="text-gray-500 text-[11px] font-semibold uppercase">
                 {driverName
                   .split(" ")
                   .map((n) => n[0])
@@ -81,106 +83,104 @@ const DeliveryCard = ({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-gray-900 text-sm truncate">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-semibold text-gray-900 text-[12px] truncate">
                 {driverName}
               </span>
               <span
-                className={`shrink-0 inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
+                className={`shrink-0 inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
                   isOnline
                     ? "bg-[#D4FFDA] text-[#109F22]"
-                    : "bg-gray-200 text-gray-600"
+                    : "bg-[#FEECEB] text-[#F44336]"
                 }`}
               >
                 {isOnline ? "Online" : "Offline"}
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-0.5 shrink-0">
             <button
               type="button"
               onClick={() => onShare?.()}
-              className="p-1.5 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              className="p-1 rounded text-gray-600 hover:bg-gray-100"
               aria-label="Share"
             >
-              <Icon icon="mdi:share-variant-outline" className="w-4 h-4" />
+              <Icon icon="mdi:share-variant-outline" className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
               onClick={() => onChat?.()}
-              className="p-1.5 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              className="p-1 rounded text-gray-600 hover:bg-gray-100"
               aria-label="Chat"
             >
-              <Icon icon="mdi:chat-outline" className="w-4 h-4" />
+              <Icon icon="mdi:chat-outline" className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* ETA */}
-        <p className="text-xs text-gray-600 mb-1.5">ETA: {eta}</p>
-
-        {/* Current delivery status */}
-        <div className="flex items-center gap-1.5 mb-2">
-          <span
-            className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusStyle.dot}`}
-          />
-          <span className={`text-sm font-semibold ${statusStyle.text}`}>
-            {status}
-          </span>
+        {/* ETA + delivery status on same row */}
+        <div className="flex items-center justify-between gap-2 mb-1">
+          <p className="text-[11px] text-gray-600 truncate">ETA: {eta}</p>
+          <div className="flex items-center gap-1 shrink-0">
+            <span
+              className={`w-1 h-1 rounded-full shrink-0 ${statusStyle.dot}`}
+            />
+            <span className={`text-[11px] font-semibold ${statusStyle.text}`}>
+              {status}
+            </span>
+          </div>
         </div>
 
         {/* Address */}
-        <p className="text-xs text-gray-700 mb-3">{address}</p>
+        <p className="text-[11px] text-gray-700 mb-2 leading-tight">
+          {address}
+        </p>
 
-        {/* Total Orders breakdown */}
+        {/* Total Orders with box icon + stacked bar + legend */}
         <div>
-          <p className="text-xs font-semibold text-gray-900 mb-1.5">
-            Total Orders ({totalOrders})
-          </p>
-          <div className="flex flex-wrap gap-1.5 mb-1.5">
-            {pending > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded text-xs font-medium bg-[#E3EEFF] text-[#0066FF]">
-                {pending}
-              </span>
-            )}
-            {inProgress > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded text-xs font-medium bg-[#FFF5E5] text-[#FF9800]">
-                {inProgress}
-              </span>
-            )}
-            {delivered > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded text-xs font-medium bg-[#D4FFDA] text-[#109F22]">
-                {delivered}
-              </span>
-            )}
-            {cancelled > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded text-xs font-medium bg-[#FEECEB] text-[#F44336]">
-                {cancelled}
-              </span>
-            )}
+          <div className="flex items-center gap-1.5 mb-1">
+            <Icon
+              icon="mdi:package-variant"
+              className="w-3.5 h-3.5 text-gray-500 shrink-0"
+            />
+            <p className="text-[11px] font-semibold text-gray-900">
+              Total Orders ({totalOrders})
+            </p>
           </div>
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-gray-500">
+          {/* Horizontal stacked bar */}
+          <div className="flex h-2 rounded overflow-hidden bg-gray-100 mb-1.5">
+            {segments.map((seg) => (
+              <div
+                key={seg.key}
+                className={`${seg.color} min-w-[4px]`}
+                style={{ width: `${(seg.count / total) * 100}%` }}
+                title={`${seg.key}: ${seg.count}`}
+              />
+            ))}
+          </div>
+          {/* Legend */}
+          <div className="flex flex-wrap gap-x-2.5 gap-y-0.5 text-[10px] text-gray-500">
             {pending > 0 && (
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF]" />{" "}
+                <span className="w-1 h-1 rounded-full bg-[#0066FF]" />
                 Pending
               </span>
             )}
             {inProgress > 0 && (
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9800]" />{" "}
+                <span className="w-1 h-1 rounded-full bg-[#FF9800]" />
                 In-Progress
               </span>
             )}
             {delivered > 0 && (
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#109F22]" />{" "}
+                <span className="w-1 h-1 rounded-full bg-[#109F22]" />
                 Delivered
               </span>
             )}
             {cancelled > 0 && (
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F44336]" />{" "}
+                <span className="w-1 h-1 rounded-full bg-[#F44336]" />
                 Canceled
               </span>
             )}
