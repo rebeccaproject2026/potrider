@@ -22,7 +22,7 @@ const NewClients = ({ data, onViewAll }) => {
         <h2 className="text-base font-semibold text-gray-800">New Clients</h2>
         <button
           onClick={onViewAll}
-          className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
+          className="text-(--color-primary) hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
         >
           View All
         </button>
@@ -34,7 +34,7 @@ const NewClients = ({ data, onViewAll }) => {
             key={client.id}
             className="flex items-center gap-3 p-1 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
               {client.avatar ? (
                 <img
                   src={client.avatar}
@@ -51,7 +51,7 @@ const NewClients = ({ data, onViewAll }) => {
               <p className="text-sm font-semibold text-gray-900">{client.name}</p>
               <p className="text-xs font-[450] text-[#6B7280]">{client.orders} Orders</p>
             </div>
-            <div className="text-right flex-shrink-0">
+            <div className="text-right shrink-0">
               <svg
                 className="w-4 h-4 text-gray-400"
                 fill="none"

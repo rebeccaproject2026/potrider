@@ -65,8 +65,8 @@ const Sidebar = ({ setSidebar }) => {
               onClick={handleNavClick}
               className={({ isActive }) =>
                 `px-3 py-2 flex items-center gap-3 rounded-sm transition-colors ${isActive && activeMenu === null
-                  ? "bg-[var(--color-primary)] text-white"
-                  : "text-[#212121] font-medium tracking-wide hover:bg-[var(--color-primary-soft)]"
+                  ? "bg-(--color-primary) text-white"
+                  : "text-[#212121] font-medium tracking-wide hover:bg-(--color-primary-soft)"
 
                 }`
               }
@@ -80,7 +80,7 @@ const Sidebar = ({ setSidebar }) => {
           <button
             onClick={handleStaffClick}
             className={`w-full px-3 py-2 flex items-center justify-between rounded-sm transition-colors ${activeMenu === "staff"
-              ? "bg-[var(--color-primary)] text-white"
+              ? "bg-(--color-primary) text-white"
               : "text-[#212121] hover:bg-green-100"
               }`}
           >

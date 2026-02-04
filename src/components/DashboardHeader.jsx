@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Bell } from "lucide-react";
 
@@ -11,27 +12,36 @@ const routeTitleMap = {
   "/ai-agent": "AI Agent",
   "/marketing": "Marketing",
   "/staff": "Staff",
+  "/support": "Support",
+  "/setting": "Setting",
+};
+
+const specificPathTitles = {
+  "/orders/create": "Create Order",
+  "/staff/ai-admin": "AI Administrator",
+  "/staff/add-driver": "Add Driver",
+  "/staff/drivers": "Drivers",
+};
+
+const getDisplayTitle = (pathname) => {
+  if (specificPathTitles[pathname]) return specificPathTitles[pathname];
+  if (/^\/orders\/[^/]+$/.test(pathname)) return "Order Details";
+  const matchedPath = Object.keys(routeTitleMap).find(
+    (path) => pathname === path
+  );
+  return routeTitleMap[matchedPath];
 };
 
 const DashboardHeader = ({ sidebar, setSidebar, userName = "Akash" }) => {
   const location = useLocation();
   const pathname = location.pathname;
+  const displayTitle = getDisplayTitle(pathname);
 
-  // Order details: /orders/:orderId (exclude /orders/create)
-  const isCreateOrder = pathname === "/orders/create";
-  const isOrderDetails = /^\/orders\/[^/]+$/.test(pathname) && !isCreateOrder;
-
-  const activeTitle = isCreateOrder
-    ? "Create Order"
-    : isOrderDetails
-      ? "Order Details"
-      : Object.keys(routeTitleMap).find((path) => pathname === path);
-
-  const displayTitle = isCreateOrder
-    ? "Create Order"
-    : isOrderDetails
-      ? "Order Details"
-      : routeTitleMap[activeTitle];
+  useEffect(() => {
+    const pageTitle =
+      displayTitle || (pathname.startsWith("/staff") ? "Staff" : "Potrider");
+    document.title = pageTitle ? `${pageTitle} | Potrider` : "Potrider";
+  }, [displayTitle, pathname]);
 
   return (
     <nav className="w-full px-4 sm:px-6 h-16 flex items-center justify-between bg-white">

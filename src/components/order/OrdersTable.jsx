@@ -254,7 +254,7 @@ const OrdersTable = ({
   return (
     <div className="min-w-0 max-w-full bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
       {/* Search and filters section */}
-      <div className="flex-shrink-0 p-3 min-w-0">
+      <div className="shrink-0 p-3 min-w-0">
         {/* Top row: Full width search bar */}
         <div className="mb-2">
           <div className="relative w-full">
@@ -321,7 +321,7 @@ const OrdersTable = ({
             />
             <button
               onClick={handleExportToExcel}
-              className="p-2 bg-[var(--color-primary)] text-white rounded-sm hover:opacity-90 transition-colors flex-shrink-0 h-[32px] flex items-center justify-center"
+              className="p-2 bg-(--color-primary) text-white rounded-sm hover:opacity-90 transition-colors shrink-0 h-[32px] flex items-center justify-center"
               title="Export to Excel"
             >
               <Download className="w-4 h-4" />
