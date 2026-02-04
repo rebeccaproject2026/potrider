@@ -799,13 +799,13 @@ const Tracking = () => {
                 minWidth="100%"
               />
             </div>
-            <div className="flex items-center gap-1 rounded-md border border-gray-200 bg-white p-0.5 min-w-0">
+            <div className="flex items-center gap-1 rounded-sm border border-gray-200 bg-white p-0.5 min-w-0">
               {["all", "online", "offline"].map((key) => (
                 <button
                   key={key}
                   type="button"
                   onClick={() => setTableDriverStatus(key)}
-                  className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
                     tableDriverStatus === key
                       ? "bg-(--color-secondary) text-white"
                       : "text-gray-600 hover:bg-gray-50"
