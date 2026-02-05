@@ -7,6 +7,7 @@ import AddInventory from "./pages/inventory/AddInventory";
 import Finances from "./pages/finances/Finances";
 import Customers from "./pages/customers/Customers";
 import AddCustomer from "./pages/customers/AddCustomer";
+import CustomerDetails from "./pages/customers/CustomerDetails";
 import Marketing from "./pages/marketing/Marketing";
 import Staff from "./pages/staff/Staff";
 import Order from "./pages/orders/Order";
@@ -39,6 +40,7 @@ function App() {
           <Route path="finances" element={<Finances />} />
           <Route path="customers" element={<Customers />} />
           <Route path="customers/add" element={<AddCustomer />} />
+          <Route path="customers/:customerId" element={<CustomerDetails />} />
           <Route path="marketing" element={<Marketing />} />
           <Route path="ai-agent" element={<AIAgents />} />
 

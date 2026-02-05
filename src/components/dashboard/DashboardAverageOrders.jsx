@@ -1,6 +1,6 @@
 import Chart from "react-apexcharts";
 
-const DashboardAverageOrders = ({ data, onViewAll }) => {
+const DashboardAverageOrders = ({ data, onViewAll, title = "Average Orders", rightContent }) => {
   const chartData = data || {
     categories: Array.from({ length: 30 }, (_, i) => String(i + 1)),
     series: [
@@ -90,13 +90,17 @@ const DashboardAverageOrders = ({ data, onViewAll }) => {
   return (
     <div className="bg-white rounded-sm shadow p-6">
       <div className="flex items-start justify-between mb-4">
-        <h2 className="text-base font-semibold text-[#3F4753]">Average Orders</h2>
-        <button
-          onClick={onViewAll}
-          className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
-        >
-          View All
-        </button>
+        <h2 className="text-base font-semibold text-[#3F4753]">{title}</h2>
+        {rightContent != null ? (
+          rightContent
+        ) : onViewAll ? (
+          <button
+            onClick={onViewAll}
+            className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
+          >
+            View All
+          </button>
+        ) : null}
       </div>
 
       {/* Legend */}

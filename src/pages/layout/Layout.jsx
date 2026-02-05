@@ -32,8 +32,8 @@ const Layout = () => {
           userName="Akash"
         />
 
-        {/* Page content: prevent horizontal overflow; child pages control their own scroll */}
-        <div className="flex-1 min-w-0 min-h-0 p-2 bg-[#F2F2F2] overflow-x-hidden flex flex-col">
+        {/* Page content: spacing below header for all pages; child pages control their own scroll */}
+        <div className="flex-1 min-w-0 min-h-0 p-2 pt-4 bg-[#F2F2F2] overflow-x-hidden flex flex-col">
           <Outlet />
         </div>
       </div>

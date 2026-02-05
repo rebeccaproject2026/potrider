@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   useReactTable,
   getCoreRowModel,
@@ -238,6 +238,7 @@ const SUMMARY_CARDS = [
 ];
 
 const Customers = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filterTab, setFilterTab] = useState("all");
   const [pagination, setPagination] = useState({
@@ -250,10 +251,10 @@ const Customers = () => {
   const columns = useMemo(
     () =>
       getCustomerColumns(
-        (row) => {},
+        (row) => navigate(`/customers/${row.id}`),
         (row) => {}
       ),
-    []
+    [navigate]
   );
 
   const filteredData = useMemo(() => {
