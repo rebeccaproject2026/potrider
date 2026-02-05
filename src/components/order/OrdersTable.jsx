@@ -28,6 +28,7 @@ const OrdersTable = ({
   onSearch,
   filters = {},
   onFilterChange,
+  onStatusClick,
   // onView,
   // onDelete,
 }) => {
@@ -116,6 +117,9 @@ const OrdersTable = ({
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
+    meta: {
+      onStatusClick,
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),

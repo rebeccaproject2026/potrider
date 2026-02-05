@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Select from "../../components/Select";
 import Input from "../../components/Input";
+import PastOrderCard from "../../components/order/PastOrderCard";
+import StatsCards from "../../components/order/StatsCards";
+import ProductsTable from "../../components/order/productsTable";
+import PaymentDrawer from "../../components/order/PaymentDrawer";
 
 // Static data for Create Order page (API implementation pending)
 const STATIC_CUSTOMER = {
@@ -32,6 +36,17 @@ const PROVINCE_OPTIONS = [
   { value: "Alberta", label: "Alberta" },
 ];
 
+const CUSTOMER_OPTIONS = [
+  { value: "Jack Benson", label: "Jack Benson" },
+  { value: "Khaled Dardar", label: "Khaled Dardar" },
+  { value: "Sarah Johnson", label: "Sarah Johnson" },
+  { value: "Michael Chen", label: "Michael Chen" },
+  { value: "Emily Rodriguez", label: "Emily Rodriguez" },
+  { value: "David Thompson", label: "David Thompson" },
+  { value: "Lisa Anderson", label: "Lisa Anderson" },
+  { value: "Robert Williams", label: "Robert Williams" },
+];
+
 const DELIVERY_OPTIONS = [
   { value: "Pickup", label: "Pickup" },
   { value: "Delivery", label: "Delivery" },
@@ -57,25 +72,46 @@ const COUPON_OPTIONS = [
   {
     id: "3",
     title: "Exclusive Hash Offer!",
-    code: "HASH20",
+    code: "FREE-HASH",
   },
   {
     id: "4",
     title: "Pre-Roll Bonanza!",
-    code: "PREROLL",
+    code: "FREE-PREROLLS",
   },
   {
     id: "5",
     title: "BUY 3 AURA PRODUCTS AND GET A FREE AURA CARTRIDGE!",
-    code: "AURA3",
+    code: "FREE-AURA",
+  },
+  {
+    id: "6",
+    title: "Pre-Roll Bonanza!",
+    code: "FREE-PREROLLS",
+  },
+  {
+    id: "7",
+    title: "Exclusive Hash Offer!",
+    code: "FREE-HASH",
   },
 ];
 
 const DELIVERY_METHODS = [
   { id: "local", label: "Local Delivery", icon: "mdi:truck-delivery" },
-  { id: "ship", label: "Ship to My Address", icon: "mdi:home" },
+  { id: "ship", label: "Ship to My Address", icon: "mdi:truck-fast" },
   { id: "sameday", label: "Same-Day (2-4 hrs)", icon: "mdi:clock-outline" },
   { id: "express", label: "Express (1 hr)", icon: "mdi:lightning-bolt" },
+];
+
+const PAYMENT_OPTIONS = [
+  { id: "cash", label: "Cash", icon: "ph:money-wavy-bold" },
+  { id: "etransfer", label: "E-transfer", icon: "mdi:cash-sync" },
+  {
+    id: "creditcard", label: "Credit Card", icon: "ph:credit-card-bold"
+  },
+  {
+    id: "crypto", label: "Crypto", icon: "ph:currency-btc-bold"
+  },
 ];
 
 // Product options for Select dropdown (with avatar and product info)
@@ -108,30 +144,30 @@ const PRODUCT_OPTIONS = [
 
 // Static selected products (matches image – API pending)
 const STATIC_SELECTED_PRODUCTS = [
-  {
-    id: "1",
-    name: "Buudabomb Taro Taro 500mg",
-    image: "",
-    price: "$40.00",
-    stockStatus: "In-stock: 0 - Out of Stock",
-    meta: "Category: Edible · Genetics: Hybrid · THC: 500MG · CBD: 20MG · CBN: 10MG",
-    sizeOptions: ["1 Gram", "1/8 OZ", "1/4 OZ", "1/2 OZ", "1 OZ"],
-    selectedSize: "1 Gram",
-    quantity: 10,
-    itemTotal: "$250.23",
-  },
-  {
-    id: "2",
-    name: "Kush Kraft Black Gas",
-    image: "",
-    price: "$37.00",
-    stockStatus: "In-stock: 99",
-    meta: "Category: Weed · Genetics: Indica · THC: 20 - 25% · CBD: 0 - 1% · CBN: 0 - 1%",
-    sizeOptions: ["1 Gram", "1/8 OZ", "1/4 OZ", "1/2 OZ", "1 OZ"],
-    selectedSize: "1/4 OZ",
-    quantity: 2,
-    itemTotal: "$74.00",
-  },
+  // {
+  //   id: "1",
+  //   name: "Buudabomb Taro Taro 500mg",
+  //   image: "",
+  //   price: "$40.00",
+  //   stockStatus: "In-stock: 0 - Out of Stock",
+  //   meta: "Category: Edible · Genetics: Hybrid · THC: 500MG · CBD: 20MG · CBN: 10MG",
+  //   sizeOptions: ["1 Gram", "1/8 OZ", "1/4 OZ", "1/2 OZ", "1 OZ"],
+  //   selectedSize: "1 Gram",
+  //   quantity: 10,
+  //   itemTotal: "$250.23",
+  // },
+  // {
+  //   id: "2",
+  //   name: "Kush Kraft Black Gas",
+  //   image: "",
+  //   price: "$37.00",
+  //   stockStatus: "In-stock: 99",
+  //   meta: "Category: Weed · Genetics: Indica · THC: 20 - 25% · CBD: 0 - 1% · CBN: 0 - 1%",
+  //   sizeOptions: ["1 Gram", "1/8 OZ", "1/4 OZ", "1/2 OZ", "1 OZ"],
+  //   selectedSize: "1/4 OZ",
+  //   quantity: 2,
+  //   itemTotal: "$74.00",
+  // },
 ];
 
 // Invoice preview static data
@@ -162,6 +198,87 @@ const STATIC_INVOICE = {
   paymentMethod: "Cash on Delivery",
 };
 
+// Static data for customer stats and past orders section
+const STATIC_CUSTOMER_STATS = [
+  { label: "Total Orders", value: "4" },
+  { label: "Delivered Orders", value: "3" },
+  { label: "Cancelled Orders", value: "0" },
+  { label: "Processing Orders", value: "1" },
+  { label: "Total Spending", value: "$258.75" },
+  { label: "Total Quantity", value: "85kg" },
+  { label: "Used CHEETAH CA$H", value: "$95.65" },
+  { label: "Coupons Used So Far", value: "165" },
+  { label: "Same Day Deliveries", value: "69" },
+  { label: "Express Deliveries", value: "35" },
+  { label: "Amount Due", value: "$83.25" },
+  { label: "Collection", value: "$9025.35" },
+  { label: "Order Frequency", value: "5 Days" },
+];
+
+const STATIC_MOST_BOUGHT = [
+  { no: 1, productName: "Pre-rolls", totalQty: "20 Units", amountSpent: "$200.00" },
+  { no: 2, productName: "Fruity Pebbles OG", totalQty: "5 Grams", amountSpent: "$168.05" },
+  { no: 3, productName: "Chocolope", totalQty: "4.9 Grams", amountSpent: "$168.05" },
+  { no: 4, productName: "Willo Grape Ape", totalQty: "15 Units", amountSpent: "$160.65" },
+  { no: 5, productName: "Euphoria Extractions Shatter Chews (3000 MG)", totalQty: "10 Units", amountSpent: "$100.16" },
+];
+
+const STATIC_LAST_ORDERED = "23 Aug, 2025 - 01:46 PM";
+
+const STATIC_PAST_ORDERS = [
+  {
+    orderId: "1769222658",
+    orderDate: "January 23, 2026, 9:44 PM",
+    status: "Delivered",
+    statusVariant: "delivered",
+    totalProducts: "1",
+    productPrice: "$75.00",
+    coupon: "N/A",
+    cheetahCashRedeemed: "Did not Redeem",
+    deliveryFee: "$15.00",
+    totalPrice: "$90.00",
+    orderType: "Online",
+    orderMethod: "Delivery",
+    paymentMethod: "Credit Card",
+    paymentStatus: "Paid",
+    transactionId: "pi_3SswpQGu3NMzvKQUOgs183zj_secret_SxEaNA4wbH8BWEFOFjU3YEpIf",
+  },
+  {
+    orderId: "1769222657",
+    orderDate: "January 20, 2026, 2:30 PM",
+    status: "Ordered",
+    statusVariant: "ordered",
+    totalProducts: "2",
+    productPrice: "$110.00",
+    coupon: "NEW15",
+    cheetahCashRedeemed: "$16.50",
+    deliveryFee: "$10.00",
+    totalPrice: "$105.00",
+    orderType: "Online",
+    orderMethod: "Delivery",
+    paymentMethod: "e-transfer",
+    paymentStatus: "Pending",
+    transactionId: "pi_3SswpQGu3NMzvKQU1yM4x1Ff_secret_t08Ylt5lAEwh",
+  },
+  {
+    orderId: "1769222656",
+    orderDate: "January 15, 2026, 6:00 PM",
+    status: "Packed",
+    statusVariant: "packed",
+    totalProducts: "1",
+    productPrice: "$55.00",
+    coupon: "N/A",
+    cheetahCashRedeemed: "Did not Redeem",
+    deliveryFee: "$12.00",
+    totalPrice: "$67.00",
+    orderType: "Online",
+    orderMethod: "Same Day",
+    paymentMethod: "Cash",
+    paymentStatus: "Pending",
+    transactionId: "pi_3SswpQGu3NMzvKQU1yM4x1Ff_secret_t08Ylt5lAEwh",
+  },
+];
+
 const CreateOrder = () => {
   const navigate = useNavigate();
   const [customer, setCustomer] = useState(STATIC_CUSTOMER);
@@ -177,11 +294,19 @@ const CreateOrder = () => {
   const [ownerDiscountAmount, setOwnerDiscountAmount] = useState("");
   const [ownerDiscountPercentage, setOwnerDiscountPercentage] = useState("");
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState("local");
+  const [selectedPayment, setSelectedPayment] = useState("");
+  const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
+  const [activePaymentMethod, setActivePaymentMethod] = useState("");
   const couponSliderRef = useRef(null);
 
-  const handleCustomerChange = (field, value) => {
+  const handleCustomerChange = useCallback((field, value) => {
     setCustomer((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
+
+  // Memoized handler for delivery option to prevent flickering
+  const handleDeliveryOptionChange = useCallback((e) => {
+    handleCustomerChange("deliveryOption", e.target.value);
+  }, [handleCustomerChange]);
 
   const handleAddProduct = (e) => {
     const productId = e.target.value;
@@ -241,15 +366,80 @@ const CreateOrder = () => {
     setCheetahCashAmount((prev) => Math.max(0, prev + delta));
   };
 
+  // Get delivery fee information based on selected method
+  const getDeliveryFeeInfo = () => {
+    switch (selectedDeliveryMethod) {
+      case "express":
+        return {
+          lines: [
+            { text: "$15 Delivery Fee", highlight: "$15", suffix: " (orders under $100)" },
+            { text: "ONLY $5 for Express if order is", highlight: "$5", suffix: " $100+" },
+          ],
+        };
+      case "sameday":
+        return {
+          lines: [
+            { text: "$12 Delivery Fee", highlight: "$12", suffix: " (orders under $100)" },
+            { text: "FREE Delivery on orders", highlight: "FREE", suffix: " over $100" },
+          ],
+        };
+      case "ship":
+        return {
+          lines: [
+            { text: "$10 Delivery Fee", highlight: "$10", suffix: " (orders under $100)" },
+            { text: "FREE Delivery on orders", highlight: "FREE", suffix: " over $100" },
+          ],
+        };
+      case "":
+      default:
+        return {
+          lines: [
+            { text: "$10 Delivery Fee on orders", highlight: "$10", suffix: " under $100" },
+            { text: "FREE Delivery on orders", highlight: "FREE", suffix: " over $100" },
+          ],
+        };
+    }
+  };
+
+  // Memoized handler for delivery method selection to prevent flickering
+  const handleDeliveryMethodChange = useCallback((methodId) => {
+    // When Same-Day or Express is selected, keep Local Delivery selected as well
+    // because they are sub-options of Local Delivery
+    if (methodId === "sameday" || methodId === "express") {
+      // Keep local selected when selecting sub-options
+      setSelectedDeliveryMethod(methodId);
+    } else {
+      setSelectedDeliveryMethod(methodId);
+    }
+  }, []);
+
+  // Handler for payment method selection - opens drawer for E-transfer, Credit Card, and Crypto
+  const handlePaymentMethodClick = useCallback((paymentId) => {
+    if (paymentId === "etransfer" || paymentId === "creditcard" || paymentId === "crypto") {
+      setSelectedPayment(paymentId);
+      setActivePaymentMethod(paymentId);
+      setPaymentDrawerOpen(true);
+    } else {
+      // For Cash, just select it without opening drawer
+      setSelectedPayment(paymentId);
+      setPaymentDrawerOpen(false);
+    }
+  }, []);
+
+  // Close payment drawer
+  const handleClosePaymentDrawer = useCallback(() => {
+    setPaymentDrawerOpen(false);
+  }, []);
+
   return (
     <div className="flex flex-col lg:flex-row gap-2 flex-1 min-h-0 overflow-hidden">
       {/* Left column – Create Order form (scrollable on its own) */}
-      <div className="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden space-y-4 pr-1 hide-scrollbar">
+      <div className="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden space-y-2 pr-1 hide-scrollbar">
         {/* Back arrow */}
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+          className="flex items-center cursor-pointer gap-2 text-gray-700 hover:text-gray-900 focus:outline-none"
           aria-label="Go back"
         >
           <Icon icon="mdi:arrow-left" className="w-6 h-6" />
@@ -263,9 +453,9 @@ const CreateOrder = () => {
                 <label className="block text-sm font-semibold text-[#212121] mb-1">Customer Name </label>
                 <Select
                   label="Customer Name"
-                  value={customer.deliveryOption}
-                  onChange={(e) => handleCustomerChange("deliveryOption", e.target.value)}
-                  options={DELIVERY_OPTIONS}
+                  value={customer.customerName}
+                  onChange={(e) => handleCustomerChange("customerName", e.target.value)}
+                  options={CUSTOMER_OPTIONS}
                   placeholder="Type or select customer"
                   className="w-full"
                   minWidth="100%"
@@ -342,7 +532,7 @@ const CreateOrder = () => {
               <label className="block text-sm font-semibold text-[#212121] mb-1">Delivery Option</label>
               <Select
                 value={customer.deliveryOption}
-                onChange={(e) => handleCustomerChange("deliveryOption", e.target.value)}
+                onChange={handleDeliveryOptionChange}
                 options={DELIVERY_OPTIONS}
                 placeholder="Delivery Option"
                 className="w-full"
@@ -447,7 +637,6 @@ const CreateOrder = () => {
             <label className="block text-sm font-semibold text-[#212121] mb-1">Select Product</label>
             <Select
               showSearch
-              searchLabel="Search"
               searchPlaceholder="Select a product"
               placeholder="Select a product"
               value={selectedProductValue}
@@ -465,68 +654,122 @@ const CreateOrder = () => {
           {selectedProducts.length === 0 ? (
             <p className="text-sm text-gray-500">No Products Selected</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {selectedProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="flex gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50"
+                  className="flex items-start gap-3 p-1.5 border border-gray-200 rounded-sm bg-white"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gray-200 shrink-0 overflow-hidden flex items-center justify-center">
+                  {/* Product Image */}
+                  <div className="w-24 h-24 rounded-sm bg-gray-100 shrink-0 overflow-hidden flex items-center justify-center">
                     {product.image ? (
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
-                      <Icon icon="mdi:package-variant" className="w-7 h-7 text-gray-400" />
+                      <Icon
+                        icon="mdi:package-variant"
+                        className="w-8 h-8 text-gray-400"
+                      />
                     )}
                   </div>
+
+                  {/* Product Content */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm text-gray-900">{product.name}</p>
-                    <p className="text-xs text-gray-600 mt-0.5">
-                      {product.price} ({product.stockStatus})
+                    {/* Name */}
+                    <p className="font-semibold text-sm text-gray-900">
+                      {product.name}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5 truncate">{product.meta}</p>
-                    <div className="flex flex-wrap gap-1 mt-2">
+
+                    {/* Price + Stock */}
+                    <p className="text-sm font-semibold  text-[#212529bf] mt-0.5">
+                      {product.price}
+                      <span className="text-xs font-semibold text-[#212529bf] ml-1">
+                        ({product.stockStatus})
+                      </span>
+                    </p>
+
+                    {/* Meta + Quantity + Price + Delete (ONE ROW) */}
+                    <div className="flex items-center justify-between gap-4">
+                      {/* Category / Meta */}
+                      <p className="text-[12.3px] font-medium text-[#212529bf] line-clamp-2 flex-1">
+                        {product.meta}
+                      </p>
+
+                      {/* Right Controls */}
+                      <div className="flex items-center gap-4 shrink-0">
+                        {/* Quantity */}
+                        <div className="flex items-center bg-gray-100 border border-gray-300 rounded-sm h-8 px-1">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleQuantityChange(product.id, -1)
+                            }
+                            disabled={product.quantity <= 1}
+                            className="w-8 text-lg font-medium text-gray-700 disabled:text-gray-400"
+                          >
+                            −
+                          </button>
+
+                          <span className="w-8 text-center text-sm font-semibold text-gray-900">
+                            {product.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleQuantityChange(product.id, 1)
+                            }
+                            className="w-8 text-lg font-medium text-gray-700"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        {/* Item Total */}
+                        <p className="font-semibold text-sm text-gray-900 min-w-[60px] text-right">
+                          {product.itemTotal}
+                        </p>
+
+                        {/* Remove */}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemoveProduct(product.id)
+                          }
+                          className="text-red-600 hover:bg-red-50 p-1 rounded"
+                          aria-label="Remove"
+                        >
+                          <Icon
+                            icon="mdi:trash-can-outline"
+                            className="w-5 h-5"
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Size Options */}
+                    <div className="flex flex-wrap gap-2 ">
                       {product.sizeOptions.map((size) => (
                         <button
                           key={size}
                           type="button"
-                          onClick={() => handleSizeSelect(product.id, size)}
-                          className={`px-2 py-1 text-xs rounded border ${product.selectedSize === size
-                            ? "bg-green-600 text-white border-green-600"
-                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                            }`}
+                          onClick={() =>
+                            handleSizeSelect(product.id, size)
+                          }
+                          className={`px-3 py-1 text-xs font-medium rounded-xs border transition
+                    ${product.selectedSize === size
+                              ? "bg-[var(--color-primary)] text-white border-green-600"
+                              : "bg-white text-[#000] border-gray-300 hover:bg-gray-100"
+                            }
+                  `}
                         >
                           {size}
                         </button>
                       ))}
                     </div>
-                    <div className="flex items-center mt-2">
-                      <button
-                        type="button"
-                        onClick={() => handleQuantityChange(product.id, -1)}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-100"
-                      >
-                        −
-                      </button>
-                      <span className="w-8 text-center text-sm font-medium">{product.quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleQuantityChange(product.id, 1)}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-100"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <p className="font-bold text-sm text-gray-900">{product.itemTotal}</p>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveProduct(product.id)}
-                      className="mt-2 p-1.5 text-red-600 hover:bg-red-50 rounded"
-                      aria-label="Remove"
-                    >
-                      <Icon icon="mdi:trash-can-outline" className="w-5 h-5" />
-                    </button>
                   </div>
                 </div>
               ))}
@@ -535,137 +778,303 @@ const CreateOrder = () => {
         </div>
 
         {/* Select Coupon */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-900">Select Coupon</h3>
-            <div className="flex gap-1">
-              <button
-                type="button"
-                onClick={() => scrollCouponSlider("left")}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <Icon icon="mdi:chevron-left" className="w-5 h-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollCouponSlider("right")}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <Icon icon="mdi:chevron-right" className="w-5 h-5" />
-              </button>
-            </div>
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="text-sm font-semibold text-gray-900  pl-1">Select Coupon</h3>
+          <div className="flex gap-1">
+            <button
+              type="button"
+              onClick={() => scrollCouponSlider("left")}
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-[#000] hover:bg-gray-200 transition-colors"
+            >
+              <Icon icon="mdi:chevron-left" className="w-6 h-6" />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollCouponSlider("right")}
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-[#000] hover:bg-gray-200 transition-colors"
+            >
+              <Icon icon="mdi:chevron-right" className="w-6 h-6" />
+            </button>
           </div>
-          <div
-            ref={couponSliderRef}
-            className="flex gap-3 overflow-x-auto hide-scrollbar"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {COUPON_OPTIONS.map((coupon) => (
+        </div>
+
+        <div
+          ref={couponSliderRef}
+          className="flex gap-3 overflow-x-auto hide-scrollbar pb-1"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {COUPON_OPTIONS.map((coupon) => {
+            const isApplied = selectedCoupon === coupon.id;
+            return (
               <div
                 key={coupon.id}
-                onClick={() => setSelectedCoupon(selectedCoupon === coupon.id ? "" : coupon.id)}
-                className={`min-w-[200px] p-4 border rounded-lg bg-white cursor-pointer transition-all ${selectedCoupon === coupon.id
-                  ? "border-blue-500 border-2 shadow-md"
-                  : "border-gray-200 hover:border-gray-300"
-                  }`}
+                onClick={() => setSelectedCoupon(isApplied ? "" : coupon.id)}
+                className={`relative min-w-[180px] max-w-[220px] rounded-sm border border-gray-200 bg-white shadow-sm cursor-pointer transition-all hover:border-gray-300 flex flex-col`}
               >
-                <p className="text-sm font-bold text-gray-900 mb-2">{coupon.title}</p>
-                <p className="text-xs text-gray-700">
-                  Coupon Code: <span className="font-medium">{coupon.code}</span>
-                </p>
+                {isApplied && (
+                  <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[var(--color-primary)] flex items-center justify-center z-10">
+                    <Icon icon="mdi:check" className="w-4 h-4 text-white" />
+                  </span>
+                )}
+                {/* Top row: placeholder + blue offer text */}
+                <div className="p-3 flex gap-2 items-start flex-1">
+                  <div className="w-12 h-12 rounded-lg bg-gray-100 shrink-0 flex items-center justify-center text-gray-400">
+                    <Icon icon="mdi:tag-outline" className="w-6 h-6" />
+                  </div>
+                  <p className="text-sm font-medium text-blue-600 leading-snug flex-1 min-w-0 pr-6">
+                    {coupon.title}
+                  </p>
+                </div>
+                {/* Bottom: title, code, applied text */}
+                <div className="px-3 pb-3 pt-0 space-y-1">
+                  <p className="text-sm font-bold text-gray-900 leading-snug">
+                    {coupon.title}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Coupon Code:{" "}
+                    <span className="font-semibold text-gray-900">{coupon.code}</span>
+                  </p>
+                  {isApplied && (
+                    <p className="text-xs font-semibold text-green-600">
+                      $999.99 Discount Applied!
+                    </p>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-        {/* Use CHEETAH CA$H */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Use CHEETAH CA$H</h3>
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white">
-            <button
-              type="button"
-              onClick={() => handleCheetahCashChange(-1)}
-              className="px-4 py-2.5 border-r border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              −
-            </button>
-            <div className="flex-1 px-4 py-2.5 text-center text-sm font-medium text-gray-900">
-              {cheetahCashAmount.toFixed(2)}
-            </div>
-            <button
-              type="button"
-              onClick={() => handleCheetahCashChange(1)}
-              className="px-4 py-2.5 border-l border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              +
-            </button>
-          </div>
-        </div>
+        {/* Discount section: Use CHEETAH CA$H + Owner's Discount */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 items-end mb-6">
+          {/* CHEETAH CASH */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 mb-1.5 pl-1">
+              Use CHEETAH CA$H
+            </label>
 
-        {/* Owner's Discount */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1.5">
-                Owner's Discount in Amount
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700 font-medium">$</span>
-                <Input
-                  type="text"
-                  value={ownerDiscountAmount}
-                  onChange={(e) => setOwnerDiscountAmount(e.target.value)}
-                  placeholder="Enter Amount"
-                  className="pl-7"
-                />
-              </div>
+            <div className="flex  border border-[#DDDDDD] overflow-hidden bg-white rounded-sm">
+              <button
+                type="button"
+                onClick={() => handleCheetahCashChange(-1)}
+                className="w-10 flex items-center justify-center  font-bold cursor-pointer"
+              >
+                −
+              </button>
+
+              <Input
+                type="text"
+                readOnly
+                value={cheetahCashAmount.toFixed(2)}
+                className="text-center border-0 focus:ring-0 rounded-none"
+              />
+
+              <button
+                type="button"
+                onClick={() => handleCheetahCashChange(1)}
+                className="w-10 flex items-center justify-center font-bold cursor-pointer"
+              >
+                +
+              </button>
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1.5">
-                Owner's Discount in Percentage
-              </label>
-              <div className="relative">
-                <Input
-                  type="text"
-                  value={ownerDiscountPercentage}
-                  onChange={(e) => setOwnerDiscountPercentage(e.target.value)}
-                  placeholder="Enter Percentage"
-                  className="pr-7"
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 font-medium">%</span>
-              </div>
-            </div>
+          </div>
+
+          {/* OWNER DISCOUNT AMOUNT */}
+          <div>
+            <Input
+              label="Owner's Discount in Amount"
+              type="text"
+              value={ownerDiscountAmount}
+              onChange={(e) => setOwnerDiscountAmount(e.target.value)}
+              placeholder="Enter Amount"
+              prefix="$"
+            />
+          </div>
+
+          {/* OWNER DISCOUNT PERCENTAGE */}
+          <div>
+            <Input
+              label="Owner's Discount in Percentage"
+              type="text"
+              value={ownerDiscountPercentage}
+              onChange={(e) => setOwnerDiscountPercentage(e.target.value)}
+              placeholder="Enter Percentage"
+              suffix="%"
+            />
           </div>
         </div>
 
         {/* Delivery Method */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Delivery Method</h3>
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            {DELIVERY_METHODS.map((method) => (
+        <h1 className="text-[18.5px] font-semibold text-gray-900 mb-2">Delivery Method</h1>
+        <hr className=" border-gray-300 mb-6" />
+        <div className="grid grid-cols-2 gap-3 mb-2">
+          {DELIVERY_METHODS.filter((method) => {
+            // If "ship" is selected, show "local" and "ship" (hide "sameday" and "express")
+            if (selectedDeliveryMethod === "ship") {
+              return method.id === "local" || method.id === "ship";
+            }
+            // When "local" is clicked or any other option is selected, show all 4 methods
+            // This includes: Local Delivery, Ship to My Address, Same-Day, and Express
+            return true;
+          }).map((method) => {
+            // Check if this method should be highlighted
+            // Local Delivery should be highlighted when local, sameday, or express is selected
+            // Same-Day and Express should be highlighted when they are selected
+            const isSelected =
+              method.id === selectedDeliveryMethod ||
+              (method.id === "local" && (selectedDeliveryMethod === "sameday" || selectedDeliveryMethod === "express"));
+
+            return (
               <button
                 key={method.id}
                 type="button"
-                onClick={() => setSelectedDeliveryMethod(method.id)}
-                className={`p-4 border rounded-lg bg-white text-center transition-all ${selectedDeliveryMethod === method.id
-                  ? "border-gray-900 border-2"
-                  : "border-gray-200 hover:border-gray-300"
+                onClick={() => handleDeliveryMethodChange(method.id)}
+                className={`flex items-center gap-2 p-3 border rounded-sm bg-white shadow-sm transition-all text-left ${isSelected
+                  ? "border-2 border-gray-900"
+                  : "border border-gray-200 hover:border-gray-300"
                   }`}
               >
-                <Icon icon={method.icon} className="w-8 h-8 mx-auto mb-2 text-gray-700" />
-                <p className="text-xs font-medium text-gray-900">{method.label}</p>
+                <Icon icon={method.icon} className="w-5 h-5 shrink-0 text-gray-700" />
+                <span className="text-sm font-medium text-gray-900">{method.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        {/* Only show delivery fee info when "local" is NOT selected */}
+        {selectedDeliveryMethod !== "local" && (
+          <div className="border border-gray-200 rounded-xs bg-white p-2">
+            <div className="border-2 border-gray-900 rounded-sm bg-white p-2 space-y-1">
+              {getDeliveryFeeInfo().lines.map((line, index) => {
+                const parts = line.text.split(line.highlight);
+                return (
+                  <p key={index} className="text-sm text-gray-900">
+                    {parts[0]}
+                    <span className="font-bold">{line.highlight}</span>
+                    {parts[1] && <>{parts[1]}</>}
+                    {line.suffix && <span className="font-bold">{line.suffix}</span>}
+                  </p>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {/* Payment */}
+        <div className="mt-8">
+          <h1 className="text-[18.5px] font-semibold text-gray-900 mb-2">Payment</h1>
+          <hr className=" border-gray-300 mb-6" />
+          <div className="grid grid-cols-4 gap-3">
+            {PAYMENT_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handlePaymentMethodClick(option.id)}
+                className={`
+    relative z-[1]
+    flex items-center justify-center gap-2
+    px-[5px] py-[12px]
+    rounded-[5px]
+    border border-[#a4a4a4]
+    bg-white
+    cursor-pointer
+    opacity-90
+    transition-all duration-150
+    shadow-[0_0_0_1px_rgba(0,0,0,0)]
+    ${selectedPayment === option.id
+                    ? "border-2 border-gray-900 "
+                    : "hover:border-gray-400"
+                  }
+  `}
+              >
+                <Icon icon={option.icon} className="w-7 h-7 shrink-0 text-gray-700" />
+                <span className="text-base font-medium text-gray-900">{option.label}</span>
               </button>
             ))}
           </div>
-          <div className="text-xs text-gray-600 space-y-1">
-            <p>
-              $10 Delivery Fee on orders <span className="font-bold">under $100</span>
-            </p>
-            <p>
-              FREE Delivery on orders <span className="font-bold">over $100</span>
-            </p>
-          </div>
         </div>
+
+        {/* Payment Drawer - Reusable Component */}
+        <PaymentDrawer
+          isOpen={paymentDrawerOpen}
+          onClose={handleClosePaymentDrawer}
+          paymentMethod={activePaymentMethod}
+          onPaymentSent={() => {
+            // Handle payment sent action
+            console.log("Payment sent via E-transfer");
+          }}
+          onProceedPayment={() => {
+            // Handle proceed to payment action
+            console.log("Proceeding to credit card payment");
+          }}
+          onCryptoSelect={(cryptoType) => {
+            // Handle crypto selection
+            console.log(`Selected crypto: ${cryptoType}`);
+          }}
+          recipientEmail="ccmail647@gmail.com"
+        />
+
+        {/* Create & Save Order */}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 px-2 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
+          >
+            <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
+            Create & Save Order
+          </button>
+        </div>
+
+        {/* Customer Stats and Past Orders Section */}
+        {/* {customer.customerName && ( */}
+        <>
+          <StatsCards
+            title={`${customer.customerName || "Jack Benson"}'s Stats`}
+            subtitle={`Last ordered on ${STATIC_LAST_ORDERED}`}
+            showDivider
+            stats={STATIC_CUSTOMER_STATS}
+            className="mb-1"
+          />
+
+          <div className="mt-5">
+            <ProductsTable
+              title={`${customer.customerName || "Jack Benson"}'s 5 Most Bought Products`}
+              showDivider
+              columns={[
+                { key: "no", header: "No.", align: "left" },
+                {
+                  key: "productName",
+                  header: "Product Name",
+                  align: "left",
+                  render: (row) => (
+                    <a href="#" className="text-[var(--color-secondary)] text-[12px] underline font-extralight">
+                      {row.productName}
+                    </a>
+                  ),
+                },
+                { key: "totalQty", header: "Total Qty", align: "right" },
+                { key: "amountSpent", header: "Amount Spent", align: "right" },
+                {
+                  key: "action",
+                  header: "Action",
+                  align: "left",
+                  render: () => (
+                    <a href="#" className="text-[var(--color-secondary)] hover:underline text-xs font-semibold">
+                      View Recent Order
+                    </a>
+                  ),
+                },
+              ]}
+              data={STATIC_MOST_BOUGHT}
+              className="mb-4"
+            />
+          </div>
+
+          <p className="text-lg font-semibold text-black mb-1">{customer.customerName || "Jack Benson"}&apos;s Past Orders</p>
+          <hr className="border-gray-400 mb-3" />
+          {STATIC_PAST_ORDERS.map((pastOrder) => (
+            <PastOrderCard key={pastOrder.orderId} order={pastOrder} />
+          ))}
+        </>
+        {/* // )} */}
       </div>
 
       {/* Right column – Invoice Preview (fixed height, scroll inside panel only) */}

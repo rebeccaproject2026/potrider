@@ -52,6 +52,7 @@ const Select = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const dropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
 
   const isValueOnChangeMode = value !== undefined && onChange;
   const isMulti = multiple || Array.isArray(value);
@@ -59,8 +60,8 @@ const Select = ({
     isMulti && Array.isArray(value)
       ? value
       : value != null && value !== ""
-      ? [value]
-      : [];
+        ? [value]
+        : [];
   const displayTitle = isValueOnChangeMode ? placeholder : title;
 
   const getDisplayOption = () => {
@@ -111,8 +112,8 @@ const Select = ({
 
   const filteredOptions = showSearch
     ? options.filter((item) =>
-        getOptionLabel(item)?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      getOptionLabel(item)?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : options;
 
   useEffect(() => {
@@ -126,6 +127,16 @@ const Select = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Auto-focus search input when dropdown opens
+  useEffect(() => {
+    if (isOpen && showSearch && searchInputRef.current) {
+      // Small delay to ensure the input is rendered
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 0);
+    }
+  }, [isOpen, showSearch]);
 
   const handleKeyDown = (e) => {
     if (!isOpen) return;
@@ -159,11 +170,11 @@ const Select = ({
     if (showProductInfo || showAvatar) {
       return (
         <div
-          className={`flex items-start gap-3 px-3 py-2.5 cursor-pointer border-b border-gray-100 last:border-0 transition ${
-            isHighlighted
+          className={`group flex items-start gap-3 px-2 py-1 cursor-pointer border-b border-gray-100 last:border-0 transition
+        ${isHighlighted
               ? "bg-blue-600 text-white"
-              : "bg-white text-gray-900 hover:bg-gray-50"
-          }`}
+              : "bg-white text-gray-900 hover:bg-[var(--color-secondary)]"
+            }`}
           onClick={() => handleSelectOption(item)}
         >
           {showCheckbox !== false && isMulti && (
@@ -177,8 +188,9 @@ const Select = ({
               />
             </span>
           )}
+
           {showAvatar && (
-            <div className="w-10 h-10 rounded shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-sm shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
               {image ? (
                 <img
                   src={image}
@@ -186,32 +198,41 @@ const Select = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-gray-400 text-lg">📦</span>
+                <span className="text-gray-400 text-lg group-hover:text-white">📦</span>
               )}
             </div>
           )}
+
           <div className="flex-1 min-w-0">
             <p
-              className={`font-bold text-sm ${
-                isHighlighted ? "text-white" : "text-gray-900"
-              }`}
+              className={`font-bold text-sm transition
+            ${isHighlighted
+                  ? "text-white"
+                  : "text-gray-900 group-hover:text-white"
+                }`}
             >
               {label}
             </p>
+
             {showProductInfo && (priceRange || stockStatus) && (
               <p
-                className={`text-xs mt-0.5 ${
-                  isHighlighted ? "text-blue-100" : "text-gray-600"
-                }`}
+                className={`text-xs font-semibold mt-0.5 transition
+              ${isHighlighted
+                    ? "text-blue-100"
+                    : "text-gray-600 group-hover:text-white"
+                  }`}
               >
                 {priceRange} {stockStatus ? `(${stockStatus})` : ""}
               </p>
             )}
+
             {showProductInfo && meta && (
               <p
-                className={`text-xs mt-1 truncate ${
-                  isHighlighted ? "text-blue-100" : "text-gray-400"
-                }`}
+                className={`text-xs mt-1 font-medium truncate transition
+              ${isHighlighted
+                    ? "text-blue-100"
+                    : "text-gray-400 group-hover:text-white"
+                  }`}
               >
                 {meta}
               </p>
@@ -224,11 +245,9 @@ const Select = ({
     return (
       <li
         onClick={() => handleSelectOption(item)}
-        className={`px-2.5 py-2 cursor-pointer border-b border-gray-100 last:border-0 transition flex items-center gap-2 ${
-          isHighlighted ? "bg-blue-100 font-medium" : "hover:bg-gray-100"
-        } ${displayOption === label ? "bg-gray-200 font-medium" : ""} ${
-          highlightedIndex === index ? "bg-blue-100" : ""
-        }`}
+        className={`px-2.5 py-2 cursor-pointer border-b border-gray-100 last:border-0 transition flex items-center gap-2 ${isHighlighted ? "bg-blue-100 font-medium" : "hover:bg-gray-100"
+          } ${displayOption === label ? "bg-gray-200 font-medium" : ""} ${highlightedIndex === index ? "bg-blue-100" : ""
+          }`}
       >
         {showCheckbox !== false && isMulti && (
           <input
@@ -280,6 +299,7 @@ const Select = ({
                 </label>
               )}
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchTerm}
                 onChange={(e) => {
@@ -288,7 +308,7 @@ const Select = ({
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder={searchPlaceholder}
-                className="w-full px-2.5 py-1.5 text-[13px] border border-gray-300 rounded-sm bg-white text-gray-700 placeholder-gray-600 focus:outline-none "
+                className="w-full px-2.5 py-1.5 text-[13px] border border-[#000] rounded-sm bg-white text-gray-700 placeholder-gray-600 focus:outline-none "
               />
             </div>
           )}

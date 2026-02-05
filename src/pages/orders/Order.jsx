@@ -6,6 +6,7 @@ import DatePickerMap from "../../components/DatePickerMap";
 import OrdersTable from "../../components/order/OrdersTable";
 import OrderAnalytics from "../../components/order/OrderAnalytics";
 import OrderDetailsDrawer from "./OrderDetailsDrawer";
+import OrderTrackingDrawer from "../../components/order/OrderTrackingDrawer";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
@@ -34,6 +35,10 @@ const Order = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
 
+  // Order tracking drawer state
+  const [selectedTrackingOrder, setSelectedTrackingOrder] = useState(null);
+  const [isTrackingDrawerOpen, setIsTrackingDrawerOpen] = useState(false);
+
   // Handlers - defined first
   const handleView = useCallback((row) => {
     setSelectedOrder(row ?? null);
@@ -42,6 +47,17 @@ const Order = () => {
 
   const handleCloseOrderDrawer = useCallback(() => {
     setIsOrderDrawerOpen(false);
+  }, []);
+
+  // Handle status click to open tracking drawer
+  const handleStatusClick = useCallback((row) => {
+    setSelectedTrackingOrder(row ?? null);
+    setIsTrackingDrawerOpen(true);
+  }, []);
+
+  const handleCloseTrackingDrawer = useCallback(() => {
+    setIsTrackingDrawerOpen(false);
+    setSelectedTrackingOrder(null);
   }, []);
 
   const handleDelete = useCallback((row) => {
@@ -63,8 +79,8 @@ const Order = () => {
 
   // Get columns and data - after handlers are defined
   const columns = useMemo(
-    () => getOrdersColumns(handleView, handleDelete),
-    [handleView, handleDelete]
+    () => getOrdersColumns(handleView, handleDelete, handleStatusClick),
+    [handleView, handleDelete, handleStatusClick]
   );
   const tableData = useMemo(() => getOrdersData(), []);
 
@@ -342,7 +358,7 @@ const Order = () => {
         <div className="flex gap-4">
           <button
             onClick={() => navigate("/orders/create")}
-            className="flex items-center gap-2 px-2 py-2.5 bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
+            className="flex items-center gap-2 px-2 py-2.5 cursor-pointer bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
           >
             + Create Order
           </button>
@@ -397,6 +413,7 @@ const Order = () => {
         onSearch={handleSearch}
         onView={handleView}
         onDelete={handleDelete}
+        onStatusClick={handleStatusClick}
       />
 
       {/* Order Analytics Component */}
@@ -414,6 +431,13 @@ const Order = () => {
         isOpen={isOrderDrawerOpen}
         onClose={handleCloseOrderDrawer}
         selectedOrder={selectedOrder}
+      />
+
+      {/* Order Tracking Drawer – opens on Delivery Status click */}
+      <OrderTrackingDrawer
+        isOpen={isTrackingDrawerOpen}
+        onClose={handleCloseTrackingDrawer}
+        selectedOrder={selectedTrackingOrder}
       />
     </div>
   );

@@ -33,7 +33,7 @@ const Layout = () => {
         />
 
         {/* Page content: spacing below header for all pages; child pages control their own scroll */}
-        <div className="flex-1 min-w-0 min-h-0 p-2 pt-4 bg-[#F2F2F2] overflow-x-hidden flex flex-col">
+        <div className="flex-1 min-w-0 min-h-0 p-2 pt-3 bg-[#F2F2F2] overflow-x-hidden flex flex-col">
           <Outlet />
         </div>
       </div>

@@ -5,7 +5,7 @@ import { Eye, Trash2 } from "lucide-react";
  * Orders table columns definition
  * Returns columns array - should be wrapped in useMemo in the component
  */
-export const getOrdersColumns = (onView, onDelete) => [
+export const getOrdersColumns = (onView, onDelete, onStatusClick) => [
   {
     accessorKey: "orderId",
     header: "Order#",
@@ -191,14 +191,17 @@ export const getOrdersColumns = (onView, onDelete) => [
     cell: (info) => {
       const status = info.getValue();
       const isCancelled = status === "Cancelled";
+      const rowData = info.row.original;
+
       return (
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap  ${isCancelled ? "bg-[#FEECEB] text-[#F44336]"
-            : "bg-[#E3EEFF] text-[#0066FF]"
+        <button
+          onClick={() => onStatusClick?.(rowData)}
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap cursor-pointer hover:opacity-80 transition-opacity ${isCancelled ? "bg-[#FEECEB] text-[#F44336]" : "bg-[#E3EEFF] text-[#0066FF]"
             }`}
+          type="button"
         >
           {status}
-        </span>
+        </button>
       );
     },
   },
