@@ -1,0 +1,213 @@
+/* CSS for QuantityTimelineDrawer */
+
+/* Slider Main Container */
+.timeline-drawer-slider {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 100%;
+  max-width: 550px;
+  background: white;
+  z-index: 1050; /* High z-index */
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.timeline-drawer-slider.active {
+  transform: translateX(0);
+}
+
+/* Header */
+.timeline-drawer-header {
+  padding: 16px;
+  border-bottom: 1px solid #0b5ed7; /* Darker blue border */
+  background: #0d6efd; /* Bootstrap primary blue */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeline-drawer-title {
+  font-weight: 600;
+  font-size: 17px;
+  color: #fff; /* White text */
+  margin: 0;
+}
+
+.timeline-drawer-closer {
+  font-size: 24px;
+  color: #fff; /* White X */
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: 500;
+}
+.timeline-drawer-closer:hover {
+  color: #e6e6e6;
+}
+
+/* Accordion Container */
+.cust-acc-1 {
+  position: relative;
+  padding: 20px 20px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* Timeline Wrapper for Content */
+.timeline-wrapper {
+  position: relative;
+  /* Use auto height so line stops at the end of content */
+  height: auto; 
+  padding-bottom: 20px; /* Add some padding at botton */
+}
+
+/* Timeline Line */
+.timeline-line {
+  position: absolute;
+  left: 8px; /* Alignment with dot center */
+  top: 15px; /* Start at first dot center approx */
+  bottom: 15px; /* End at last dot center approx? or 0 for now */
+  width: 2px;
+  background-color: #e3eeff; /* Pale blue line */
+  z-index: 0;
+}
+
+.accordion-item {
+  position: relative;
+  margin-bottom: 24px;
+  z-index: 1;
+}
+
+.accordion-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Header Row Layout */
+.pq-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-left: 25px; /* Space for dot */
+  position: relative;
+}
+
+/* Timeline Dot */
+.timeline-dot {
+  position: absolute;
+  left: 0; /* relative to padding-left above? No, to item */
+  /* Actually strictly positioned */
+  left: 3px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background-color: #e3eeff; /* Pale blue dot */
+  border-radius: 50%;
+  z-index: 2;
+}
+
+
+/* Date Text */
+.pq-title-1 {
+  font-size: 16px; 
+  font-weight: 500; /* Regular weight based on screenshot? Or 500 */
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Right Content: Weight + Arrow */
+.right-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pq-text-2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+  text-align: right;
+}
+
+.accordion-arrow {
+  color: #ccc;
+  transform: rotate(180deg); /* Arrow up by default? Or down? */
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.accordion-button.collapsed .accordion-arrow {
+  transform: rotate(0deg); 
+}
+
+/* Collapse Animation */
+.timeline-accordion-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.timeline-accordion-collapse.show {
+  max-height: 1000px; /* arbitrary large value */
+  opacity: 1;
+}
+
+.accordion-body {
+  padding-left: 25px; /* match indentation */
+  padding-top: 12px;
+}
+
+/* Details Rows */
+.pq-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align top if text wraps */
+  gap: 10px;
+}
+
+.pq-title-2 {
+  font-size: 13px;
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5;
+}
+
+.pq-title-2.fw-semibold {
+  font-weight: 600;
+}
+
+.d-flex {
+  display: flex;
+}
+.justify-space-between {
+  justify-content: space-between;
+}
+
+/* Backdrop */
+.timeline-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1040; /* Below slider (1050) but high enough */
+}
+.timeline-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}

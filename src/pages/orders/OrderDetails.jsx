@@ -277,7 +277,7 @@ const OrderDetails = () => {
           className={`order-details-col-right shrink-0 w-full xl:max-w-[380px] bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden ${trackingOpen ? "order-details-tracking-open block" : "hidden"
             } xl:block`}
         >
-          <div className="bg-[var(--color-secondary)] text-white px-3 py-3.5 flex justify-between items-center">
+          <div className="bg-[var(--color-secondary)] text-white px-2.5 py-2 flex justify-between items-center shrink-0">
             <h3 className="text-lg font-semibold">Order Tracking</h3>
             <button
               type="button"
@@ -288,10 +288,16 @@ const OrderDetails = () => {
               <Icon icon="mdi:close" className="w-5 h-5" />
             </button>
           </div>
-          <div className="p-3 border-b border-gray-200">
-            <p className="font-semibold text-gray-900">Order #{order.orderId}</p>
-            <p className="text-sm text-gray-500">Customer: {order.clientName?.replace(/\.$/, "")}</p>
-            <span className="inline-flex mt-2 px-2 py-0.5 rounded text-xs font-semibold bg-[#E3EEFF] text-[#0066FF]">
+          <div className="p-3 border-b border-gray-200 flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-900">
+                Order #{order.orderId}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Customer: {order.clientName?.replace(/\.$/, "")}
+              </div>
+            </div>
+            <span className="inline-flex px-1.5 py-0.5 rounded-full text-xs font-medium bg-[#E3EEFF] text-[#0066FF]">
               {order.currentStatus}
             </span>
           </div>

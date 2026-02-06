@@ -6,6 +6,7 @@ import PastOrderCard from "../../components/order/PastOrderCard";
 import StatsCards from "../../components/order/StatsCards";
 import ProductsTable from "../../components/order/productsTable";
 import PaymentDrawer from "../../components/order/PaymentDrawer";
+import QuantityTimelineDrawer from "../../components/common/QuantityTimelineDrawer";
 
 const DELIVERY_STEPS = [
   { key: "Ordered", label: "Ordered", description: "Order is in Ordered stage" },
@@ -128,6 +129,63 @@ const STATIC_MOST_BOUGHT = [
 
 const STATIC_LAST_ORDERED = "23 Aug, 2025 - 01:46 PM";
 
+// Timeline data for recent orders by product
+const PRODUCT_TIMELINE_DATA = {
+  "Pre-rolls": [
+    {
+      first: "12 Dec 2025",
+      second: "$200.00",
+      details: [
+        { first: "Order #302011", second: "$200.00", third: "12 Items", fourth: "Delivered" },
+        { first: "Order #302010", second: "$25.00", third: "5 Items", fourth: "Pending" },
+      ],
+    },
+    {
+      first: "11 Dec 2025",
+      second: "$150.00",
+      details: [
+        { first: "Order #302009", second: "$150.00", third: "8 Items", fourth: "Delivered" },
+      ],
+    },
+  ],
+  "Fruity Pebbles OG": [
+    {
+      first: "10 Dec 2025",
+      second: "$168.05",
+      details: [
+        { first: "Order #302008", second: "$168.05", third: "5 Grams", fourth: "Delivered" },
+      ],
+    },
+  ],
+  "Chocolope": [
+    {
+      first: "09 Dec 2025",
+      second: "$168.05",
+      details: [
+        { first: "Order #302007", second: "$168.05", third: "4.9 Grams", fourth: "Delivered" },
+      ],
+    },
+  ],
+  "Willo Grape Ape": [
+    {
+      first: "08 Dec 2025",
+      second: "$160.65",
+      details: [
+        { first: "Order #302006", second: "$160.65", third: "15 Units", fourth: "Delivered" },
+      ],
+    },
+  ],
+  "Euphoria Extractions Shatter Chews (3000 MG)": [
+    {
+      first: "07 Dec 2025",
+      second: "$100.16",
+      details: [
+        { first: "Order #302005", second: "$100.16", third: "10 Units", fourth: "Delivered" },
+      ],
+    },
+  ],
+};
+
 // Static data for Past Orders cards (3 cards – reusable card design)
 const STATIC_PAST_ORDERS = [
   {
@@ -227,6 +285,7 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
   const [activePaymentMethod, setActivePaymentMethod] = useState("");
+  const [timelineDrawerOpen, setTimelineDrawerOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
     storeCredit: "",
     handlerFee: "",
@@ -243,7 +302,7 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
     totalSavings: "",
     grandTotal: "",
   });
-
+  const [stepChecked, setStepChecked] = useState({});
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
@@ -294,13 +353,56 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, selectedOrder?.id]);
 
-  const completedStepIndex = useMemo(() => {
-    if (!selectedOrder) return -1;
-    const status = selectedOrder.deliveryStatus ?? selectedOrder.status ?? "";
-    const idx = STATUS_TO_INDEX[status];
-    return typeof idx === "number" ? idx : 0;
-  }, [selectedOrder]);
-
+  // const completedStepIndex = useMemo(() => {
+  //   if (!selectedOrder) return -1;
+  //   const status = selectedOrder.deliveryStatus ?? selectedOrder.status ?? "";
+  //   const idx = STATUS_TO_INDEX[status];
+  //   return typeof idx === "number" ? idx : 0;
+  // }, [selectedOrder]);
+  // Dummy timeline data
+  const timelineData = [
+    {
+      first: "05 November 2025",
+      second: "14.00gm",
+      details: [
+        { first: "#89 - Mango - at 12:40pm", second: "3.20gm" },
+        { first: "#88 - Sugar - at 12:36pm", second: "0.40gm" },
+        { first: "#87 - Tea, Mango, ginger - at 12:35pm", second: "10.40gm" },
+      ],
+    },
+    {
+      first: "26 November 2025",
+      second: "7.20gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "29 January 2026",
+      second: "57.90gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "01 February 2026",
+      second: "55.50gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "03 February 2026",
+      second: "82.50gm",
+      details: [],
+    },
+  ];
   const completedAt = useMemo(() => {
     if (!selectedOrder) return null;
     const d = selectedOrder.date ?? "";
@@ -506,7 +608,42 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
     setProductQuantities(initialQuantities);
     setSelectedProducts([]);
   };
+  // Get initial step checked state based on order status
+  const getInitialStepChecked = useCallback((status) => {
+    const idx = DELIVERY_STEPS.findIndex((s) => s.key === status);
+    const i = idx >= 0 ? idx : 0;
+    const initial = {};
+    DELIVERY_STEPS.forEach((s, j) => {
+      initial[s.key] = j <= i;
+    });
+    return initial;
+  }, []);
+  useEffect(() => {
+    if (selectedOrder) {
+      const status = selectedOrder.deliveryStatus || selectedOrder.currentStatus || "Ordered";
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setStepChecked(getInitialStepChecked(status));
+    }
+  }, [selectedOrder, getInitialStepChecked]);
+  const handleStepChange = useCallback((stepKey, checked) => {
+    setStepChecked((prev) => {
+      const next = { ...prev };
+      const idx = DELIVERY_STEPS.findIndex((s) => s.key === stepKey);
+      if (checked) {
+        for (let i = 0; i <= idx; i++) next[DELIVERY_STEPS[i].key] = true;
+      } else {
+        for (let i = idx; i < DELIVERY_STEPS.length; i++) next[DELIVERY_STEPS[i].key] = false;
+      }
+      return next;
+    });
+  }, []);
 
+  // Check if a step is disabled (can't skip steps)
+  const isStepDisabled = useCallback((stepKey) => {
+    const idx = DELIVERY_STEPS.findIndex((s) => s.key === stepKey);
+    if (idx === 0) return false;
+    return !stepChecked[DELIVERY_STEPS[idx - 1].key];
+  }, [stepChecked]);
   if (!isOpen) return null;
 
   return (
@@ -1186,9 +1323,15 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
                       header: "Action",
                       align: "left",
                       render: () => (
-                        <a href="#" className="text-[var(--color-secondary)] hover:underline text-xs font-semibold">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setTimelineDrawerOpen(true);
+                          }}
+                          className="text-[var(--color-secondary)] hover:underline text-xs font-semibold"
+                        >
                           View Recent Order
-                        </a>
+                        </button>
                       ),
                     },
                   ]}
@@ -1250,13 +1393,14 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
                               onChange={(e) => setSelectedDriver(e.target.value)}
                               options={DRIVER_OPTIONS}
                               placeholder="Select driver"
-                              className="w-full h-9 text-sm focus:ring-2 focus:ring-[#0066FF] focus:border-transparent"
+                              className="w-full h-[30px] min-h-[35px] text-sm"
+                              compact
                             />
                           </div>
                           <button
                             type="button"
                             disabled={!selectedDriver}
-                            className="shrink-0 h-8.5 px-10 text-sm font-medium text-white rounded-sm bg-[var(--color-secondary)]"
+                            className="shrink-0 h-8.5 px-10 mb-0.5 text-sm font-medium text-white rounded-sm bg-[var(--color-secondary)]"
                           >
                             Assign
                           </button>
@@ -1272,7 +1416,8 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
                             onChange={(e) => setSelectedCompany(e.target.value)}
                             options={COMPANY_OPTIONS}
                             placeholder="Select company"
-                            className="w-full h-9 text-sm focus:ring-2 focus:ring-[#0066FF] focus:border-transparent"
+                            className="w-full h-[30px] min-h-[35px] text-sm"
+                            compact
                           />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -1282,13 +1427,14 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
                             onChange={(e) => setSelectedHandler(e.target.value)}
                             options={HANDLER_OPTIONS}
                             placeholder="Select handler"
-                            className="w-full h-9 text-sm focus:ring-2 focus:ring-[#0066FF] focus:border-transparent"
+                            className="w-full h-[30px] min-h-[35px] text-sm"
+                            compact
                           />
                         </div>
                         <button
                           type="button"
                           disabled={!selectedCompany && !selectedHandler}
-                          className="shrink-0 h-8.5 px-10 text-sm font-medium text-white rounded-sm bg-[var(--color-secondary)]"
+                          className="shrink-0 h-8.5 px-10 mb-0.5 text-sm font-medium text-white rounded-sm bg-[var(--color-secondary)]"
                         >
                           Assign
                         </button>
@@ -1298,36 +1444,64 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
                   )}
                   {activeTab === "Order Tracking" && !isCancelled && (
                     <>
-                      <hr className=" border-gray-200 w-full" />
-                      <div className="p-4">
-                        <h3 className="text-sm font-medium text-gray-800 mb-4">Delivery Process</h3>
-                        <div className="relative  space-y-5">
-                          <div className="absolute left-[11px] top-0 bottom-0 w-px " />
-                          {DELIVERY_STEPS.map((step, idx) => {
-                            const isCompleted = idx <= completedStepIndex;
-                            const isOrderedStep = step.key === "Ordered";
+                      <div className="p-3">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-4">
+                          Delivery Process
+                        </h4>
+                        <div className="relative">
+                          {DELIVERY_STEPS.map((step) => {
+                            const isCompleted = stepChecked[step.key];
+                            const isDisabled = isStepDisabled(step.key);
+
                             return (
-                              <div key={step.key} className="relative flex items-start gap-3">
-                                <div className="relative z-10 flex items-center justify-center mt-0.5 shrink-0">
-                                  {isCompleted ? (
-                                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-white">
-                                      <Icon icon="mdi:check" className="h-3.5 w-3.5" />
-                                    </span>
-                                  ) : (
-                                    <span className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-300 bg-white" aria-hidden />
-                                  )}
+                              <div
+                                key={step.key}
+                                className="relative flex items-start gap-3 pb-6 last:pb-0"
+                              >
+                                {/* Circle */}
+                                <div className="relative z-10 mt-0.5">
+                                  <button
+                                    disabled={isDisabled}
+                                    onClick={() => handleStepChange(step.key, !isCompleted)}
+                                    className={`w-4 h-4 rounded-full flex items-center justify-center border
+                                     ${isCompleted
+                                        ? "bg-[var(--color-primary)] border-green-600"
+                                        : "bg-white border-gray-300"
+                                      }
+                                     ${!isDisabled ? "cursor-pointer" : "cursor-not-allowed"}
+                                   `}
+                                  >
+                                    {isCompleted && (
+                                      <Icon
+                                        icon="mdi:check"
+                                        className="text-white w-4 h-4"
+                                      />
+                                    )}
+                                  </button>
                                 </div>
-                                <div className="flex-1 min-w-0 pt-0.5">
-                                  <p className="text-sm font-semibold text-gray-800">
-                                    {step.label}:
-                                  </p>
-                                  <p className="text-sm font-normal text-gray-500 mt-0.5">{step.description}</p>
-                                  {isOrderedStep && completedAt && (
-                                    <p className="text-xs font-normal text-green-600 flex items-center gap-1.5 mt-2 pl-0">
-                                      <Icon icon="mdi:check" className="h-3.5 w-3.5 shrink-0" />
-                                      Completed on {completedAt}
-                                    </p>
-                                  )}
+
+                                {/* Text */}
+                                <div className="flex-1">
+                                  <div className="text-[13px] mb-0.5 font-semibold text-gray-900">
+                                    {step.label}
+                                  </div>
+
+                                  <div className="text-[11.5px]  text-gray-500">
+                                    {step.description}
+                                  </div>
+
+                                  {/* Completed time (only for completed Ordered in screenshot) */}
+                                  {isCompleted &&
+                                    step.key === "Ordered" &&
+                                    selectedOrder?.date && (
+                                      <div className="text-xs text-[var(--color-primary)] flex items-center gap-1 mt-1">
+                                        <Icon
+                                          icon="mdi:check-circle"
+                                          className="w-3 h-3"
+                                        />
+                                        Completed on {selectedOrder.date}
+                                      </div>
+                                    )}
                                 </div>
                               </div>
                             );
@@ -1524,6 +1698,15 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
         }}
         recipientEmail="ccmail647@gmail.com"
       />
+      <>
+
+        <QuantityTimelineDrawer
+          isOpen={timelineDrawerOpen}
+          onClose={() => setTimelineDrawerOpen(false)}
+          title="Quantity"
+          items={timelineData}
+        />
+      </>
     </>
   );
 };

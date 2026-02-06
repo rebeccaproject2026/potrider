@@ -8,6 +8,11 @@ const DELIVERY_STEPS = [
   { key: "Out For Delivery", label: "Out For Delivery", description: "Order is in Out For Delivery stage" },
   { key: "Delivered", label: "Delivered", description: "Order is in Delivered stage" },
 ];
+const STATUS_STYLES = {
+  Pending: "bg-yellow-100 text-yellow-700",
+  Ordered: "bg-blue-100 text-blue-600",
+  Cancelled: "bg-red-100 text-red-600",
+};
 
 const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,6 +34,7 @@ const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
   useEffect(() => {
     if (selectedOrder) {
       const status = selectedOrder.deliveryStatus || selectedOrder.currentStatus || "Ordered";
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStepChecked(getInitialStepChecked(status));
     }
   }, [selectedOrder, getInitialStepChecked]);
@@ -36,6 +42,7 @@ const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
   // Handle drawer visibility animation
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -66,10 +73,11 @@ const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
   // Handle save changes
   const handleSaveChanges = useCallback(() => {
     setSaving(true);
-    let lastChecked = null;
+    // let lastChecked = null;
     for (let i = DELIVERY_STEPS.length - 1; i >= 0; i--) {
       if (stepChecked[DELIVERY_STEPS[i].key]) {
-        lastChecked = DELIVERY_STEPS[i].key;
+
+        // lastChecked = DELIVERY_STEPS[i].key;
         break;
       }
     }
@@ -119,8 +127,8 @@ const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
         aria-labelledby="order-tracking-title"
       >
         {/* Header */}
-        <div className="bg-[var(--color-secondary)] text-white px-3 py-3.5 flex justify-between items-center shrink-0">
-          <h3 id="order-tracking-title" className="text-lg font-semibold">
+        <div className="bg-[var(--color-secondary)] text-white px-2.5 py-2 flex justify-between items-center shrink-0">
+          <h3 id="order-tracking-title" className="text-base font-semibold">
             Order Tracking
           </h3>
           <button
@@ -135,72 +143,107 @@ const OrderTrackingDrawer = ({ isOpen, onClose, selectedOrder }) => {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto min-h-0">
-          {/* Order Info Section */}
-          <div className="p-3 border-b border-gray-200">
-            <p className="font-semibold text-gray-900">Order #{order.orderId}</p>
-            <p className="text-sm text-gray-500">Customer: {order.clientName?.replace(/\.$/, "")}</p>
-            <span className="inline-flex mt-2 px-2 py-0.5 rounded text-xs font-semibold bg-[#E3EEFF] text-[#0066FF]">
+          <div className="p-3 border-b border-gray-200 flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-900">
+                Order #{order.orderId}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Customer: {order.clientName?.replace(/\.$/, "")}
+              </div>
+            </div>
+            <span
+              className={`inline-flex px-1.5 py-0.5 rounded-full text-xs font-medium
+    ${STATUS_STYLES[order.currentStatus] || "bg-gray-100 text-gray-600"}
+  `}
+            >
               {order.currentStatus}
             </span>
           </div>
-
           {/* Delivery Process Section */}
           <div className="p-3">
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Delivery Process</h4>
-            <div className="relative ">
-              {/* <div className="absolute left-[11px] top-0 bottom-0 w-px bg-gray-200" /> */}
-              {DELIVERY_STEPS.map((step, idx) => (
-                <div key={step.key} className="relative flex items-start gap-3 pb-4 last:pb-0">
-                  <div className="relative z-10 flex items-center justify-center mt-0.5">
-                    <input
-                      type="checkbox"
-                      id={`step-${step.key}`}
-                      checked={!!stepChecked[step.key]}
-                      disabled={isStepDisabled(step.key)}
-                      onChange={(e) => handleStepChange(step.key, e.target.checked)}
-                      className="order-details-custom-checkbox"
-                    />
+            <h4 className="text-sm font-semibold text-gray-900 mb-4">
+              Delivery Process
+            </h4>
+            <div className="relative">
+              {DELIVERY_STEPS.map((step) => {
+                const isCompleted = stepChecked[step.key];
+                const isDisabled = isStepDisabled(step.key);
+
+                return (
+                  <div
+                    key={step.key}
+                    className="relative flex items-start gap-3 pb-6 last:pb-0"
+                  >
+                    {/* Circle */}
+                    <div className="relative z-10 mt-0.5">
+                      <button
+                        disabled={isDisabled}
+                        onClick={() => handleStepChange(step.key, !isCompleted)}
+                        className={`w-4 h-4 rounded-full flex items-center justify-center border
+                ${isCompleted
+                            ? "bg-[var(--color-primary)] border-green-600"
+                            : "bg-white border-gray-300"
+                          }
+                ${!isDisabled ? "cursor-pointer" : "cursor-not-allowed"}
+              `}
+                      >
+                        {isCompleted && (
+                          <Icon
+                            icon="mdi:check"
+                            className="text-white w-4 h-4"
+                          />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Text */}
+                    <div className="flex-1">
+                      <div className="text-[13px] mb-0.5 font-semibold text-gray-900">
+                        {step.label}
+                      </div>
+
+                      <div className="text-[11.5px]  text-gray-500">
+                        {step.description}
+                      </div>
+
+                      {/* Completed time (only for completed Ordered in screenshot) */}
+                      {isCompleted &&
+                        step.key === "Ordered" &&
+                        selectedOrder?.date && (
+                          <div className="text-xs text-[var(--color-primary)] flex items-center gap-1 mt-1">
+                            <Icon
+                              icon="mdi:check-circle"
+                              className="w-3 h-3"
+                            />
+                            Completed on {selectedOrder.date}
+                          </div>
+                        )}
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <label
-                      htmlFor={`step-${step.key}`}
-                      className="text-sm font-semibold text-gray-900 cursor-pointer block"
-                    >
-                      {step.label}:
-                    </label>
-                    <p className="text-sm text-gray-500">{step.description}</p>
-                    {stepChecked[step.key] && step.key === "Ordered" && order.completedAt && (
-                      <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                        <Icon icon="mdi:check-circle-outline" className="w-3 h-3" />
-                        Completed on {order.completedAt}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="p-3 pt-4 flex flex-wrap justify-end gap-2 border-t border-gray-200 shrink-0">
-          <button
-            type="button"
-            onClick={handleCancelOrder}
-            className="inline-flex items-center gap-2 px-3 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-sm hover:bg-red-700 transition-colors"
-          >
-            <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
-            Cancel Order
-          </button>
-          <button
-            type="button"
-            onClick={handleSaveChanges}
-            disabled={saving}
-            className="inline-flex items-center gap-2 px-3 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
+          <div className="p-3 pt-4 flex flex-wrap justify-end gap-2 border-t border-gray-200 shrink-0">
+            <button
+              type="button"
+              onClick={handleCancelOrder}
+              className="inline-flex items-center gap-2 px-3 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-sm hover:bg-red-700 transition-colors"
+            >
+              <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
+              Cancel Order
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveChanges}
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-3 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         </div>
       </div>
     </>

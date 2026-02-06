@@ -47,6 +47,7 @@ const Select = ({
   getOptionMeta = (o) => o.meta ?? "",
   minWidth = "100px",
   compact = false,
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -273,9 +274,8 @@ const Select = ({
         type="button"
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
-        className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border bg-white border-[#DDDDDD] rounded-sm text-[#0000] font-medium focus:outline-none cursor-pointer shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${
-          compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
-        }`}
+        className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border bg-white border-[#DDDDDD] rounded-sm text-[#0000] font-medium focus:outline-none cursor-pointer shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
+          } ${className}`}
       >
         <span className="overflow-hidden whitespace-nowrap text-sm flex-1 text-left text-gray-600">
           {displayOption || displayTitle}

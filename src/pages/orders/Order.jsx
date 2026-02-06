@@ -7,6 +7,7 @@ import OrdersTable from "../../components/order/OrdersTable";
 import OrderAnalytics from "../../components/order/OrderAnalytics";
 import OrderDetailsDrawer from "./OrderDetailsDrawer";
 import OrderTrackingDrawer from "../../components/order/OrderTrackingDrawer";
+import QuantityTimelineDrawer from "../../components/common/QuantityTimelineDrawer";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
 
 const Order = () => {
@@ -39,6 +40,70 @@ const Order = () => {
   const [selectedTrackingOrder, setSelectedTrackingOrder] = useState(null);
   const [isTrackingDrawerOpen, setIsTrackingDrawerOpen] = useState(false);
 
+  // Quantity Timeline Drawer state
+  const [timelineConfig, setTimelineConfig] = useState({
+    isOpen: false,
+    title: "Quantity",
+    items: []
+  });
+
+  // Dummy timeline data
+  const timelineData = [
+    {
+      first: "05 November 2025",
+      second: "14.00gm",
+      details: [
+        { first: "#89 - Mango - at 12:40pm", second: "3.20gm" },
+        { first: "#88 - Sugar - at 12:36pm", second: "0.40gm" },
+        { first: "#87 - Tea, Mango, ginger - at 12:35pm", second: "10.40gm" },
+      ],
+    },
+    {
+      first: "26 November 2025",
+      second: "7.20gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "29 January 2026",
+      second: "57.90gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "01 February 2026",
+      second: "55.50gm",
+      details: [
+        { first: "#144 - yogurt - at 09:15pm", second: "0.50gm" },
+        { first: "#143 - new test - at 09:05pm", second: "6.30gm" },
+        { first: "#142 - yogurt - at 09:04pm", second: "0.40gm" },
+      ],
+    },
+    {
+      first: "03 February 2026",
+      second: "82.50gm",
+      details: [],
+    },
+  ];
+
+  const handleOpenTimeline = useCallback((item) => {
+    setTimelineConfig({
+      isOpen: true,
+      title: item.title || "Quantity",
+      items: timelineData // User requested this specific static data
+    });
+  }, []);
+
+  const handleCloseTimeline = useCallback(() => {
+    setTimelineConfig(prev => ({ ...prev, isOpen: false }));
+  }, []);
+
   // Handlers - defined first
   const handleView = useCallback((row) => {
     setSelectedOrder(row ?? null);
@@ -51,6 +116,7 @@ const Order = () => {
 
   // Handle status click to open tracking drawer
   const handleStatusClick = useCallback((row) => {
+    console.log("Status click:", row);
     setSelectedTrackingOrder(row ?? null);
     setIsTrackingDrawerOpen(true);
   }, []);
@@ -84,7 +150,7 @@ const Order = () => {
   );
   const tableData = useMemo(() => getOrdersData(), []);
 
-  // Orders summary data
+  // Orders summary data (icon classes from tracking steps: fi = Flaticon-style icon font)
   const ordersSummary = {
     shipping: {
       title: "New Orders",
@@ -95,6 +161,7 @@ const Order = () => {
       change: "-8%",
       borderColor: "border-orange-500",
       icon: ordersIcon,
+      iconClass: "fi-rr-clipboard-list",
     },
     processing: {
       title: "Processing",
@@ -105,6 +172,7 @@ const Order = () => {
       change: "+5%",
       borderColor: "border-yellow-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rr-process",
     },
     shipped: {
       title: "Shipped",
@@ -115,6 +183,7 @@ const Order = () => {
       change: "+5%",
       borderColor: "border-purple-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rr-dolly-flatbed",
     },
     inTransit: {
       title: "In-Transit",
@@ -125,6 +194,7 @@ const Order = () => {
       change: "-10%",
       borderColor: "border-blue-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rs-shipping-fast",
     },
     delivered: {
       title: "Delivered",
@@ -135,6 +205,7 @@ const Order = () => {
       change: "+10%",
       borderColor: "border-green-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rr-home",
     },
   };
 
@@ -187,6 +258,7 @@ const Order = () => {
       bgColor: "bg-blue-50",
       borderColor: "border-blue-500",
       icon: ordersIcon,
+      iconClass: "fi-rr-clipboard-list",
     },
     packed: {
       title: "Packed",
@@ -198,6 +270,7 @@ const Order = () => {
       bgColor: "bg-orange-50",
       borderColor: "border-orange-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rr-dolly-flatbed",
     },
     outForDelivery: {
       title: "Out for Delivery",
@@ -209,6 +282,7 @@ const Order = () => {
       bgColor: "bg-purple-50",
       borderColor: "border-purple-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rs-shipping-fast",
     },
     delivered: {
       title: "Delivered",
@@ -220,6 +294,7 @@ const Order = () => {
       bgColor: "bg-green-50",
       borderColor: "border-green-500",
       icon: ordersIcon,
+      iconClass: "fi fi-rr-home",
     },
   };
 
@@ -304,17 +379,19 @@ const Order = () => {
             {item.title} ({item.orders})
           </p>
           <div
-            className="w-9 h-9 flex items-center justify-center rounded-lg shrink-0"
+            className="w-9 h-9 flex items-center justify-center rounded-full shrink-0"
             style={{ backgroundColor: item.iconsBg }}
           >
-            <Icon
-              icon="solar:documents-outline"
-              width="18"
-              height="18"
-              color={item.color}
-            />
+            {item.iconClass ? (
+              <i className={item.iconClass} style={{ color: item.color, fontSize: "18px" }} aria-hidden="true" />
+            ) : (
+              <Icon icon="solar:documents-outline" width="18" height="18" color={item.color} />
+            )}
           </div>
-          <button className="text-[12px] text-[#3F4753] font-bold underline hover:underline mt-2">
+          <button
+            onClick={() => handleOpenTimeline(item)}
+            className="text-[12px] text-[#3F4753] font-bold underline hover:underline mt-2"
+          >
             View Orders
           </button>
         </div>
@@ -347,7 +424,7 @@ const Order = () => {
 
 
   return (
-    <div className="min-w-0 max-w-full  overflow-x-hidden">
+    <div className="min-w-0 max-w-full  overflow-x-hidden pr-2">
       {/* Header - fixed */}
       <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <DatePickerMap
@@ -438,6 +515,14 @@ const Order = () => {
         isOpen={isTrackingDrawerOpen}
         onClose={handleCloseTrackingDrawer}
         selectedOrder={selectedTrackingOrder}
+      />
+
+      {/* Quantity Timeline Drawer */}
+      <QuantityTimelineDrawer
+        isOpen={timelineConfig.isOpen}
+        onClose={handleCloseTimeline}
+        title={timelineConfig.title}
+        items={timelineConfig.items}
       />
     </div>
   );
