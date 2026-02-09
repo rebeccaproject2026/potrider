@@ -8,7 +8,26 @@ import OrderAnalytics from "../../components/order/OrderAnalytics";
 import OrderDetailsDrawer from "./OrderDetailsDrawer";
 import OrderTrackingDrawer from "../../components/order/OrderTrackingDrawer";
 import QuantityTimelineDrawer from "../../components/common/QuantityTimelineDrawer";
+import OrderSummaryCard from "../../components/order/OrderSummaryCard";
+import CustomerDetailsDrawer from "./CustomerDetailsDrawer";
+import ActionModal from "../../components/common/ActionModal";
+import Select from "../../components/Select";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
+
+const DRIVERS_LIST = [
+  { value: "Abou Zidan Houssin", label: "Abou Zidan Houssin" },
+  { value: "John Doe", label: "John Doe" },
+  { value: "Mike Johnson", label: "Mike Johnson" },
+  { value: "Sarah Johnson", label: "Sarah Johnson" },
+];
+
+const PAYMENT_STATUS_list = [
+  { value: "Pending", label: "Pending" },
+  { value: "Paid", label: "Paid" },
+  { value: "Refunded", label: "Refunded" },
+  { value: "Dispute", label: "Dispute" },
+  { value: "Cancelled", label: "Cancelled" },
+];
 
 const Order = () => {
   const navigate = useNavigate();
@@ -40,12 +59,26 @@ const Order = () => {
   const [selectedTrackingOrder, setSelectedTrackingOrder] = useState(null);
   const [isTrackingDrawerOpen, setIsTrackingDrawerOpen] = useState(false);
 
+  // Customer drawer state
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [isCustomerDrawerOpen, setIsCustomerDrawerOpen] = useState(false);
+
   // Quantity Timeline Drawer state
   const [timelineConfig, setTimelineConfig] = useState({
     isOpen: false,
     title: "Quantity",
     items: []
   });
+
+  // Action Modal State (Assign Driver / Update Payment)
+  const [actionModal, setActionModal] = useState({
+    isOpen: false,
+    type: null, // "courier" | "payment"
+    title: "",
+    data: null,
+    actionLabel: "Assign"
+  });
+  const [assignValue, setAssignValue] = useState(""); // Selected value in modal
 
   // Dummy timeline data
   const timelineData = [
@@ -143,10 +176,52 @@ const Order = () => {
     // Search is handled internally by OrdersTable
   }, []);
 
+  const handleCustomerClick = useCallback((row) => {
+    setSelectedCustomer(row ?? null);
+    setIsCustomerDrawerOpen(true);
+  }, []);
+
+  const handleCloseCustomerDrawer = useCallback(() => {
+    setIsCustomerDrawerOpen(false);
+    setSelectedCustomer(null);
+  }, []);
+
+  const handleCourierClick = useCallback((row) => {
+    setActionModal({
+      isOpen: true,
+      type: "courier",
+      title: "Assign Driver",
+      data: row,
+      actionLabel: "Assign"
+    });
+    setAssignValue(row.courier || ""); // Pre-fill current value if any
+  }, []);
+
+  const handlePaymentStatusClick = useCallback((row) => {
+    setActionModal({
+      isOpen: true,
+      type: "payment",
+      title: "Update Payment Status",
+      data: row,
+      actionLabel: "Update"
+    });
+    setAssignValue(row.paymentStatus || "Pending");
+  }, []);
+
+  const handleActionConfirm = useCallback(() => {
+    console.log(`Action Confirm: Type=${actionModal.type}, Value=${assignValue}, Order=${actionModal.data?.orderId}`);
+    // Here you would call API to update order
+    setActionModal(prev => ({ ...prev, isOpen: false }));
+  }, [actionModal, assignValue]);
+
+  const handleCloseActionModal = useCallback(() => {
+    setActionModal(prev => ({ ...prev, isOpen: false }));
+  }, []);
+
   // Get columns and data - after handlers are defined
   const columns = useMemo(
-    () => getOrdersColumns(handleView, handleDelete, handleStatusClick),
-    [handleView, handleDelete, handleStatusClick]
+    () => getOrdersColumns(handleView, handleDelete, handleStatusClick, handleCustomerClick, handleCourierClick, handlePaymentStatusClick),
+    [handleView, handleDelete, handleStatusClick, handleCustomerClick, handleCourierClick, handlePaymentStatusClick]
   );
   const tableData = useMemo(() => getOrdersData(), []);
 
@@ -367,60 +442,7 @@ const Order = () => {
     setAnalyticsState((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
-  const OrderCard = ({ item }) => (
-    <div className="bg-white rounded-md border border-gray-200 p-3 flex items-center justify-between gap-3 min-w-0">
-      {/* Left */}
-      <div className="flex items-center gap-2 min-w-0 flex-1">
-        <div className="min-w-0 flex-1">
-          <p
-            className="text-[13px] font-semibold truncate mb-2"
-            style={{ color: item.color }}
-          >
-            {item.title} ({item.orders})
-          </p>
-          <div
-            className="w-9 h-9 flex items-center justify-center rounded-full shrink-0"
-            style={{ backgroundColor: item.iconsBg }}
-          >
-            {item.iconClass ? (
-              <i className={item.iconClass} style={{ color: item.color, fontSize: "18px" }} aria-hidden="true" />
-            ) : (
-              <Icon icon="solar:documents-outline" width="18" height="18" color={item.color} />
-            )}
-          </div>
-          <button
-            onClick={() => handleOpenTimeline(item)}
-            className="text-[12px] text-[#3F4753] font-bold underline hover:underline mt-2"
-          >
-            View Orders
-          </button>
-        </div>
-      </div>
 
-      {/* Right */}
-      <div className="min-w-0 flex-shrink-0">
-        <p className="text-base font-bold text-gray-900 mb-0.5">
-          {item.amount}
-        </p>
-        <span
-          className={`text-xs font-semibold flex justify-end ${item.change.startsWith("+")
-            ? "text-green-600"
-            : "text-red-600"
-            }`}
-        >
-          {item.change}
-        </span>
-        <div className="flex justify-end">
-          <button
-            onClick={() => handleOpenAnalytics(item)}
-            className="text-[10px] text-[#3F4753] font-bold underline hover:underline mt-6"
-          >
-            Analytics
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 
 
   return (
@@ -459,7 +481,12 @@ const Order = () => {
         <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Delivery</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
           {Object.values(deliveryOrders).map((item, idx) => (
-            <OrderCard key={idx} item={item} />
+            <OrderSummaryCard
+              key={idx}
+              item={item}
+              onOpenTimeline={handleOpenTimeline}
+              onOpenAnalytics={handleOpenAnalytics}
+            />
           ))}
         </div>
       </div>
@@ -477,7 +504,12 @@ const Order = () => {
             3: ordersSummary.inTransit,
             4: ordersSummary.delivered,
           }).map((item, idx) => (
-            <OrderCard key={idx} item={item} />
+            <OrderSummaryCard
+              key={idx}
+              item={item}
+              onOpenTimeline={handleOpenTimeline}
+              onOpenAnalytics={handleOpenAnalytics}
+            />
           ))}
         </div>
       </div>
@@ -491,6 +523,7 @@ const Order = () => {
         onView={handleView}
         onDelete={handleDelete}
         onStatusClick={handleStatusClick}
+        onCustomerClick={handleCustomerClick}
       />
 
       {/* Order Analytics Component */}
@@ -502,6 +535,41 @@ const Order = () => {
         isOpen={analyticsState.isOpen}
         onClose={handleCloseAnalytics}
       />
+
+      <ActionModal
+        isOpen={actionModal.isOpen}
+        onClose={handleCloseActionModal}
+        title={actionModal.title}
+        onAction={handleActionConfirm}
+        actionLabel={actionModal.actionLabel}
+      >
+        <div className="flex flex-col gap-2">
+          {actionModal.type === "courier" && (
+            <div>
+              <label className="block text-sm font-semibold text-[#000] mb-2">Drivers:</label>
+              <Select
+                options={DRIVERS_LIST}
+                value={assignValue}
+                onChange={(e) => setAssignValue(e.target.value)}
+                placeholder="Select Driver"
+                className="w-full h-5 min-h-5"
+              />
+            </div>
+          )}
+          {actionModal.type === "payment" && (
+            <div>
+              <label className="block text-sm font-semibold text-[#000] mb-2">Payment Status:</label>
+              <Select
+                options={PAYMENT_STATUS_list}
+                value={assignValue}
+                onChange={(e) => setAssignValue(e.target.value)}
+                placeholder="Select Status"
+                className="w-full h-5 min-h-5"
+              />
+            </div>
+          )}
+        </div>
+      </ActionModal>
 
       {/* Order Details Drawer – opens on Eye icon click */}
       <OrderDetailsDrawer
@@ -523,6 +591,13 @@ const Order = () => {
         onClose={handleCloseTimeline}
         title={timelineConfig.title}
         items={timelineConfig.items}
+      />
+
+      {/* Customer Details Drawer - triggered by clicking Customer Name */}
+      <CustomerDetailsDrawer
+        isOpen={isCustomerDrawerOpen}
+        onClose={handleCloseCustomerDrawer}
+        customerName={selectedCustomer?.customer}
       />
     </div>
   );

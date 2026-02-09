@@ -7,6 +7,7 @@ import StatsCards from "../../components/order/StatsCards";
 import ProductsTable from "../../components/order/productsTable";
 import PaymentDrawer from "../../components/order/PaymentDrawer";
 import QuantityTimelineDrawer from "../../components/common/QuantityTimelineDrawer";
+import Drawer from "../../components/common/Drawer";
 
 const DELIVERY_STEPS = [
   { key: "Ordered", label: "Ordered", description: "Order is in Ordered stage" },
@@ -268,7 +269,6 @@ const STATIC_INVOICE = {
 };
 
 const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("Order Tracking");
   const [selectedDriver, setSelectedDriver] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
@@ -307,6 +307,7 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // eslint-disable-next-line no-undef
     const id = requestAnimationFrame(() => setIsVisible(true));
     return () => {
       cancelAnimationFrame(id);
@@ -648,18 +649,10 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
 
   return (
     <>
-      <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      <div
-        className="fixed top-0 right-0 h-full w-[88vw] max-w-[100vw] bg-white z-50 shadow-xl transition-transform duration-300 ease-out flex flex-col"
-        style={{ transform: isVisible ? "translateX(0)" : "translateX(100%)" }}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Order details"
+      <Drawer
+        isOpen={isOpen}
+        onClose={onClose}
+        width="w-[88vw] max-w-[100vw]"
       >
         {/* Unified view - fields become editable when isEditMode is true */}
         <>
@@ -1681,10 +1674,10 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
             </div>
           </div>
         </>
-      </div >
+      </Drawer>
 
       {/* Payment Drawer - Reusable Component */}
-      < PaymentDrawer
+      <PaymentDrawer
         isOpen={paymentDrawerOpen}
         onClose={handleClosePaymentDrawer}
         paymentMethod={activePaymentMethod}
@@ -1698,15 +1691,13 @@ const OrderDetailsDrawer = ({ isOpen, onClose, selectedOrder }) => {
         }}
         recipientEmail="ccmail647@gmail.com"
       />
-      <>
 
-        <QuantityTimelineDrawer
-          isOpen={timelineDrawerOpen}
-          onClose={() => setTimelineDrawerOpen(false)}
-          title="Quantity"
-          items={timelineData}
-        />
-      </>
+      <QuantityTimelineDrawer
+        isOpen={timelineDrawerOpen}
+        onClose={() => setTimelineDrawerOpen(false)}
+        title="Quantity"
+        items={timelineData}
+      />
     </>
   );
 };

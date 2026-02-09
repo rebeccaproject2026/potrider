@@ -224,10 +224,10 @@ const getTrackingTableColumns = (onView, onDelete) => [
         v === "Delivered"
           ? "bg-[#D4FFDA] text-[#109F22]"
           : v === "Pending"
-          ? "bg-[#E3EEFF] text-[#0066FF]"
-          : v === "In-progress" || v === "Processing"
-          ? "bg-[#FFF5E5] text-[#FF9800]"
-          : "bg-[#FEECEB] text-[#F44336]";
+            ? "bg-[#E3EEFF] text-[#0066FF]"
+            : v === "In-progress" || v === "Processing"
+              ? "bg-[#FFF5E5] text-[#FF9800]"
+              : "bg-[#FEECEB] text-[#F44336]";
       return (
         <span
           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}
@@ -245,11 +245,10 @@ const getTrackingTableColumns = (onView, onDelete) => [
       const isOnline = v === "online";
       return (
         <span
-          className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            isOnline
+          className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${isOnline
               ? "bg-[#D4FFDA] text-[#109F22]"
               : "bg-[#FEECEB] text-[#F44336]"
-          }`}
+            }`}
         >
           {isOnline ? "Online" : "Offline"}
         </span>
@@ -524,7 +523,7 @@ const Tracking = () => {
         {SUMMARY_CARDS.map((card) => (
           <div
             key={card.key}
-            className="bg-white rounded-md border border-gray-200 p-3 flex items-center justify-between gap-3 min-w-0"
+            className="bg-white rounded-sm border border-gray-200 p-3 flex items-center justify-between gap-3 min-w-0"
           >
             {/* Left – title, icon, View Products */}
             <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -558,9 +557,8 @@ const Tracking = () => {
                 {card.value}
               </p>
               <span
-                className={`text-xs font-semibold flex justify-end ${
-                  card.trendUp ? "text-green-600" : "text-red-600"
-                }`}
+                className={`text-xs font-semibold flex justify-end ${card.trendUp ? "text-green-600" : "text-red-600"
+                  }`}
               >
                 {card.trend}
               </span>
@@ -583,13 +581,12 @@ const Tracking = () => {
                     activeStatusFilter === filter.key ? null : filter.key
                   )
                 }
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  activeStatusFilter === filter.key
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${activeStatusFilter === filter.key
                     ? "bg-white border border-gray-300 shadow-sm " +
-                      filter.color
+                    filter.color
                     : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-100 " +
-                      filter.color
-                }`}
+                    filter.color
+                  }`}
               >
                 {filter.label} {filter.count}
               </button>
@@ -599,22 +596,20 @@ const Tracking = () => {
             <button
               type="button"
               onClick={() => setDeliveryMode("delivery")}
-              className={`px-4 py-2 text-sm font-medium ${
-                deliveryMode === "delivery"
+              className={`px-4 py-2 text-sm font-medium ${deliveryMode === "delivery"
                   ? "bg-(--color-secondary) text-white"
                   : "text-gray-600 hover:bg-gray-50"
-              }`}
+                }`}
             >
               Delivery
             </button>
             <button
               type="button"
               onClick={() => setDeliveryMode("shipping")}
-              className={`px-4 py-2 text-sm font-medium ${
-                deliveryMode === "shipping"
+              className={`px-4 py-2 text-sm font-medium ${deliveryMode === "shipping"
                   ? "bg-(--color-secondary) text-white"
                   : "text-gray-600 hover:bg-gray-50"
-              }`}
+                }`}
             >
               Shipping
             </button>
@@ -628,22 +623,20 @@ const Tracking = () => {
             <button
               type="button"
               onClick={() => setMapView("map")}
-              className={`px-3 py-2 text-sm font-medium ${
-                mapView === "map"
+              className={`px-3 py-2 text-sm font-medium ${mapView === "map"
                   ? "bg-white text-(--color-secondary)"
                   : "text-gray-500"
-              }`}
+                }`}
             >
               Map
             </button>
             <button
               type="button"
               onClick={() => setMapView("satellite")}
-              className={`px-3 py-2 text-sm font-medium ${
-                mapView === "satellite"
+              className={`px-3 py-2 text-sm font-medium ${mapView === "satellite"
                   ? "bg-white text-(--color-secondary)"
                   : "text-gray-500"
-              }`}
+                }`}
             >
               Satellite
             </button>
@@ -805,17 +798,16 @@ const Tracking = () => {
                   key={key}
                   type="button"
                   onClick={() => setTableDriverStatus(key)}
-                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
-                    tableDriverStatus === key
+                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${tableDriverStatus === key
                       ? "bg-(--color-secondary) text-white"
                       : "text-gray-600 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {key === "all"
                     ? "All"
                     : key === "online"
-                    ? "Online"
-                    : "Offline"}
+                      ? "Online"
+                      : "Offline"}
                 </button>
               ))}
             </div>
@@ -831,11 +823,10 @@ const Tracking = () => {
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className={`px-2 py-2 text-[11px] font-semibold text-[#3F4753] whitespace-nowrap ${
-                        header.column.id === "action"
+                      className={`px-2 py-2 text-[11px] font-semibold text-[#3F4753] whitespace-nowrap ${header.column.id === "action"
                           ? "text-center"
                           : "text-left"
-                      }`}
+                        }`}
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -856,11 +847,10 @@ const Tracking = () => {
                     {row.getVisibleCells().map((cell) => (
                       <td
                         key={cell.id}
-                        className={`px-2 py-2 text-[12px] text-[#3F4753] align-middle ${
-                          cell.column.id === "action"
+                        className={`px-2 py-2 text-[12px] text-[#3F4753] align-middle ${cell.column.id === "action"
                             ? "text-right whitespace-nowrap"
                             : ""
-                        }`}
+                          }`}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -894,7 +884,7 @@ const Tracking = () => {
             to{" "}
             {Math.min(
               (trackingTable.getState().pagination.pageIndex + 1) *
-                trackingTable.getState().pagination.pageSize,
+              trackingTable.getState().pagination.pageSize,
               filteredTableData.length
             )}{" "}
             of {filteredTableData.length} results
@@ -934,12 +924,11 @@ const Tracking = () => {
                   key={pageNum}
                   type="button"
                   onClick={() => trackingTable.setPageIndex(pageNum - 1)}
-                  className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${
-                    trackingTable.getState().pagination.pageIndex + 1 ===
-                    pageNum
+                  className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${trackingTable.getState().pagination.pageIndex + 1 ===
+                      pageNum
                       ? "bg-blue-600 text-white border border-blue-600"
                       : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {pageNum}
                 </button>

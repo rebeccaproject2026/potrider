@@ -9,9 +9,9 @@ const PastOrderCard = ({ order }) => {
       ? "bg-[#D4FFDA] text-[#109F22]"
       : order.statusVariant === "cancelled"
         ? "bg-[#FEECEB] text-[#F44336]"
-        : order.statusVariant === "packed"
+        : order.statusVariant === "ordered" || order.statusVariant === "packed"
           ? "bg-[#FFF5E5] text-[#FF9800]"
-          : "bg-[#E3EEFF] text-[#0066FF]"; // light blue badge for Ordered
+          : "bg-[#E3EEFF] text-[#0066FF]"; // Default or other statuses
 
   return (
     <div className="border border-gray-200 rounded-sm bg-white overflow-hidden shadow-sm mb-4">

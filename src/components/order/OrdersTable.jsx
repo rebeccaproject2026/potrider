@@ -29,6 +29,9 @@ const OrdersTable = ({
   filters = {},
   onFilterChange,
   onStatusClick,
+  onCustomerClick,
+  onCourierClick,
+  onPaymentStatusClick,
   // onView,
   // onDelete,
 }) => {

@@ -5,7 +5,7 @@ import { Eye, Trash2 } from "lucide-react";
  * Orders table columns definition
  * Returns columns array - should be wrapped in useMemo in the component
  */
-export const getOrdersColumns = (onView, onDelete, onStatusClick) => [
+export const getOrdersColumns = (onView, onDelete, onStatusClick, onCustomerClick, onCourierClick, onPaymentStatusClick) => [
   {
     accessorKey: "orderId",
     header: "Order#",
@@ -23,12 +23,13 @@ export const getOrdersColumns = (onView, onDelete, onStatusClick) => [
     header: "Details",
     cell: (info) => (
       <div className="leading-tight">
-        <a
-          href="#"
-          className="text-[12px] text-blue-600 hover:underline font-medium block"
+        <button
+          type="button"
+          onClick={() => onCustomerClick?.(info.row.original)}
+          className="text-[12px] text-blue-600 hover:underline font-medium block text-left"
         >
           {info.row.original.customer}
-        </a>
+        </button>
         <span className="text-[11px] text-gray-500">
           {info.row.original.phone}
         </span>
@@ -70,12 +71,12 @@ export const getOrdersColumns = (onView, onDelete, onStatusClick) => [
     header: "Courier",
     cell: (info) => (
       <div className="leading-tight">
-        <a
-          href="#"
-          className="text-[12px] text-blue-600 hover:underline font-medium block"
+        <button
+          onClick={() => onCourierClick?.(info.row.original)}
+          className="text-[12px] text-blue-600 hover:underline font-medium block text-left"
         >
           {info.getValue()}
-        </a>
+        </button>
         <span className="text-[11px] text-gray-500">
           {info.row.original.courierTips}
         </span>
@@ -122,13 +123,14 @@ export const getOrdersColumns = (onView, onDelete, onStatusClick) => [
       const status = info.getValue();
       const isPaid = status === "Paid";
       return (
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap  ${isPaid ? "bg-[#D4FFDA] text-[#109F22]"
+        <button
+          onClick={() => onPaymentStatusClick?.(info.row.original)}
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap cursor-pointer hover:opacity-80 transition-opacity ${isPaid ? "bg-[#D4FFDA] text-[#109F22]"
             : "bg-[#FFF5E5] text-[#FF9800]"
             }`}
         >
           {status}
-        </span>
+        </button>
       );
     },
   },

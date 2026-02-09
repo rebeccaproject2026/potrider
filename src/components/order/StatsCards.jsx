@@ -29,7 +29,7 @@ const StatsCards = ({
         <>
           <div className={`border border-gray-200 rounded-sm bg-white p-2.5 ${className}`.trim()}>
             <p className="text-xs text-[#212529] font-semibold">{label}</p>
-            <p className="text-base font-bold text-gray-900 mt-0.5">{value}</p>
+            <p className="text-lg font-bold text-gray-900 mt-0.5">{value}</p>
           </div>
         </>
       ))}
