@@ -48,6 +48,7 @@ const Select = ({
   minWidth = "100px",
   compact = false,
   className = "",
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,11 +86,15 @@ const Select = ({
 
   const displayOption = getDisplayOption();
 
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
+  const toggleDropdown = () => {
+    if (disabled) return;
+    setIsOpen((prev) => !prev);
+  };
 
   const isSelected = (item) => selectedValues.includes(getOptionValue(item));
 
   const handleSelectOption = (item) => {
+    if (disabled) return;
     const val = getOptionValue(item);
     const label = getOptionLabel(item);
 
@@ -140,7 +145,7 @@ const Select = ({
   }, [isOpen, showSearch]);
 
   const handleKeyDown = (e) => {
-    if (!isOpen) return;
+    if (!isOpen || disabled) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setHighlightedIndex((prev) =>
@@ -272,15 +277,19 @@ const Select = ({
     >
       <button
         type="button"
+        disabled={disabled}
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
-        className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border bg-white border-[#DDDDDD] rounded-sm text-[#0000] font-medium focus:outline-none cursor-pointer shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
+        className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border border-[#DDDDDD] rounded-sm font-medium focus:outline-none shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
+          } ${disabled
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
+            : "bg-white text-[#0000] cursor-pointer"
           } ${className}`}
       >
         <span className="overflow-hidden whitespace-nowrap text-sm flex-1 text-left text-gray-600">
           {displayOption || displayTitle}
         </span>
-        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none flex items-center justify-center">
+        <span className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 flex items-center justify-center ${disabled ? "text-gray-300" : "text-gray-500"}`}>
           {isOpen ? (
             <ChevronUp className="w-3.5 h-3.5" />
           ) : (

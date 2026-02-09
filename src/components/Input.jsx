@@ -73,8 +73,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={id}
-          className={`block text-sm font-semibold text-[#212121] ${compact ? "mb-0.5" : "mb-1"
-            } ${labelClassName}`.trim()}
+          className={`block text-sm ${compact ? "mb-0.5" : "mb-1"} ${labelClassName?.includes("font-") ? "" : "font-semibold"} ${labelClassName?.includes("text-") ? "" : "text-[#212121]"} ${labelClassName}`.trim()}
         >
           {label}
         </label>

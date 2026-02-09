@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Layout from "./pages/layout/Layout";
 import Inventory from "./pages/inventory/Inventory";
+import InventoryDetail from "./pages/inventory/InventoryDetail";
 import AddInventory from "./pages/inventory/AddInventory";
 import Finances from "./pages/finances/Finances";
 import Customers from "./pages/customers/Customers";
@@ -33,6 +34,8 @@ function App() {
 
           <Route path="inventory" element={<Inventory />} />
           <Route path="inventory/add" element={<AddInventory />} />
+          <Route path="inventory/edit/:id" element={<AddInventory />} />
+          <Route path="inventories/view-inventory/:id" element={<InventoryDetail />} />
           <Route path="orders" element={<Order />} />
           <Route path="orders/create" element={<CreateOrder />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />

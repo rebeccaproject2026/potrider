@@ -6,15 +6,14 @@
 const FinanceSummaryCard = ({ title, value, change, isPositive }) => {
   return (
     <div className="bg-[#F9FAFB] rounded-sm shadow-sm p-4 border border-gray-200">
-      <p className="text-sm font-medium text-gray-700 mb-2">{title}</p>
+      <p className="text-[13.5px] font-semibold text-[#3F4753] mb-2">{title}</p>
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-2xl font-bold text-gray-900 truncate">
+        <span className="text-2xl font-semibold text-[#000000] truncate">
           {value}
         </span>
         <span
-          className={`text-sm font-medium shrink-0 ${
-            isPositive ? "text-green-600" : "text-red-600"
-          }`}
+          className={`text-sm font-semibold shrink-0 ${isPositive ? "text-green-600" : "text-red-600"
+            }`}
         >
           {change}
         </span>

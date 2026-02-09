@@ -14,8 +14,8 @@ const CustomerSummaryCard = ({
   onView,
 }) => {
   return (
-    <div className="bg-white rounded-sm shadow-md p-4 border border-gray-100">
-      <p className={`text-sm font-semibold ${titleColor} mb-3`}>{title}</p>
+    <div className="bg-white rounded-sm shadow-md p-2.5 border border-gray-100">
+      <p className={`text-sm font-semibold ${titleColor} mb-2`}>{title}</p>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-3">
           <div
@@ -32,7 +32,7 @@ const CustomerSummaryCard = ({
       <button
         type="button"
         onClick={onView}
-        className="mt-3 flex items-center gap-1.5 text-gray-500 hover:text-gray-700 text-sm font-medium"
+        className="mt-2 flex items-center gap-1.5 text-gray-500 hover:text-gray-700 text-sm font-medium"
       >
         <Eye className="w-4 h-4" />
         View

@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   useReactTable,
   getCoreRowModel,
@@ -24,7 +24,7 @@ const SUMMARY = [
     label: "In Stock",
     count: 210,
     bgLight: "bg-[#D4FFDA]",
-    textColor: "text-[#109F22]",
+    textColor: "text-[var(--color-primary)]",
   },
   {
     label: "Low Stock",
@@ -231,10 +231,12 @@ const INVENTORY_DATA = [
 ];
 
 const Inventory = () => {
+  // eslint-disable-next-line no-unused-vars
   const [period, setPeriod] = useState({ start: null, end: null });
   const [search, setSearch] = useState("");
   const [statusTab, setStatusTab] = useState("all");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const navigate = useNavigate();
 
   const onDateUpdate = useCallback(
     ({ start, end }) => setPeriod({ start, end }),
@@ -270,10 +272,10 @@ const Inventory = () => {
   const columns = useMemo(
     () =>
       getInventoryColumns(
-        (row) => console.log("View", row),
+        (row) => navigate(`/inventories/view-inventory/${row.id}`),
         (row) => console.log("Delete", row)
       ),
-    []
+    [navigate]
   );
 
   const table = useReactTable({
@@ -330,11 +332,10 @@ const Inventory = () => {
                   key={tab.key}
                   type="button"
                   onClick={() => setStatusTab(tab.key)}
-                  className={`px-2 py-1.5 w-full text-sm m-1 rounded ronded-2xl font-medium whitespace-nowrap ${
-                    statusTab === tab.key
-                      ? "bg-(--color-secondary) text-white"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
+                  className={`px-2 py-1.5 w-full text-sm m-1 rounded ronded-2xl font-medium whitespace-nowrap ${statusTab === tab.key
+                    ? "bg-(--color-secondary) text-white"
+                    : "text-gray-600 hover:bg-gray-50"
+                    }`}
                 >
                   {tab.label} ({tab.count})
                 </button>
@@ -373,9 +374,8 @@ const Inventory = () => {
                     return (
                       <th
                         key={header.id}
-                        className={`px-3 py-2.5 text-[11px] font-semibold text-[#3F4753] whitespace-nowrap ${
-                          isRight ? "text-right" : "text-left"
-                        }`}
+                        className={`px-3 py-2.5 text-[11px] font-semibold text-[#3F4753] whitespace-nowrap ${isRight ? "text-right" : "text-left"
+                          }`}
                       >
                         {flexRender(
                           header.column.columnDef.header,
@@ -402,9 +402,8 @@ const Inventory = () => {
                       return (
                         <td
                           key={cell.id}
-                          className={`px-3 py-2 text-[12px] text-[#3F4753] align-middle ${
-                            isRight ? "text-right" : "text-left"
-                          }`}
+                          className={`px-3 py-2 text-[12px] text-[#3F4753] align-middle ${isRight ? "text-right" : "text-left"
+                            }`}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
@@ -438,7 +437,7 @@ const Inventory = () => {
             to{" "}
             {Math.min(
               (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
+              table.getState().pagination.pageSize,
               filteredData.length
             )}{" "}
             of {filteredData.length} results

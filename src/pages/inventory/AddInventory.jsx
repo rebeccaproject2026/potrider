@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Select from "../../components/Select";
 import Input from "../../components/Input";
@@ -50,6 +50,8 @@ const BEST_SELLING_OPTIONS = [
 
 const AddInventory = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
   const [searchProduct, setSearchProduct] = useState("");
   const [productName, setProductName] = useState("Buddabomb Taro Taro 500mg");
   const [productOrder, setProductOrder] = useState("298");
@@ -71,9 +73,46 @@ const AddInventory = () => {
   const [status, setStatus] = useState("Active");
   const [isBestSelling, setIsBestSelling] = useState("yes");
 
-  const handleClose = () => navigate("/inventory");
+  useEffect(() => {
+    if (isEditMode) {
+      // Mock data pre-fill for edit mode
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setProductName("Buddabomb Taro Taro 500mg");
+      setProductOrder("298");
+      setThcCbdUnit("MG");
+      setThcMg("100");
+      setCbdMg("200");
+      setCbnMg("500");
+      setPriceUnit("Grams");
+      setDescription(`Kush Kraft Premium Pre-Rolls – Blue Gelato
+Kush Kraft's Blue Gelato pre-rolls offer a refined twist on a fruity powerhouse. This balanced hybrid blends the sweet berry notes of Blueberry with the citrusy richness of Gelato, creating a flavour profile that's both smooth and invigorating.`);
+      setPurchaseQty("1023");
+      setPurchaseCost("10230.00");
+      setSalePrice("10999.00");
+      setDiscountedPrice("10979.00");
+      setLowStockAlert("23");
+      setSelectProduct("buddabomb");
+      setGenetic("Hybrid");
+      setCategory("Weed");
+      setStock("In-Stock");
+      setStatus("Active");
+      setIsBestSelling("yes");
+    }
+  }, [isEditMode]);
+
+  const handleClose = () => {
+    if (isEditMode) {
+      navigate(`/inventories/view-inventory/${id}`);
+    } else {
+      navigate("/inventory");
+    }
+  };
   const handleSave = () => {
-    navigate("/inventory");
+    if (isEditMode) {
+      navigate(`/inventories/view-inventory/${id}`);
+    } else {
+      navigate("/inventory");
+    }
   };
 
   return (
@@ -81,12 +120,12 @@ const AddInventory = () => {
       {/* Header - fixed: title left, Close (red) + Save (blue) right */}
       <div className="px-5">
         <div className="flex flex-wrap items-center justify-between gap-2  py-3 border-b border-[#000000] shrink-0">
-          <h1 className="text-lg font-bold text-gray-900">Add Product</h1>
-          <div className="flex items-center gap-2">
+          <h1 className="text-lg font-bold text-gray-900">{isEditMode ? "Edit Product" : "Add Product"}</h1>
+          <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={handleClose}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-sm hover:bg-red-600 font-medium text-sm"
+              className="inline-flex items-center gap-2 px-2 py-2 bg-red-500 text-white rounded-sm hover:bg-red-600 font-medium text-sm  cursor-pointer"
             >
               <Icon icon="mdi:close" className="w-5 h-5" />
               Close
@@ -94,10 +133,10 @@ const AddInventory = () => {
             <button
               type="button"
               onClick={handleSave}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-(--color-secondary) text-white rounded-sm hover:opacity-90 font-medium text-sm"
+              className="inline-flex items-center gap-2 px-1.5 py-2 bg-(--color-secondary) text-white rounded-sm hover:opacity-90 font-medium text-sm  cursor-pointer"
             >
               <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
-              Save
+              {isEditMode ? "Update" : "Save"}
             </button>
           </div>
         </div>
@@ -106,15 +145,21 @@ const AddInventory = () => {
       {/* Scrollable content */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {/* Search - full width, reusable Input */}
-        <div className="px-4 pt-4 pb-2">
-          <Input
-            value={searchProduct}
-            onChange={(e) => setSearchProduct(e.target.value)}
-            placeholder="Search Product..."
-            compact
-            className="max-w-full border-gray-300 bg-[#DDDDDD]!"
-          />
-        </div>
+        {isEditMode ? (
+          <div className="pt-2 pb-2" />
+        ) : (
+          <div className="px-4 pt-4 pb-2">
+            <Input
+              value={searchProduct}
+              onChange={(e) => setSearchProduct(e.target.value)}
+              placeholder="Search Product..."
+              compact
+              className="max-w-full border-gray-300 bg-[#DDDDDD]!"
+            />
+          </div>
+        )
+
+        }
 
         {/* Two columns: left wider (~65%), right narrower (~35%) */}
         <div className="px-4 pb-4 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-5">
@@ -307,7 +352,7 @@ const AddInventory = () => {
                   Low Stock Alert
                 </label>
                 <div className="flex rounded-sm border border-[#DDDDDD] overflow-hidden bg-white">
-                  <div className="flex items-center justify-center px-3 py-2 bg-gray-100 border-r border-[#DDDDDD] font-semibold text-gray-700 text-sm shrink-0">
+                  <div className="flex items-center justify-center px-3 py-2 bg-[#F3F3F3] border-r border-[#DDDDDD] font-semibold text-gray-700 text-sm shrink-0">
                     Unit
                   </div>
                   <input
@@ -326,21 +371,21 @@ const AddInventory = () => {
 
             {/* Available Stock - title with underline, two side-by-side display cards */}
             <div>
-              <h2 className="text-base font-bold text-gray-900 pb-2 border-b border-[#000000]">
+              <h2 className="text-base font-bold text-[#212121]  pb-2 border-b border-[#000000]">
                 Available Stock
               </h2>
               <div className="grid grid-cols-2 gap-3 mt-3">
-                <div className="bg-gray-100 rounded-md p-4 border border-gray-200">
+                <div className="bg-[#F3F3F3] rounded-sm p-2 border border-[#DDDDDD]">
                   <p className="text-sm font-medium text-[#212121] mb-1">
                     Available Quantity
                   </p>
-                  <p className="text-xl font-bold text-gray-900">568 Units</p>
+                  <p className="text-xl font-bold text-[#212121] ">568 Units</p>
                 </div>
-                <div className="bg-gray-100 rounded-md p-4 border border-gray-200">
+                <div className="bg-[#F3F3F3] rounded-sm p-2 border border-[#DDDDDD]">
                   <p className="text-sm font-medium text-[#212121] mb-1">
                     Available Stock Valuation
                   </p>
-                  <p className="text-xl font-bold text-gray-900">$1952.36</p>
+                  <p className="text-xl font-bold text-[#212121] ">$1952.36</p>
                 </div>
               </div>
             </div>
@@ -350,12 +395,14 @@ const AddInventory = () => {
             <h2 className="text-base font-bold px-4 text-gray-900 mb-2">
               Others
             </h2>
-            <a
-              href="#add-product"
-              className="text-(--color-secondary) font-medium text-sm hover:underline mb-3 inline-block px-4"
-            >
-              + Add Product
-            </a>
+            {!isEditMode && (
+              <a
+                href="#add-product"
+                className="text-(--color-secondary) font-medium text-sm hover:underline mb-3 inline-block px-4"
+              >
+                + Add Product
+              </a>
+            )}
             <div className="space-y-3 px-4">
               <div>
                 <label className="block text-sm font-semibold text-[#212121] mb-0.5">
@@ -367,6 +414,7 @@ const AddInventory = () => {
                   options={PRODUCT_OPTIONS}
                   placeholder="Select Product"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
               <div>
@@ -379,6 +427,7 @@ const AddInventory = () => {
                   options={GENETIC_OPTIONS}
                   placeholder="Genetic"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
               <div>
@@ -391,6 +440,7 @@ const AddInventory = () => {
                   options={CATEGORY_OPTIONS}
                   placeholder="Category"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
               <div>
@@ -403,6 +453,7 @@ const AddInventory = () => {
                   options={STOCK_OPTIONS}
                   placeholder="Stock"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
               <div>
@@ -415,6 +466,7 @@ const AddInventory = () => {
                   options={STATUS_OPTIONS}
                   placeholder="Status"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
               <div>
@@ -427,13 +479,14 @@ const AddInventory = () => {
                   options={BEST_SELLING_OPTIONS}
                   placeholder="Yes/No"
                   compact
+                  disabled={isEditMode}
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

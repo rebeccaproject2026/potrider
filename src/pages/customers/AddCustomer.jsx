@@ -58,7 +58,7 @@ const AddCustomer = () => {
       {/* Layout matches Add Inventory: px-4 pt-4 pb-4 for content area */}
       <div className="flex-1 full-width w-full flex flex-col">
         <div className="bg-white rounded-sm border border-gray-200 shadow-sm p-4 flex-1 min-h-0 flex flex-col w-full max-w-none">
-          <h1 className="text-lg mt-2 font-bold text-[#3F4753] mb-3">
+          <h1 className="text-lg mt-2 font-semibold text-[#3E3834] mb-3">
             Customer Details
           </h1>
 
@@ -70,7 +70,7 @@ const AddCustomer = () => {
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Enter full name"
               // compact
-              labelClassName="font-normal text-gray-700"
+              labelClassName="font-medium text-[#212121]"
               className="border-[#DDDDDD] rounded-sm"
             />
             <Input
@@ -79,13 +79,13 @@ const AddCustomer = () => {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Enter last name"
               // compact
-              labelClassName="font-normal text-gray-700"
+              labelClassName="font-medium text-[#212121]"
               className="border-[#DDDDDD] rounded-sm"
             />
 
             {/* Phone Number (code + input) | Email Address */}
             <div className="w-full">
-              <label className="block text-sm font-normal text-gray-700 mb-0.5">
+              <label className="block text-sm font-medium text-[#212121] mb-0.5">
                 Phone Number
               </label>
               <div className="flex border border-[#DDDDDD] rounded-sm bg-white overflow-hidden min-h-[38px]">
@@ -120,13 +120,13 @@ const AddCustomer = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
               // compact
-              labelClassName="font-normal text-gray-700"
+              labelClassName="font-medium text-[#212121]"
               className="border-[#DDDDDD] rounded-sm"
             />
 
             {/* Home Address - full width */}
             <div className="sm:col-span-2">
-              <label className="block text-sm font-normal text-gray-700 mb-0.5">
+              <label className="block text-sm font-medium text-[#212121] mb-0.5">
                 Home Address
               </label>
               <textarea
@@ -145,7 +145,7 @@ const AddCustomer = () => {
               onChange={(e) => setCity(e.target.value)}
               placeholder="Enter your city name"
               // compact
-              labelClassName="font-normal text-gray-700"
+              labelClassName="font-medium text-[#212121]"
               className="border-[#DDDDDD] rounded-sm"
             />
             <Input
@@ -154,13 +154,13 @@ const AddCustomer = () => {
               onChange={(e) => setPostalCode(e.target.value)}
               placeholder="Postal code"
               // compact
-              labelClassName="font-normal text-gray-700"
+              labelClassName="font-medium text-[#212121]"
               className="border-[#DDDDDD] rounded-sm"
             />
 
             {/* Country | Province */}
             <div className="w-full">
-              <label className="block text-sm font-normal text-gray-700 mb-0.5">
+              <label className="block text-sm font-medium text-[#212121] mb-0.5">
                 Country
               </label>
               <Select
@@ -168,11 +168,11 @@ const AddCustomer = () => {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="Select your country"
-                // compact
+              // compact
               />
             </div>
             <div className="w-full">
-              <label className="block text-sm font-normal text-gray-700 mb-0.5">
+              <label className="block text-sm font-medium text-[#212121] mb-0.5">
                 Province
               </label>
               <Select
@@ -180,7 +180,7 @@ const AddCustomer = () => {
                 value={province}
                 onChange={(e) => setProvince(e.target.value)}
                 placeholder="Select province"
-                // compact
+              // compact
               />
             </div>
           </div>
@@ -190,15 +190,15 @@ const AddCustomer = () => {
             <button
               type="button"
               onClick={handleCancel}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-400 text-gray-800 rounded-sm font-medium text-sm hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 px-2 py-2.5 bg-white border border-gray-400 text-[#212121] rounded-sm font-semibold text-sm hover:bg-gray-50 transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4 text-gray-700" />
+              <X className="w-4 h-4 text-[#212121]" />
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSave}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm font-medium text-sm hover:opacity-90 transition-opacity shadow-sm"
+              className="inline-flex items-center gap-2 px-2.5 py-2.5 bg-(--color-primary) text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
             >
               <ArrowUp className="w-4 h-4" />
               Save

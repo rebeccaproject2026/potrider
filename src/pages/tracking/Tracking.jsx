@@ -70,6 +70,7 @@ const SUMMARY_CARDS = [
     colorHex: "#109F22",
     bgLight: "bg-[#D4FFDA]",
     icon: "mdi:file-document-check-outline",
+    iconClass: "fi-rr-clipboard-list",
   },
   {
     key: "delivered",
@@ -81,6 +82,7 @@ const SUMMARY_CARDS = [
     colorHex: "#0066FF",
     bgLight: "bg-[#E3EEFF]",
     icon: "mdi:package-variant-closed-check",
+    iconClass: "fi fi-rr-home",
   },
   {
     key: "processing",
@@ -92,6 +94,7 @@ const SUMMARY_CARDS = [
     colorHex: "#FF9800",
     bgLight: "bg-[#FFF5E5]",
     icon: "mdi:clock-outline",
+    iconClass: "fi fi-rr-process",
   },
   {
     key: "cancelled",
@@ -163,6 +166,20 @@ const MOCK_DELIVERY_CARDS = [
     position: { bottom: "25%", left: "25%" },
   },
 ];
+
+const MOCK_SHIPPING_DATA = {
+  origin: [-79.3962, 43.6285], // Billy Bishop Toronto City Airport
+  destination: [-75.6692, 45.3192], // Ottawa International Airport
+  currentLocation: [-79.3962, 43.6285], // At Origin (Billy Bishop)
+  route: [
+    [-79.3962, 43.6285],
+    [-75.6692, 45.3192]
+  ],
+  stats: {
+    time: "55 min",
+    cost: "₹19,701"
+  }
+};
 
 /** Tracking table: Driver, Device, Order (multi-line), Quantity, Price, Order Status, Driver Status, ETA, Action */
 const getTrackingTableColumns = (onView, onDelete) => [
@@ -246,8 +263,8 @@ const getTrackingTableColumns = (onView, onDelete) => [
       return (
         <span
           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${isOnline
-              ? "bg-[#D4FFDA] text-[#109F22]"
-              : "bg-[#FEECEB] text-[#F44336]"
+            ? "bg-[#D4FFDA] text-[#109F22]"
+            : "bg-[#FEECEB] text-[#F44336]"
             }`}
         >
           {isOnline ? "Online" : "Offline"}
@@ -462,14 +479,148 @@ const Tracking = () => {
         ? "mapbox://styles/mapbox/satellite-streets-v12"
         : "mapbox://styles/mapbox/light-v11";
     mapRef.current.setStyle(style);
+
+    // Wait for style to load before re-adding layers
+    mapRef.current.once('style.load', () => {
+      // Trigger mode update to re-draw layers on new style
+      const currentMode = deliveryMode;
+      setDeliveryMode(null); // Force refresh
+      setTimeout(() => setDeliveryMode(currentMode), 10);
+    });
   }, [mapView]);
+
+  // Handle Delivery vs Shipping Mode
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+
+    const drawShippingRoute = () => {
+      // 1. Add Source
+      if (!map.getSource('shipping-route')) {
+        map.addSource('shipping-route', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: MOCK_SHIPPING_DATA.route
+            }
+          }
+        });
+      }
+
+      // 2. Add Line Layer
+      if (!map.getLayer('shipping-line')) {
+        map.addLayer({
+          id: 'shipping-line',
+          type: 'line',
+          source: 'shipping-route',
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': '#0066FF',
+            'line-width': 4
+          }
+        });
+      }
+
+      // 3. Add Airplane Marker (Orange in White Circle)
+      const el = document.createElement('div');
+      el.className = 'shipping-marker-airplane';
+      // Orange airplane icon
+      el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FF9800" width="20" height="20"><path d="M21,16V14L13,9V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V9L2,14V16L10,13.5V19L8,20.5V22L11.5,21L15,22V20.5L13,19V13.5L21,16Z" /></svg>';
+      el.style.width = '36px';
+      el.style.height = '36px';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+      el.style.background = 'white';
+      el.style.borderRadius = '50%';
+      el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+      el.style.transform = 'rotate(45deg)'; // Tilt for effect
+      el.style.zIndex = '10'; // On top of line
+
+      new mapboxgl.Marker(el)
+        .setLngLat(MOCK_SHIPPING_DATA.currentLocation)
+        .addTo(map);
+
+      // 4. Add Label Marker
+      const labelEl = document.createElement('div');
+      labelEl.className = 'shipping-marker-label';
+      labelEl.innerHTML = `
+        <div style="background: white; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); font-size: 11px; font-weight: 600; white-space: nowrap; display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <span>✈ ${MOCK_SHIPPING_DATA.stats.time}</span>
+          </div>
+          <div style="font-size: 10px; color: #666; font-weight: 400;">
+            from ${MOCK_SHIPPING_DATA.stats.cost}
+          </div>
+          <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid white;"></div>
+        </div>
+      `;
+      new mapboxgl.Marker({ element: labelEl, anchor: 'bottom', offset: [0, -10] })
+        .setLngLat(MOCK_SHIPPING_DATA.currentLocation)
+        .addTo(map);
+
+      // 5. Add Destination Marker (Blue Dot)
+      const destEl = document.createElement('div');
+      destEl.style.width = '12px';
+      destEl.style.height = '12px';
+      destEl.style.background = '#0066FF';
+      destEl.style.borderRadius = '50%';
+      destEl.style.border = '2px solid white';
+      destEl.style.boxShadow = '0 0 0 1px rgba(0,0,0,0.1)';
+
+      new mapboxgl.Marker(destEl)
+        .setLngLat(MOCK_SHIPPING_DATA.destination)
+        .addTo(map);
+
+      // Fit bounds
+      const bounds = new mapboxgl.LngLatBounds();
+      MOCK_SHIPPING_DATA.route.forEach(coord => bounds.extend(coord));
+      map.fitBounds(bounds, { padding: 50 });
+
+      // 6. Add Origin Marker (Blue Dot)
+      const originEl = document.createElement('div');
+      originEl.style.width = '12px';
+      originEl.style.height = '12px';
+      originEl.style.background = '#0066FF';
+      originEl.style.borderRadius = '50%';
+      originEl.style.border = '2px solid white';
+      originEl.style.boxShadow = '0 0 0 1px rgba(0,0,0,0.1)';
+
+      new mapboxgl.Marker(originEl)
+        .setLngLat(MOCK_SHIPPING_DATA.origin)
+        .addTo(map);
+    };
+
+    const clearShippingLayers = () => {
+      if (map.getLayer('shipping-line')) map.removeLayer('shipping-line');
+      if (map.getSource('shipping-route')) map.removeSource('shipping-route');
+      // Remove markers by checking DOM elements (simple way for now since we didn't store refs)
+      document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove());
+    };
+
+    if (deliveryMode === 'shipping') {
+      clearShippingLayers(); // Clear anything existing first
+      drawShippingRoute();
+    } else {
+      clearShippingLayers();
+      // Restore default center if needed, or let user browse
+      // Re-add delivery markers logic (if we had specific markers for delivery mode)
+    }
+
+  }, [deliveryMode]);
 
   const hasMapToken =
     typeof import.meta.env.VITE_MAPBOX_ACCESS_TOKEN !== "undefined" &&
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   return (
-    <div className="flex flex-col gap-4 min-h-0">
+    <div className="flex flex-col gap-2 min-h-0">
       <h1 className="text-lg font-semibold text-gray-900 sr-only">Tracking</h1>
 
       {/* Global filters – 6 dropdowns */}
@@ -537,11 +688,11 @@ const Tracking = () => {
                 <div
                   className={`w-9 h-9 flex items-center justify-center rounded-lg shrink-0 ${card.bgLight}`}
                 >
-                  <Icon
-                    icon={card.icon}
-                    className="w-[18px] h-[18px]"
-                    style={{ color: card.colorHex }}
-                  />
+                  {card.iconClass ? (
+                    <i className={card.iconClass} style={{ color: card.colorHex, fontSize: "18px" }} aria-hidden="true" />
+                  ) : (
+                    <Icon icon="solar:documents-outline" width="18" height="18" color={card.colorHex} />
+                  )}
                 </div>
                 <a
                   href="#"
@@ -569,77 +720,84 @@ const Tracking = () => {
 
       {/* Map section */}
       <div className="flex-1 min-h-[560px] flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        {/* Row above map: status filters + Delivery/Shipping toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b border-gray-200 bg-gray-50">
-          <div className="flex flex-wrap gap-2">
-            {STATUS_FILTERS.map((filter) => (
-              <button
-                key={filter.key}
-                type="button"
-                onClick={() =>
-                  setActiveStatusFilter(
-                    activeStatusFilter === filter.key ? null : filter.key
-                  )
-                }
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${activeStatusFilter === filter.key
-                    ? "bg-white border border-gray-300 shadow-sm " +
-                    filter.color
-                    : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-100 " +
-                    filter.color
-                  }`}
-              >
-                {filter.label} {filter.count}
-              </button>
-            ))}
-          </div>
-          <div className="flex rounded-md overflow-hidden border border-gray-200 bg-white">
-            <button
-              type="button"
-              onClick={() => setDeliveryMode("delivery")}
-              className={`px-4 py-2 text-sm font-medium ${deliveryMode === "delivery"
-                  ? "bg-(--color-secondary) text-white"
-                  : "text-gray-600 hover:bg-gray-50"
-                }`}
-            >
-              Delivery
-            </button>
-            <button
-              type="button"
-              onClick={() => setDeliveryMode("shipping")}
-              className={`px-4 py-2 text-sm font-medium ${deliveryMode === "shipping"
-                  ? "bg-(--color-secondary) text-white"
-                  : "text-gray-600 hover:bg-gray-50"
-                }`}
-            >
-              Shipping
-            </button>
-          </div>
-        </div>
-
         {/* Map container with overlays */}
         <div className="relative flex-1 min-h-[520px]">
-          {/* Map / Satellite toggle – top left of map */}
-          <div className="absolute top-3 left-3 z-10 flex rounded-md overflow-hidden border border-gray-200 bg-white shadow-sm">
-            <button
-              type="button"
-              onClick={() => setMapView("map")}
-              className={`px-3 py-2 text-sm font-medium ${mapView === "map"
-                  ? "bg-white text-(--color-secondary)"
-                  : "text-gray-500"
-                }`}
-            >
-              Map
-            </button>
-            <button
-              type="button"
-              onClick={() => setMapView("satellite")}
-              className={`px-3 py-2 text-sm font-medium ${mapView === "satellite"
-                  ? "bg-white text-(--color-secondary)"
-                  : "text-gray-500"
-                }`}
-            >
-              Satellite
-            </button>
+          {/* Top Control Bar: Map Toggle | Status Cards | Delivery Toggle */}
+          <div className="absolute top-1 left-4 right-4 z-10 flex items-start justify-between pointer-events-none">
+
+            {/* Left: Map/Satellite */}
+            <div className="flex items-center rounded bg-white shadow-sm border border-gray-200 pointer-events-auto h-9 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setMapView("map")}
+                className={`px-4 h-full text-sm font-bold transition-colors ${mapView === "map" ? "text-gray-900 bg-gray-50" : "text-gray-500 hover:bg-gray-50 font-medium"
+                  }`}
+              >
+                Map
+              </button>
+              <div className="w-[1px] h-5 bg-gray-200"></div>
+              <button
+                type="button"
+                onClick={() => setMapView("satellite")}
+                className={`px-4 h-full text-sm font-medium transition-colors ${mapView === "satellite" ? "text-gray-900 bg-gray-50" : "text-gray-500 hover:bg-gray-50"
+                  }`}
+              >
+                Satellite
+              </button>
+            </div>
+
+            {/* Right Group: Status Counts + Delivery/Shipping */}
+            <div className="flex items-center gap-0 min-w-0 justify-end">
+              {/* Status Counts */}
+              <div className="flex items-center gap-1 pointer-events-auto overflow-x-auto hide-scrollbar px-2 py-1">
+                {STATUS_FILTERS.map((filter) => (
+                  <button
+                    key={filter.key}
+                    type="button"
+                    onClick={() =>
+                      setActiveStatusFilter(
+                        activeStatusFilter === filter.key ? null : filter.key
+                      )
+                    }
+                    className={`flex items-center justify-between gap-4 px-2 py-1 bg-white rounded-sm shadow-sm border transition-all min-w-[160px] h-11 ${activeStatusFilter === filter.key
+                      ? "ring-1 ring-gray-300 border-gray-300"
+                      : "border-gray-200 hover:border-gray-300"
+                      }`}
+                  >
+                    <span className={`text-[13px] font-semibold ${filter.color}`}>
+                      {filter.label}
+                    </span>
+                    <span className="text-xl font-bold text-gray-900 leading-none">
+                      {filter.count.toLocaleString()}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Delivery/Shipping */}
+              <div className="flex items-center rounded-sm bg-white shadow-sm border-2 border-[#969696] pointer-events-auto h-10.5 overflow-hidden p-1 gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setDeliveryMode("delivery")}
+                  className={`px-4 h-full text-sm font-semibold cursor-pointer rounded-[5px] transition-colors flex items-center ${deliveryMode === "delivery"
+                    ? "bg-[#0066FF] text-white shadow-sm"
+                    : "text-[#969696] hover:bg-gray-50 bg-transparent"
+                    }`}
+                >
+                  Delivery
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryMode("shipping")}
+                  className={`px-4 h-full text-sm font-medium cursor-pointer rounded-[5px] transition-colors flex items-center ${deliveryMode === "shipping"
+                    ? "bg-[#0066FF] text-white shadow-sm"
+                    : "text-[#969696] hover:bg-gray-50 bg-transparent"
+                    }`}
+                >
+                  Shipping
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Map or placeholder */}
@@ -659,15 +817,17 @@ const Tracking = () => {
           {/* Delivery cards overlay */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="relative w-full h-full pointer-events-auto">
-              {MOCK_DELIVERY_CARDS.map((card) => (
+              {MOCK_DELIVERY_CARDS.filter(card =>
+                deliveryMode === 'delivery' ? true : card.driverName === 'Olivia Smith'
+              ).map((card) => (
                 <div
                   key={card.id}
                   className="absolute pointer-events-auto"
                   style={{
-                    top: card.position.top,
-                    left: card.position.left,
-                    right: card.position.right,
-                    bottom: card.position.bottom,
+                    top: deliveryMode === 'shipping' ? 'auto' : card.position.top,
+                    left: deliveryMode === 'shipping' ? '12%' : card.position.left,
+                    right: deliveryMode === 'shipping' ? 'auto' : card.position.right,
+                    bottom: deliveryMode === 'shipping' ? '15%' : card.position.bottom,
                   }}
                 >
                   <DeliveryCard
@@ -792,15 +952,15 @@ const Tracking = () => {
                 minWidth="100%"
               />
             </div>
-            <div className="flex items-center gap-1 rounded-sm border border-gray-200 bg-white p-0.5 min-w-0">
+            <div className="flex items-center rounded-sm border border-[#969696] bg-white p-1 min-w-0 h-[45.5px]">
               {["all", "online", "offline"].map((key) => (
                 <button
                   key={key}
                   type="button"
                   onClick={() => setTableDriverStatus(key)}
-                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${tableDriverStatus === key
-                      ? "bg-(--color-secondary) text-white"
-                      : "text-gray-600 hover:bg-gray-50"
+                  className={`flex-1 px-4 h-full text-sm font-semibold rounded-sm cursor-pointer transition-colors ${tableDriverStatus === key
+                    ? "bg-[#0066FF] text-white shadow-sm"
+                    : "text-[#969696] hover:bg-gray-50 bg-transparent"
                     }`}
                 >
                   {key === "all"
@@ -824,8 +984,8 @@ const Tracking = () => {
                     <th
                       key={header.id}
                       className={`px-2 py-2 text-[11px] font-semibold text-[#3F4753] whitespace-nowrap ${header.column.id === "action"
-                          ? "text-center"
-                          : "text-left"
+                        ? "text-center"
+                        : "text-left"
                         }`}
                     >
                       {flexRender(
@@ -848,8 +1008,8 @@ const Tracking = () => {
                       <td
                         key={cell.id}
                         className={`px-2 py-2 text-[12px] text-[#3F4753] align-middle ${cell.column.id === "action"
-                            ? "text-right whitespace-nowrap"
-                            : ""
+                          ? "text-right whitespace-nowrap"
+                          : ""
                           }`}
                       >
                         {flexRender(
@@ -925,9 +1085,9 @@ const Tracking = () => {
                   type="button"
                   onClick={() => trackingTable.setPageIndex(pageNum - 1)}
                   className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${trackingTable.getState().pagination.pageIndex + 1 ===
-                      pageNum
-                      ? "bg-blue-600 text-white border border-blue-600"
-                      : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                    pageNum
+                    ? "bg-blue-600 text-white border border-blue-600"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                     }`}
                 >
                   {pageNum}
