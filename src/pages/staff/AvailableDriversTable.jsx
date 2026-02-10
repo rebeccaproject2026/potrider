@@ -7,7 +7,6 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
-import "../tracking/Tracking.css"; // Import existing CSS for .order-list-table and .search-input
 
 /**
  * AvailableDriversTable
