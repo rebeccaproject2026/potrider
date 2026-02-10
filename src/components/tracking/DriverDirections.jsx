@@ -9,12 +9,6 @@ if (
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 }
 
-/**
- * Directions map – React port of the Vue DriverDirections component,
- * focused on matching the visual design (driver + route + two red pins).
- *
- * Uses Mapbox directly; no external plugin utilities.
- */
 const DriverDirections = ({ mapId, driver, destinations = [] }) => {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
