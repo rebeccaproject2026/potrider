@@ -339,7 +339,7 @@ const OrdersTable = ({
 
       {/* Table: scrolls horizontally inside, page scrolls vertically */}
       <div className="order-list-table-table-container overflow-x-auto">
-        <table className="order-list-table table w-full min-w-[1100px] border-collapse">
+        <table className="order-list-table table w-full min-w-275 border-collapse">
           <thead className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-10 text-[3px]!important">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
