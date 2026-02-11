@@ -627,7 +627,7 @@ const CustomerDetails = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1100px] border-collapse">
-            <thead className="bg-white border-b border-gray-200">
+            <thead className="bg-white border-b border-gray-200 sticky top-0 z-10 text-[3px]!important">
               {table.getHeaderGroups().map((hg) => (
                 <tr key={hg.id}>
                   {hg.headers.map((header) => {

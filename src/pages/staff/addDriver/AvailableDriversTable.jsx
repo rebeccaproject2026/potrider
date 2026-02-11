@@ -165,7 +165,7 @@ const AvailableDriversTable = ({
                 </table>
             </div>
 
-            {/* Pagination - Matched OrdersTable exactly */}
+            {/* Pagination */}
             <div id="pagination" className="flex flex-col sm:flex-row items-center justify-between gap-2 px-3 py-2 border-t border-gray-200 bg-gray-50" style={{ margin: "0 auto" }}>
                 <div className="text-[12px] text-gray-600 order-2 sm:order-1">
                     Showing{" "}
@@ -195,20 +195,27 @@ const AvailableDriversTable = ({
                     >
                         <ChevronLeft className="w-3.5 h-3.5" />
                     </button>
-
-                    {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map((pageNum) => (
-                        <button
-                            key={pageNum}
-                            onClick={() => table.setPageIndex(pageNum - 1)}
-                            className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
-                                ? "bg-blue-600 text-white border border-blue-600"
-                                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                                }`}
-                        >
-                            {pageNum}
-                        </button>
-                    ))}
-
+                    {Array.from({ length: table.getPageCount() }, (_, i) => i + 1)
+                        .filter((p) => {
+                            const current = table.getState().pagination.pageIndex + 1;
+                            return (
+                                p === 1 ||
+                                p === table.getPageCount() ||
+                                (p >= current - 2 && p <= current + 2)
+                            );
+                        })
+                        .map((pageNum) => (
+                            <button
+                                key={pageNum}
+                                onClick={() => table.setPageIndex(pageNum - 1)}
+                                className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
+                                    ? "bg-blue-600 text-white border border-blue-600"
+                                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                                    }`}
+                            >
+                                {pageNum}
+                            </button>
+                        ))}
                     <button
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}

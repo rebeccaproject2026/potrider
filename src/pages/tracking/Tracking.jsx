@@ -203,7 +203,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
     cell: (info) => {
       const row = info.row.original;
       return (
-      <div className="leading-tight text-[12px] text-[#3F4753]">
+        <div className="leading-tight text-[12px] text-[#3F4753]">
           <span className="block mb-0.5 font-medium text-[#3F4753] underline">
             #{row.orderId}
           </span>
@@ -1098,7 +1098,6 @@ const Tracking = () => {
                 </button>
               ))}
             <button
-              type="button"
               onClick={() => trackingTable.nextPage()}
               disabled={!trackingTable.getCanNextPage()}
               className="p-1 border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1106,7 +1105,6 @@ const Tracking = () => {
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
             <button
-              type="button"
               onClick={() => trackingTable.lastPage()}
               disabled={!trackingTable.getCanNextPage()}
               className="px-2 py-1 text-[12px] border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
