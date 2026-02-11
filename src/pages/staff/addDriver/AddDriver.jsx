@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, ArrowUp } from "lucide-react";
-import Input from "../../components/Input";
-import Select from "../../components/Select";
+import Input from "../../../components/Input";
+import Select from "../../../components/Select";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./AddDriver.css";
@@ -399,72 +399,72 @@ const AddDriver = () => {
 
           {/* Add Your Own Driver Tab */}
           {activeTab === "own" && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-base font-semibold text-[#212121] mb-1">
-                Driver Information
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Input
-                  label="Driver Name"
-                  value={driverName}
-                  onChange={(e) => setDriverName(e.target.value)}
-                  placeholder="Enter driver name"
-                  labelClassName="font-medium text-[#212121]"
-                  className="border-[#DDDDDD] rounded-sm"
-                />
-                <Input
-                  label="Email Address"
-                  type="email"
-                  value={driverEmail}
-                  onChange={(e) => setDriverEmail(e.target.value)}
-                  placeholder="Enter email address"
-                  labelClassName="font-medium text-[#212121]"
-                  className="border-[#DDDDDD] rounded-sm"
-                />
-                <Input
-                  label="Phone Number"
-                  type="tel"
-                  value={driverPhone}
-                  onChange={(e) => setDriverPhone(e.target.value)}
-                  placeholder="Enter phone number"
-                  labelClassName="font-medium text-[#212121]"
-                  className="border-[#DDDDDD] rounded-sm"
-                />
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-[#212121] mb-0.5">
-                    Address
-                  </label>
-                  <textarea
-                    value={driverAddress}
-                    onChange={(e) => setDriverAddress(e.target.value)}
-                    placeholder="Enter driver address"
-                    rows={3}
-                    className="w-full px-3 py-4.5 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y min-h-[80px]"
+            <>
+              <div className="flex flex-col gap-4">
+                <h2 className="text-base font-semibold text-[#212121] mb-1">
+                  Driver Information
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Input
+                    label="Driver Name"
+                    value={driverName}
+                    onChange={(e) => setDriverName(e.target.value)}
+                    placeholder="Enter driver name"
+                    labelClassName="font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm"
                   />
+                  <Input
+                    label="Email Address"
+                    type="email"
+                    value={driverEmail}
+                    onChange={(e) => setDriverEmail(e.target.value)}
+                    placeholder="Enter email address"
+                    labelClassName="font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm"
+                  />
+                  <Input
+                    label="Phone Number"
+                    type="tel"
+                    value={driverPhone}
+                    onChange={(e) => setDriverPhone(e.target.value)}
+                    placeholder="Enter phone number"
+                    labelClassName="font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm"
+                  />
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-[#212121] mb-0.5">
+                      Address
+                    </label>
+                    <textarea
+                      value={driverAddress}
+                      onChange={(e) => setDriverAddress(e.target.value)}
+                      placeholder="Enter driver address"
+                      rows={3}
+                      className="w-full px-3 py-4.5 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y min-h-[80px]"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+              <div className="flex flex-wrap items-center justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-400 text-[#212121] rounded-sm font-semibold text-sm hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4 text-[#212121]" />
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                  Save Driver
+                </button>
+              </div>
+            </>
           )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-400 text-[#212121] rounded-sm font-semibold text-sm hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4 text-[#212121]" />
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
-            >
-              <ArrowUp className="w-4 h-4" />
-              Save Driver
-            </button>
-          </div>
         </div>
       </div>
     </div>

@@ -20,8 +20,8 @@ import Support from "./pages/support/Support";
 import Setting from "./pages/setting/Setting";
 import PageNotFound from "./pages/pnf/PageNotFound";
 import AIAdministrator from "./pages/staff/AIAdministrator";
-import AddDriver from "./pages/staff/AddDriver";
-import Drivers from "./pages/staff/Drivers";
+import AddDriver from "./pages/staff/addDriver/AddDriver";
+import Drivers from "./pages/staff/drivers/Drivers";
 
 function App() {
   return (

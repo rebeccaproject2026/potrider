@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { X, Eye, Handshake } from "lucide-react";
-import Drawer from "../../components/common/Drawer";
+import Drawer from "../../../components/common/Drawer";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -90,7 +90,7 @@ const AreaCodesDrawer = ({ isOpen, onClose, driver, onViewMoreDetails, onHire })
             </div>
           </div>
 
-         {/* Map */}
+          {/* Map */}
           <div className="w-full h-75 rounded-sm overflow-hidden bg-[#EEF1F4] shadow-lg">
             {hasMapToken ? (
               <div ref={mapContainerRef} className="w-full h-full" />

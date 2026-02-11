@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, CircleQuestionMark, Handshake, Image } from "lucide-react";
-import Drawer from "../../components/common/Drawer";
+import Drawer from "../../../components/common/Drawer";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./AddDriver.css";
-import DatePickerMap from "../../components/DatePickerMap";
-import FinanceSummaryCard from "../../components/finances/FinanceSummaryCard";
+import DatePickerMap from "../../../components/DatePickerMap";
+import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
 import ComplaintsDrawer from "./ComplaintsDrawer";
-import CardImage from "../../assets/images/card.png"
+import CardImage from "../../../assets/images/card.png"
 
 if (typeof import.meta.env.VITE_MAPBOX_ACCESS_TOKEN !== "undefined") {
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -155,6 +155,7 @@ const DriverDetailsDrawer = ({ isOpen, onClose, driver }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
+  // eslint-disable-next-line no-unused-vars
   const [period, setPeriod] = useState({ start: null, end: null });
   const [isHired, setIsHired] = useState(false);
   const [isComplaintsOpen, setIsComplaintsOpen] = useState(false);
@@ -192,12 +193,12 @@ const DriverDetailsDrawer = ({ isOpen, onClose, driver }) => {
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} width="w-screen">
+    <Drawer isOpen={isOpen} onClose={onClose} width="w-[88vw] max-w-[100vw]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 bg-gray-50">
         <div className="flex items-center gap-2">
           <ArrowLeft
-            className="text-[#969696] h-4 w-4 cursor-pointer hover:text-gray-700 transition-colors"
+            className="text-[#969696] h-5 w-5 cursor-pointer hover:text-gray-700 transition-colors"
             onClick={onClose}
           />
           <div className="relative">

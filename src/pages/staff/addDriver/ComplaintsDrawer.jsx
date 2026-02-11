@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
-import Drawer from "../../components/common/Drawer";
+import Drawer from "../../../components/common/Drawer";
 
 const COMPLAINTS_DATA = [
   {

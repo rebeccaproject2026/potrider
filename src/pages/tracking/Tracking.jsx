@@ -203,7 +203,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
     cell: (info) => {
       const row = info.row.original;
       return (
-        <div className="leading-tight text-[12px] text-[#3F4753]">
+      <div className="leading-tight text-[12px] text-[#3F4753]">
           <span className="block mb-0.5 font-medium text-[#3F4753] underline">
             #{row.orderId}
           </span>

@@ -27,7 +27,7 @@ export const getDriversColumns = (onView, onHire, onViewAreaCodes) => [
         cell: (info) => (
             <div className="flex items-center gap-2">
                 <span className="text-[12px] text-[#3F4753]">{info.getValue()}</span>
-                <button 
+                <button
                     onClick={() => onViewAreaCodes?.(info.row.original)}
                     className="flex items-center justify-center p-0 text-[#0066FF] hover:opacity-80 cursor-pointer"
                 >
@@ -106,9 +106,9 @@ export const getDriversColumns = (onView, onHire, onViewAreaCodes) => [
                     onClick={() => onView?.(info.row.original)}
                     className="flex items-center gap-1 cursor-pointer text-[12px] font-bold text-[#0066FF] hover:text-blue-700 transition-colors"
                 >
-                   <EyeIcon className="w-4 h-4" />
-                   <span className="border-b">
-                    View
+                    <EyeIcon className="w-4 h-4" />
+                    <span className="border-b">
+                        View
                     </span>
                 </button>
                 <button
@@ -117,7 +117,7 @@ export const getDriversColumns = (onView, onHire, onViewAreaCodes) => [
                 >
                     <Handshake className="w-3.5 h-3.5" />
                     <span className="border-b">
-                    Hire
+                        Hire
                     </span>
                 </button>
             </div>

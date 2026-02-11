@@ -16,8 +16,6 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 const AvailableDriversTable = ({
     data = [],
     columns = [],
-    onView,
-    onHire,
 }) => {
     const [globalFilter, setGlobalFilter] = useState("");
     const [activeTab, setActiveTab] = useState("All"); // "All", "Online", "Offline", "Suspended"
@@ -94,13 +92,13 @@ const AvailableDriversTable = ({
                     </div>
 
                     {/* Tabs - Styled exactly like Tracking.jsx */}
-                    <div className="flex items-center rounded-sm border border-[#969696] bg-white p-1 min-w-0 h-[45.5px]">
+                    <div className="flex-1 flex items-center rounded-sm border border-[#969696] bg-white p-1 min-w-0 h-[38px]">
                         {["All", "Online", "Offline", "Suspended"].map((tab) => (
                             <button
                                 key={tab}
                                 type="button"
                                 onClick={() => setActiveTab(tab)}
-                                className={`flex-1 px-4 h-full text-sm font-semibold rounded-sm cursor-pointer transition-colors whitespace-nowrap
+                                className={`flex-1 px-4 h-full text-sm font-medium rounded-sm cursor-pointer transition-colors whitespace-nowrap
                             ${activeTab === tab
                                         ? "bg-[#0066FF] text-white shadow-sm"
                                         : "text-[#969696] hover:bg-gray-50 bg-transparent"
