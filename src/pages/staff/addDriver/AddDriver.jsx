@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, ArrowUp } from "lucide-react";
+import { X, ArrowUp, Plus, ChevronDown } from "lucide-react";
 import Input from "../../../components/Input";
 import Select from "../../../components/Select";
 import mapboxgl from "mapbox-gl";
@@ -31,12 +31,20 @@ const RADIUS_OPTIONS = [
 ];
 
 import AvailableDriversTable from "./AvailableDriversTable";
-import { getDriversColumns, getDriversData, DriversDataWithDrawer } from "./driversData";
+import {
+  getDriversColumns,
+  getDriversData,
+  DriversDataWithDrawer,
+} from "./driversData";
 
 const AddDriver = () => {
   const navigate = useNavigate();
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
+  const ownDriverMapContainerRef = useRef(null);
+  const ownDriverMapRef = useRef(null);
+  const secondAreaMapContainerRef = useRef(null);
+  const secondAreaMapRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState("portrider");
   const [city, setCity] = useState("");
@@ -50,7 +58,9 @@ const AddDriver = () => {
   const [driverName, setDriverName] = useState("");
   const [driverEmail, setDriverEmail] = useState("");
   const [driverPhone, setDriverPhone] = useState("");
-  const [driverAddress, setDriverAddress] = useState("");
+  const [salaryPeriod, setSalaryPeriod] = useState("monthly");
+  const [country, setCountry] = useState("");
+  const [province, setProvince] = useState("");
 
   // Table Data
   const driversData = getDriversData();
@@ -75,7 +85,7 @@ const AddDriver = () => {
 
     mapRef.current.addControl(
       new mapboxgl.NavigationControl({ showCompass: false }),
-      "bottom-right"
+      "bottom-right",
     );
 
     return () => {
@@ -83,6 +93,62 @@ const AddDriver = () => {
       mapRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (
+      activeTab !== "own" ||
+      !ownDriverMapContainerRef.current ||
+      ownDriverMapRef.current
+    )
+      return;
+    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+    if (!token) return;
+
+    ownDriverMapRef.current = new mapboxgl.Map({
+      container: ownDriverMapContainerRef.current,
+      style: "mapbox://styles/mapbox/light-v11",
+      center: [-79.3832, 43.6532],
+      zoom: 14,
+    });
+
+    ownDriverMapRef.current.addControl(
+      new mapboxgl.NavigationControl({ showCompass: false }),
+      "bottom-right",
+    );
+
+    return () => {
+      ownDriverMapRef.current?.remove();
+      ownDriverMapRef.current = null;
+    };
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (
+      activeTab !== "own" ||
+      !secondAreaMapContainerRef.current ||
+      secondAreaMapRef.current
+    )
+      return;
+    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+    if (!token) return;
+
+    secondAreaMapRef.current = new mapboxgl.Map({
+      container: secondAreaMapContainerRef.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [-79.3832, 43.6532],
+      zoom: 14,
+    });
+
+    secondAreaMapRef.current.addControl(
+      new mapboxgl.NavigationControl({ showCompass: false }),
+      "bottom-right",
+    );
+
+    return () => {
+      secondAreaMapRef.current?.remove();
+      secondAreaMapRef.current = null;
+    };
+  }, [activeTab]);
 
   const hasMapToken =
     typeof import.meta.env.VITE_MAPBOX_ACCESS_TOKEN !== "undefined" &&
@@ -93,15 +159,16 @@ const AddDriver = () => {
       <div className="flex-1 full-width w-full flex flex-col">
         <div className="bg-white rounded-sm border border-gray-200 shadow-sm p-2.5 flex-1 min-h-0 flex flex-col w-full max-w-none">
           {/* Tab Navigation */}
-          <div className="flex items-center w-full rounded-sm bg-white border border-[#CFCFCF] h-[42px] p-[2px] mb-2">
+          <div className="flex items-center w-full rounded-sm bg-white border border-[#CFCFCF] h-10.5 p-0.5 mb-2">
             <button
               type="button"
               onClick={() => setActiveTab("portrider")}
               className={`flex-1 h-full text-sm font-semibold transition-all rounded-sm
-      ${activeTab === "portrider"
-                  ? "bg-[#1FAE3D] text-white"
-                  : "bg-transparent text-gray-600"
-                }`}
+      ${
+        activeTab === "portrider"
+          ? "bg-[#1FAE3D] text-white"
+          : "bg-transparent text-gray-600"
+      }`}
             >
               Add Driver From Potrider
             </button>
@@ -110,15 +177,15 @@ const AddDriver = () => {
               type="button"
               onClick={() => setActiveTab("own")}
               className={`flex-1 h-full text-sm font-semibold transition-all rounded-sm
-      ${activeTab === "own"
-                  ? "bg-[#1FAE3D] text-white"
-                  : "bg-transparent text-gray-600"
-                }`}
+      ${
+        activeTab === "own"
+          ? "bg-[#1FAE3D] text-white"
+          : "bg-transparent text-gray-600"
+      }`}
             >
               Add Your Own Driver
             </button>
           </div>
-
 
           {/* Add Driver From Portrider Tab */}
           {activeTab === "portrider" && (
@@ -131,7 +198,6 @@ const AddDriver = () => {
 
                 {/* Main Card */}
                 <div className="border border-[#D6D6D6] rounded-sm bg-white p-4">
-
                   {/* Top Controls */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <div>
@@ -172,7 +238,7 @@ const AddDriver = () => {
                   </div>
 
                   {/* Map */}
-                  <div className="w-full h-[300px] rounded-sm overflow-hidden bg-[#EEF1F4]">
+                  <div className="w-full h-75 rounded-sm overflow-hidden bg-[#EEF1F4]">
                     {hasMapToken ? (
                       <div ref={mapContainerRef} className="w-full h-full" />
                     ) : (
@@ -181,7 +247,6 @@ const AddDriver = () => {
                       </div>
                     )}
                   </div>
-
                 </div>
               </div>
 
@@ -198,30 +263,33 @@ const AddDriver = () => {
                     <button
                       type="button"
                       onClick={() => setHireDuration("day")}
-                      className={`px-3 py-2.5 text-sm font-medium rounded-sm transition-colors border ${hireDuration === "day"
-                        ? "border-[#969696] bg-white text-gray-900"
-                        : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
-                        }`}
+                      className={`px-3 py-2.5 text-sm font-medium rounded-sm transition-colors border ${
+                        hireDuration === "day"
+                          ? "border-[#969696] bg-white text-gray-900"
+                          : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
+                      }`}
                     >
                       Day
                     </button>
                     <button
                       type="button"
                       onClick={() => setHireDuration("week")}
-                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${hireDuration === "week"
-                        ? "border-[#969696] bg-white text-gray-900"
-                        : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
-                        }`}
+                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${
+                        hireDuration === "week"
+                          ? "border-[#969696] bg-white text-gray-900"
+                          : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
+                      }`}
                     >
                       Week
                     </button>
                     <button
                       type="button"
                       onClick={() => setHireDuration("month")}
-                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${hireDuration === "month"
-                        ? "border-[#969696] bg-white text-gray-900"
-                        : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
-                        }`}
+                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${
+                        hireDuration === "month"
+                          ? "border-[#969696] bg-white text-gray-900"
+                          : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
+                      }`}
                     >
                       Month
                     </button>
@@ -232,22 +300,25 @@ const AddDriver = () => {
                     <button
                       type="button"
                       onClick={() => setHireDuration("year")}
-                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${hireDuration === "year"
-                        ? "border-[#969696] bg-white text-gray-900"
-                        : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
-                        }`}
+                      className={`px-3 py-2.5 text-sm  font-medium rounded-sm transition-colors border ${
+                        hireDuration === "year"
+                          ? "border-[#969696] bg-white text-gray-900"
+                          : "border-[#969696] bg-white text-gray-900 hover:bg-gray-50"
+                      }`}
                     >
                       Year
                     </button>
                     <button
                       type="button"
                       onClick={() => setHireDuration("custom-duration")}
-                      className={`px-3 py-2.5 text-sm font-semibold rounded-sm transition-colors ${hireDuration === "custom-duration"
-                        ? "bg-[#0066FF] text-white shadow-sm"
-                        : "bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
-                        }`}
+                      className={`px-3 py-2.5 text-sm font-semibold rounded-sm transition-colors ${
+                        hireDuration === "custom-duration"
+                          ? "bg-[#0066FF] text-white shadow-sm"
+                          : "bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
+                      }`}
                     >
-                      Custom Duration {hireDuration === "custom-duration" && "✓"}
+                      Custom Duration{" "}
+                      {hireDuration === "custom-duration" && "✓"}
                     </button>
                   </div>
 
@@ -318,11 +389,15 @@ const AddDriver = () => {
                         className="absolute h-full bg-[#1FAE3D] rounded-full"
                         style={{ width: "60%" }}
                       />
-                      <div className="absolute -top-[5px] left-[60%] w-4 h-4 bg-[#1FAE3D] rounded-full border-2 border-white shadow" />
+                      <div className="absolute -top-1.25 left-[60%] w-4 h-4 bg-[#1FAE3D] rounded-full border-2 border-white shadow" />
                     </div>
 
                     <div className="flex justify-between text-sm font-semibold text-[#1F1F1F] mt-3">
-                      <span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+                      <span>2</span>
+                      <span>4</span>
+                      <span>6</span>
+                      <span>8</span>
+                      <span>10</span>
                     </div>
                   </div>
 
@@ -337,11 +412,15 @@ const AddDriver = () => {
                         className="absolute h-full bg-[#1FAE3D] rounded-full"
                         style={{ width: "60%" }}
                       />
-                      <div className="absolute -top-[5px] left-[60%] w-4 h-4 bg-[#1FAE3D] rounded-full border-2 border-white shadow" />
+                      <div className="absolute -top-1.25 left-[60%] w-4 h-4 bg-[#1FAE3D] rounded-full border-2 border-white shadow" />
                     </div>
 
                     <div className="flex justify-between text-sm font-semibold text-[#1F1F1F] mt-3">
-                      <span>4</span><span>8</span><span>12</span><span>16</span><span>20</span>
+                      <span>4</span>
+                      <span>8</span>
+                      <span>12</span>
+                      <span>16</span>
+                      <span>20</span>
                     </div>
                   </div>
 
@@ -373,12 +452,12 @@ const AddDriver = () => {
                       </label>
                     </div>
 
-                    <p className="text-sm text-[#000] italic text-right mt-3">
-                      If actual delivery is outside of area radius it will be charge at $0.69 per km
+                    <p className="text-sm text-black italic text-right mt-3">
+                      If actual delivery is outside of area radius it will be
+                      charge at $0.69 per km
                     </p>
                   </div>
                 </div>
-
               </div>
 
               {/* Available Drivers Table */}
@@ -387,7 +466,11 @@ const AddDriver = () => {
                   {({ onView, onHire, onViewAreaCodes }) => (
                     <AvailableDriversTable
                       data={driversData}
-                      columns={getDriversColumns(onView, onHire, onViewAreaCodes)}
+                      columns={getDriversColumns(
+                        onView,
+                        onHire,
+                        onViewAreaCodes,
+                      )}
                       onView={onView}
                       onHire={onHire}
                     />
@@ -400,68 +483,364 @@ const AddDriver = () => {
           {/* Add Your Own Driver Tab */}
           {activeTab === "own" && (
             <>
-              <div className="flex flex-col gap-4">
-                <h2 className="text-base font-semibold text-[#212121] mb-1">
-                  Driver Information
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-4 mt-2">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-base font-semibold text-[#212121]">
+                    Driver Details
+                  </h2>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-400 text-[#212121] rounded-sm font-semibold text-sm hover:bg-gray-50 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSave}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FAE3D] text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity"
+                    >
+                      <ArrowUp className="w-4 h-4" />
+                      Save
+                    </button>
+                  </div>
+                </div>
+
+                {/* Form Grid - 4 columns */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Row 1 */}
                   <Input
                     label="Driver Name"
                     value={driverName}
                     onChange={(e) => setDriverName(e.target.value)}
-                    placeholder="Enter driver name"
-                    labelClassName="font-medium text-[#212121]"
-                    className="border-[#DDDDDD] rounded-sm"
+                    placeholder="Enter full name"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
                   />
                   <Input
-                    label="Email Address"
-                    type="email"
-                    value={driverEmail}
-                    onChange={(e) => setDriverEmail(e.target.value)}
-                    placeholder="Enter email address"
-                    labelClassName="font-medium text-[#212121]"
-                    className="border-[#DDDDDD] rounded-sm"
+                    label="Date of Birth"
+                    type="text"
+                    placeholder="DD/MM/YYYY"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
                   />
                   <Input
                     label="Phone Number"
                     type="tel"
                     value={driverPhone}
                     onChange={(e) => setDriverPhone(e.target.value)}
-                    placeholder="Enter phone number"
-                    labelClassName="font-medium text-[#212121]"
-                    className="border-[#DDDDDD] rounded-sm"
+                    placeholder="Enter your number"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
                   />
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-[#212121] mb-0.5">
-                      Address
+                  <Input
+                    label="Email Address"
+                    type="email"
+                    value={driverEmail}
+                    onChange={(e) => setDriverEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+
+                  {/* Row 2 */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Salary
                     </label>
-                    <textarea
-                      value={driverAddress}
-                      onChange={(e) => setDriverAddress(e.target.value)}
-                      placeholder="Enter driver address"
-                      rows={3}
-                      className="w-full px-3 py-4.5 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y min-h-[80px]"
+                    <div className="flex items-stretch border border-[#DDDDDD] rounded-sm bg-white">
+                      <input
+                        type="text"
+                        placeholder="Enter Salary"
+                        className="flex-1 px-3 py-2 text-sm bg-transparent focus:outline-none"
+                        style={{ border: 'none', outline: 'none' }}
+                      />
+                      <div className="border-l border-[#DDDDDD] flex items-center relative">
+                        <select
+                          value={salaryPeriod}
+                          onChange={(e) => setSalaryPeriod(e.target.value)}
+                          className="px-3 py-2 text-sm text-gray-900 bg-transparent focus:outline-none cursor-pointer appearance-none pr-8"
+                          style={{ border: 'none', outline: 'none', minWidth: '120px' }}
+                        >
+                          <option value="monthly">Monthly</option>
+                          <option value="weekly">Weekly</option>
+                          <option value="daily">Daily</option>
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-gray-500 absolute right-2 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+                  <Input
+                    label="Home Address"
+                    type="text"
+                    placeholder="Enter your address"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <Input
+                    label="Vehicle Insurance Number"
+                    type="text"
+                    placeholder="Enter vehicle insurance number"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <Input
+                    label="Vehicle Type"
+                    type="text"
+                    placeholder="Select vehicle type"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+
+                  {/* Row 3 */}
+                  <Input
+                    label="Vehicle Make Year"
+                    type="text"
+                    placeholder="2015"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <Input
+                    label="Vehicle Make"
+                    type="text"
+                    placeholder="Hyundai"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <Input
+                    label="Vehicle Model"
+                    type="text"
+                    placeholder="Kona"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <Input
+                    label="City"
+                    type="text"
+                    placeholder="Enter your city name"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+
+                  {/* Row 4 */}
+                  <Input
+                    label="Postal Code"
+                    type="text"
+                    placeholder="Enter your zip code"
+                    labelClassName="text-sm font-medium text-[#212121]"
+                    className="border-[#DDDDDD] rounded-sm text-sm py-2!"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Country
+                    </label>
+                    <Select
+                      options={[
+                        { value: "canada", label: "Canada" },
+                        { value: "usa", label: "USA" },
+                      ]}
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      placeholder="Select your country"
+                      className="border-[#DDDDDD] text-gray-900! rounded-sm text-sm"
                     />
                   </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Province
+                    </label>
+                    <Select
+                      options={[
+                        { value: "ontario", label: "Ontario" },
+                        { value: "quebec", label: "Quebec" },
+                      ]}
+                      value={province}
+                      onChange={(e) => setProvince(e.target.value)}
+                      placeholder="Select province"
+                      className="border-[#DDDDDD] text-gray-900! rounded-sm text-sm"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Criminal Record
+                    </label>
+                    <div className="flex gap-2 items-center ">
+                      <label className="flex items-center gap-2 cursor-pointer border py-2! px-2 w-full rounded-sm border-[#DDDDDD]">
+                        <input
+                          type="radio"
+                          name="criminalRecord"
+                          value="yes"
+                          className="w-4 h-4 accent-blue-600"
+                        />
+                        <span className="text-sm font-medium text-[#212121]">
+                          Yes
+                        </span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer border py-2 px-2 w-full rounded-sm border-[#DDDDDD]">
+                        <input
+                          type="radio"
+                          name="criminalRecord"
+                          value="no"
+                          defaultChecked
+                          className="w-4 h-4 accent-blue-600"
+                        />
+                        <span className="text-sm font-medium text-[#212121]">
+                          No
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-wrap items-center justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+
+                {/* Working Area Section */}
+                <div className="flex flex-col gap-2.5 mt-4">
+                  <h2 className="text-base font-semibold text-[#212121]">
+                    Working Area
+                  </h2>
+
+                  <div className="border border-[#C5C5C5] rounded-md p-3 flex flex-col gap-2.5">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium text-[#212121]">
+                        Area Code
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="M2N 3X1"
+                        className="w-full px-3 py-2 text-sm border border-[#D9D9D9] rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Map */}
+                    <div className="w-full h-62.5 rounded-sm overflow-hidden bg-[#EEF1F4] border border-[#DDDDDD]">
+                      {hasMapToken ? (
+                        <div
+                          ref={ownDriverMapContainerRef}
+                          className="w-full h-full"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                          Map preview
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Area Code Section */}
+                <div className="flex flex-col gap-2 p-3 rounded-md border border-[#C5C5C5]">
+                  <div className="relative">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Area Code
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter Postal code"
+                      className="w-full px-3 py-2 text-sm border border-[#D9D9D9] rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 mt-1"
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-0 text-white bg-red-500 rounded-full p-0.5 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+
+                  {/* Map */}
+                  <div className="w-full h-62.5 rounded-sm overflow-hidden bg-[#EEF1F4] border border-[#DDDDDD]">
+                    {hasMapToken ? (
+                      <div
+                        ref={secondAreaMapContainerRef}
+                        className="w-full h-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                        Map preview
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <button
                   type="button"
-                  onClick={handleCancel}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-400 text-[#212121] rounded-sm font-semibold text-sm hover:bg-gray-50 transition-colors cursor-pointer"
+                  className="text-start text-[13px] text-[#0066FF] font-semibold cursor-pointer flex gap-1 items-center"
                 >
-                  <X className="w-4 h-4 text-[#212121]" />
-                  Cancel
+                  <Plus className="stroke-2 w-5 h-5" /> Add more...
                 </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
-                >
-                  <ArrowUp className="w-4 h-4" />
-                  Save Driver
-                </button>
+
+                {/* Personal Identification Section */}
+                <div className="flex flex-col gap-3 mt-4">
+                  <h2 className="text-base font-semibold text-[#212121]">
+                    Personal Identification
+                  </h2>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-[#212121]">
+                      Upload Driver License (Front and back side)
+                    </label>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Front Side Upload */}
+                    <div className="flex flex-col items-center justify-center border border-[#D9D9D9] rounded-sm px-8 py-12 bg-white hover:border-gray-400 transition-colors cursor-pointer">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-12 h-12 text-[#D9D9D9]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
+                            </svg>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm text-gray-600">
+                              Select your file or drag and drop it here
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 font-medium">
+                            Front side
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Back Side Upload */}
+                      <div className="flex flex-col items-center justify-center border border-[#D9D9D9] rounded-sm px-8 py-12 bg-white hover:border-gray-400 transition-colors cursor-pointer">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-12 h-12 text-[#D9D9D9]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
+                            </svg>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm text-gray-600">
+                              Select your file or drag and drop it here
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 font-medium">
+                            Back side
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </>
           )}

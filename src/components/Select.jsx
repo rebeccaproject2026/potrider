@@ -283,7 +283,7 @@ const Select = ({
         className={`head-dr-dropdown form-select w-full px-2.5 text-[13px] border border-[#DDDDDD] rounded-sm font-medium focus:outline-none shadow-none flex items-center justify-between pr-8 transition-colors placeholder-gray-600 ${compact ? "min-h-[32px] py-2" : "min-h-[38px] py-3"
           } ${disabled
             ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-            : "bg-white text-[#0000] cursor-pointer"
+            : "bg-white text-gray-900 cursor-pointer"
           } ${className}`}
       >
         <span className="overflow-hidden whitespace-nowrap text-sm flex-1 text-left text-gray-600">
