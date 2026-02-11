@@ -6,7 +6,6 @@ import Select from "../Select";
 import DeliveryChatDrawer from "./DeliveryChatDrawer";
 import chatIcon from "../../assets/images/Button.png";
 import alertIcon from "../../assets/images/Button (1).png";
-import deliveryprogressICon from "../../assets/images/inprogress.png";
 
 const MOCK_DRIVER = {
   _id: "driver-1",
@@ -395,7 +394,9 @@ const DeliveryDetailsDrawer = ({ open, onClose, defaultChatOpen = false }) => {
                         type="button"
                         className="w-10 h-10 rounded-sm flex items-center justify-center transition-opacity hover:opacity-90"
                       >
-                        <img src={deliveryprogressICon} alt="inprogress" className="w-full h-full object-contain" />
+                        <div className="w-10 h-10 rounded-full bg-[#FF9800] flex items-center justify-center text-white shadow-sm ring-2 ring-white">
+                          <Icon icon="mdi:check" className="w-5 h-5" />
+                        </div>
                       </button>
                     </div>
                     <div className="flex flex-col flex-1 min-w-0 justify-between py-0.5">
