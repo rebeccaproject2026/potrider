@@ -31,7 +31,7 @@ const RADIUS_OPTIONS = [
 ];
 
 import AvailableDriversTable from "./AvailableDriversTable";
-import { getDriversColumns, getDriversData } from "./driversData";
+import { getDriversColumns, getDriversData, DriversDataWithDrawer } from "./driversData";
 
 const AddDriver = () => {
   const navigate = useNavigate();
@@ -54,7 +54,6 @@ const AddDriver = () => {
 
   // Table Data
   const driversData = getDriversData();
-  const driversColumns = getDriversColumns();
 
   const handleCancel = () => navigate("/staff/drivers");
   const handleSave = () => {
@@ -384,12 +383,16 @@ const AddDriver = () => {
 
               {/* Available Drivers Table */}
               <div className="mt-4">
-                <AvailableDriversTable
-                  data={driversData}
-                  columns={driversColumns}
-                  onView={(driver) => console.log("View driver:", driver)}
-                  onHire={(driver) => console.log("Hire driver:", driver)}
-                />
+                <DriversDataWithDrawer>
+                  {({ onView, onHire, onViewAreaCodes }) => (
+                    <AvailableDriversTable
+                      data={driversData}
+                      columns={getDriversColumns(onView, onHire, onViewAreaCodes)}
+                      onView={onView}
+                      onHire={onHire}
+                    />
+                  )}
+                </DriversDataWithDrawer>
               </div>
             </div>
           )}

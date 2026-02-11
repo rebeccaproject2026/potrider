@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
-import { Eye, Handshake } from "lucide-react";
+import { useState } from "react";
+import { Eye, EyeIcon, Handshake } from "lucide-react";
+import DriverDetailsDrawer from "./DriverDetailsDrawer";
+import AreaCodesDrawer from "./AreaCodesDrawer";
 
 /**
  * Drivers table columns definition matching the screenshot but using OrdersTable typography
  */
-export const getDriversColumns = (onView, onHire) => [
+export const getDriversColumns = (onView, onHire, onViewAreaCodes) => [
     {
         accessorKey: "driverName",
         header: "Name",
@@ -25,8 +27,11 @@ export const getDriversColumns = (onView, onHire) => [
         cell: (info) => (
             <div className="flex items-center gap-2">
                 <span className="text-[12px] text-[#3F4753]">{info.getValue()}</span>
-                <button className="flex items-center justify-center p-0 text-[#0066FF] hover:opacity-80">
-                    <Eye className="w-3.5 h-3.5" />
+                <button 
+                    onClick={() => onViewAreaCodes?.(info.row.original)}
+                    className="flex items-center justify-center p-0 text-[#0066FF] hover:opacity-80 cursor-pointer"
+                >
+                    <Eye className="w-4 h-4" />
                 </button>
             </div>
         ),
@@ -99,19 +104,21 @@ export const getDriversColumns = (onView, onHire) => [
             <div className="flex items-center gap-3">
                 <button
                     onClick={() => onView?.(info.row.original)}
-                    className="flex items-center gap-1 text-[12px] font-bold text-[#0066FF] hover:text-blue-700 transition-colors"
+                    className="flex items-center gap-1 cursor-pointer text-[12px] font-bold text-[#0066FF] hover:text-blue-700 transition-colors"
                 >
-                    <div className="w-3.5 h-3.5 rounded-full border border-current flex items-center justify-center text-[9px]">
-                        <span className="mb-0.5">i</span>
-                    </div>
+                   <EyeIcon className="w-4 h-4" />
+                   <span className="border-b">
                     View
+                    </span>
                 </button>
                 <button
                     onClick={() => onHire?.(info.row.original)}
-                    className="flex items-center gap-1 text-[12px] font-bold text-[#109F22] hover:text-green-700 transition-colors"
+                    className="flex items-center gap-1 text-[12px] cursor-pointer font-bold text-[#109F22] hover:text-green-700 transition-colors"
                 >
                     <Handshake className="w-3.5 h-3.5" />
+                    <span className="border-b">
                     Hire
+                    </span>
                 </button>
             </div>
         ),
@@ -253,3 +260,56 @@ export const getDriversData = () => [
         status: "Online",
     },
 ];
+
+/**
+ * DriversDataWithDrawer - Wrapper component that manages drawer state
+ * Use this component instead of directly using getDriversColumns
+ */
+export const DriversDataWithDrawer = ({ children }) => {
+    const [selectedDriver, setSelectedDriver] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isAreaCodesDrawerOpen, setIsAreaCodesDrawerOpen] = useState(false);
+
+    const handleView = (driver) => {
+        setSelectedDriver(driver);
+        setIsDrawerOpen(true);
+    };
+
+    const handleHire = (driver) => {
+        console.log("Hire driver:", driver);
+        // Add hire logic here
+    };
+
+    const handleViewAreaCodes = (driver) => {
+        setSelectedDriver(driver);
+        setIsAreaCodesDrawerOpen(true);
+    };
+
+    const handleCloseDrawer = () => {
+        setIsDrawerOpen(false);
+        setTimeout(() => setSelectedDriver(null), 300);
+    };
+
+    const handleCloseAreaCodesDrawer = () => {
+        setIsAreaCodesDrawerOpen(false);
+        setTimeout(() => setSelectedDriver(null), 300);
+    };
+
+    return (
+        <>
+            {children({ onView: handleView, onHire: handleHire, onViewAreaCodes: handleViewAreaCodes })}
+            <DriverDetailsDrawer
+                isOpen={isDrawerOpen}
+                onClose={handleCloseDrawer}
+                driver={selectedDriver}
+            />
+            <AreaCodesDrawer
+                isOpen={isAreaCodesDrawerOpen}
+                onClose={handleCloseAreaCodesDrawer}
+                driver={selectedDriver}
+                onViewMoreDetails={handleView}
+                onHire={handleHire}
+            />
+        </>
+    );
+};
