@@ -43,6 +43,8 @@ const DeliveryChatDrawer = ({
     orderAmount = 1325.26,
     paymentMethod = "Cash on Delivery",
     orderType = "Same Day",
+    style = {}, // Allow style overrides (e.g., for positioning)
+    hideBackdrop = false, // Allow hiding backdrop
 }) => {
     // if (!open) return null; // Remove conditional return to allow animation
 
@@ -66,13 +68,16 @@ const DeliveryChatDrawer = ({
 
     return (
         <>
-            <div
-                className={`fixed inset-0 bg-black/20 z-40 transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-                onClick={onClose}
-                aria-hidden
-            />
+            {!hideBackdrop && (
+                <div
+                    className={`fixed inset-0 bg-black/20 z-40 transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                    onClick={onClose}
+                    aria-hidden
+                />
+            )}
             <div
                 className={`fixed right-0 top-0 h-full w-[400px] bg-[#F5F5F5] shadow-2xl flex flex-col z-50 border-l border-gray-200 font-sans transition-transform duration-300 transform ${open ? "translate-x-0" : "translate-x-full"}`}
+                style={style} // Apply style overrides here
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header - Fixed */}

@@ -3,8 +3,6 @@ import { Icon } from "@iconify/react";
 import DeliveryDetailsDrawer from "./DeliveryDetailsDrawer";
 import DeliveryChatDrawer from "./DeliveryChatDrawer";
 
-
-
 const MOCK_ORDER = {
   orderQuantity: "13 Items",
   orderAmount: "1325.26",
@@ -31,9 +29,6 @@ const DeliveryCard = ({
     delivered = 0,
     cancelled = 0,
   } = breakdown;
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
 
   // Calculate percentages/widths for stacked bar
   const total = pending + inProgress + delivered + cancelled || 1;
@@ -74,13 +69,17 @@ const DeliveryCard = ({
 
   const style = getStatusStyle(status);
 
+  // Independent drawers for Card actions
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
+
   const handleShareClick = () => {
-    setDrawerOpen(true);
+    setDetailsOpen(true);
     if (onShare) onShare();
   };
 
   const handleChatClick = () => {
-    setChatOpen(true);
+    setChatOpen(true); // Only opens Chat Drawer
     if (onChat) onChat();
   };
 
@@ -127,16 +126,16 @@ const DeliveryCard = ({
               <button
                 type="button"
                 onClick={handleShareClick}
-                className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                className="text-blue-500 hover:bg-blue-50 rounded transition-colors"
               >
-                <Icon icon="mdi:export-variant" className="w-4 h-4" />
+                <Icon icon="fa6-solid:up-right-from-square" style={{ fontSize: "16px", color: "#0066FF" }} />
               </button>
               <button
                 type="button"
                 onClick={handleChatClick}
-                className="p-1.5 text-gray-700 hover:bg-gray-100 rounded transition-colors border border-gray-200"
+                className="text-gray-700 hover:bg-gray-100 transition-colors"
               >
-                <Icon icon="mdi:message-outline" className="w-4 h-4" />
+                <Icon icon="fluent:chat-16-regular" style={{ fontSize: "26px", color: "#000" }} />
               </button>
             </div>
           </div>
@@ -237,10 +236,12 @@ const DeliveryCard = ({
 
       {/* Details drawer (Share) */}
       <DeliveryDetailsDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        open={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+      // Removed defaultChatOpen={startWithChat} since we want separate control
       />
 
+      {/* Independent Chat Drawer */}
       <DeliveryChatDrawer
         open={chatOpen}
         onClose={() => setChatOpen(false)}

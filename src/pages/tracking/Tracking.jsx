@@ -204,16 +204,17 @@ const getTrackingTableColumns = (onView, onDelete) => [
       const row = info.row.original;
       return (
         <div className="leading-tight text-[12px] text-[#3F4753]">
-          <Link
-            to={`/orders/${row.orderId}`}
-            className="font-bold text-(--color-secondary) underline hover:underline block"
-          >
+          <span className="block mb-0.5 font-medium text-[#3F4753] underline">
             #{row.orderId}
+          </span>
+          <Link
+            to={`/customers/${row.customerId}`}
+            className="block font-bold text-[#000] hover:text-blue-600 underline hover:no-underline"
+          >
+            {row.customer}
           </Link>
-          <span className="block">{row.customer}</span>
-          <span className="block text-gray-600">{row.address}</span>
-          <span className="block">{row.date}</span>
-          <span className="block text-gray-500">{row.timeAgo}</span>
+          <span className="block text-gray-500 text-[11px] mt-0.5">{row.address}</span>
+          <span className="block text-gray-400 text-[11px] mt-0.5">{row.date} • {row.timeAgo}</span>
         </div>
       );
     },
@@ -247,7 +248,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
               : "bg-[#FEECEB] text-[#F44336]";
       return (
         <span
-          className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}
+          className={`inline-flex px-2.5 py-0.5 rounded text-[11px] font-semibold ${pillClass}`}
         >
           {v}
         </span>
@@ -262,7 +263,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
       const isOnline = v === "online";
       return (
         <span
-          className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${isOnline
+          className={`inline-flex px-2.5 py-0.5 rounded text-[11px] font-semibold ${isOnline
             ? "bg-[#D4FFDA] text-[#109F22]"
             : "bg-[#FEECEB] text-[#F44336]"
             }`}
@@ -277,8 +278,8 @@ const getTrackingTableColumns = (onView, onDelete) => [
     header: "ETA",
     cell: (info) => (
       <div className="text-[12px] text-[#3F4753]">
-        <span className="block">Approximate Arrival</span>
-        <span className="block">{info.getValue()}</span>
+        <span className="block text-gray-500 text-[11px]">Approximate Arrival</span>
+        <span className="block font-medium">{info.getValue()}</span>
       </div>
     ),
   },
@@ -291,7 +292,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
         <button
           type="button"
           onClick={() => onView?.(info.row.original)}
-          className="p-1.5 text-(--color-secondary) hover:bg-blue-50 rounded transition-colors"
+          className="p-1.5 text-[#0066FF] hover:bg-blue-50 rounded transition-colors"
           title="View"
         >
           <Eye className="w-4 h-4" />
@@ -313,6 +314,7 @@ const TRACKING_TABLE_DATA = [
   {
     id: "t1",
     orderId: "1235265412",
+    customerId: "c1",
     driver: "John Doe",
     device: "23076RN4BI",
     customer: "Frank Nava",
@@ -328,6 +330,7 @@ const TRACKING_TABLE_DATA = [
   {
     id: "t2",
     orderId: "1235265413",
+    customerId: "c2",
     driver: "Jane Smith",
     device: "23076RN4BJ",
     customer: "Sarah H.",
@@ -343,6 +346,7 @@ const TRACKING_TABLE_DATA = [
   {
     id: "t3",
     orderId: "1235265414",
+    customerId: "c3",
     driver: "Mike Wilson",
     device: "23076RN4BK",
     customer: "Khaled Dardar",
@@ -977,7 +981,7 @@ const Tracking = () => {
         {/* Table */}
         <div className="order-list-table-table-container overflow-x-auto">
           <table className="order-list-table table w-full min-w-[1100px] border-collapse">
-            <thead className="bg-gray-100 border-b border-gray-200 sticky top-0 z-10">
+            <thead className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-10">
               {trackingTable.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
