@@ -147,7 +147,7 @@ const OrderStatusCard = ({
       {/* Header with Address and Action Buttons */}
       <div className="flex justify-between items-center mb-2 pb-1">
         <div className="flex items-center gap-2 flex-1">
-          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${colors.icon}`}>
+          <div className={`w-5 h-5 rounded-sm flex items-center justify-center flex-shrink-0 ${colors.icon}`}>
             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
@@ -342,7 +342,7 @@ const OrderStatusCard = ({
 
         {/* Map Section - Only show for inprogress and when visible */}
         {type === 'inprogress' && isMapVisible && (
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="mt-5">
             <OrderMapSection orderData={orderData} />
           </div>
         )}

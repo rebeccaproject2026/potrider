@@ -481,46 +481,48 @@ const DriverDetailView = ({ data }) => {
       {/* Track Deliveries Section */}
 
 
-      <div className="bg-white rounded-sm border border-gray-200 p-4">
-        {/* Tab Content */}
-        <div className="">
-          {activeTab === "live-status" && (
-            <div>
-              {/* Live Status - Single Card with Map */}
-              <OrderStatusCard
-                orderData={{
-                  address: '123 Main Street, Toronto, ON M5J 2N8',
-                  orderId: '302011',
-                  driver: 'Jack Benson',
-                  orderAmount: '1325.26',
-                  orderQuantity: '10 Items',
-                  orderCreated: '5 Mar 2024',
-                  orderCreatedTime: '10:30 pm',
-                  deliveryDate: '15 Jan 2025 Today',
-                  eta: '11:30 pm',
-                  soldQuantity: '2.36g',
-                  receivedAmount: '1025.35',
-                  unpaidCollection: '1025.35',
-                  paidCollection: '25.35',
-                  deliveryStarted: '12/14/2024 at 06:53 pm',
-                  approximateArrival: '12/14/2024, 08:12 PM',
-                }}
-                showMap={true}
-                showActions={true}
-                showPaymentSummary={false}
-                type="inprogress"
-              />
-            </div>
-          )}
-          {activeTab === "order-history" && (
-            <OrderPage
-              showFilters={true}
-              showMap={false}
-              pageType="all"
+
+      {/* Tab Content */}
+      <div className="">
+        {activeTab === "live-status" && (
+          <div>
+            {/* Live Status - Single Card with Map */}
+            <OrderStatusCard
+              orderData={{
+                address: '123 Main Street, Toronto, ON M5J 2N8',
+                orderId: '302011',
+                driver: 'Jack Benson',
+                orderAmount: '1325.26',
+                orderQuantity: '10 Items',
+                orderCreated: '5 Mar 2024',
+                orderCreatedTime: '10:30 pm',
+                deliveryDate: '15 Jan 2025 Today',
+                eta: '11:30 pm',
+                soldQuantity: '2.36g',
+                receivedAmount: '1025.35',
+                unpaidCollection: '1025.35',
+                paidCollection: '25.35',
+                deliveryStarted: '12/14/2024 at 06:53 pm',
+                approximateArrival: '12/14/2024, 08:12 PM',
+              }}
+              showMap={true}
+              showActions={true}
+              showPaymentSummary={false}
+              type="inprogress"
             />
-          )}
-          {activeTab === "log-activity" && (
-            <div className="py-4">
+          </div>
+        )}
+        {activeTab === "order-history" && (
+          <OrderPage
+            showFilters={true}
+            showMap={false}
+            pageType="all"
+          />
+        )}
+        {(activeTab === "log-activity" || activeTab === "payroll-history" || activeTab === "performance") && (
+          <div className="bg-white rounded-sm border border-gray-200 p-4">
+            {activeTab === "log-activity" && (
+            <div className="">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 gap-2.5 mb-4">
                 <div className="bg-[#CEF1E0] p-2 rounded-sm text-center">
@@ -634,7 +636,8 @@ const DriverDetailView = ({ data }) => {
               />
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

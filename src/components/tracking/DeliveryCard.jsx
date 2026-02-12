@@ -20,6 +20,7 @@ const DeliveryCard = ({
   totalOrders = 0,
   breakdown = {},
   className = "",
+  showActions = true,
   onShare,
   onChat,
 }) => {
@@ -86,9 +87,9 @@ const DeliveryCard = ({
   return (
     <>
       <div
-        className={`bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden w-full max-w-[300px] ${className}`}
+        className={`bg-white rounded-sm border border-gray-200 shadow-lg overflow-hidden w-[120%] max-w-[150%px] ${className}`}
       >
-        <div className="p-3">
+        <div className="p-2">
           {/* Driver row: avatar, name + badge, share/chat icons */}
           <div className="flex justify-between items-start mb-3">
             <div className="flex gap-3">
@@ -122,22 +123,24 @@ const DeliveryCard = ({
               </div>
             </div>
 
-            <div className="flex gap-1">
-              <button
-                type="button"
-                onClick={handleShareClick}
-                className="text-blue-500 hover:bg-blue-50 rounded transition-colors"
-              >
-                <Icon icon="fa6-solid:up-right-from-square" style={{ fontSize: "16px", color: "#0066FF" }} />
-              </button>
-              <button
-                type="button"
-                onClick={handleChatClick}
-                className="text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <Icon icon="fluent:chat-16-regular" style={{ fontSize: "26px", color: "#000" }} />
-              </button>
-            </div>
+            {showActions && (
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={handleShareClick}
+                  className="text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                >
+                  <Icon icon="fa6-solid:up-right-from-square" style={{ fontSize: "16px", color: "#0066FF" }} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleChatClick}
+                  className="text-gray-700 hover:bg-gray-100 transition-colors"
+                >
+                  <Icon icon="fluent:chat-16-regular" style={{ fontSize: "26px", color: "#000" }} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* ETA & Status & Progress Line */}
@@ -234,29 +237,32 @@ const DeliveryCard = ({
         </div>
       </div>
 
-      {/* Details drawer (Share) */}
-      <DeliveryDetailsDrawer
-        open={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-      // Removed defaultChatOpen={startWithChat} since we want separate control
-      />
+      {/* Details drawer (Share) - Only render when actions are shown */}
+      {showActions && (
+        <DeliveryDetailsDrawer
+          open={detailsOpen}
+          onClose={() => setDetailsOpen(false)}
+        />
+      )}
 
-      {/* Independent Chat Drawer */}
-      <DeliveryChatDrawer
-        open={chatOpen}
-        onClose={() => setChatOpen(false)}
-        driverName={driverName}
-        avatar={avatar}
-        isOnline={isOnline}
-        eta={eta}
-        status={status}
-        address={address}
-        // Pass mock order details or real data here
-        orderQuantity={MOCK_ORDER.orderQuantity}
-        orderAmount={MOCK_ORDER.orderAmount}
-        paymentMethod={MOCK_ORDER.paymentMethod}
-        orderType={MOCK_ORDER.orderType}
-      />
+      {/* Independent Chat Drawer - Only render when actions are shown */}
+      {showActions && (
+        <DeliveryChatDrawer
+          open={chatOpen}
+          onClose={() => setChatOpen(false)}
+          driverName={driverName}
+          avatar={avatar}
+          isOnline={isOnline}
+          eta={eta}
+          status={status}
+          address={address}
+          // Pass mock order details or real data here
+          orderQuantity={MOCK_ORDER.orderQuantity}
+          orderAmount={MOCK_ORDER.orderAmount}
+          paymentMethod={MOCK_ORDER.paymentMethod}
+          orderType={MOCK_ORDER.orderType}
+        />
+      )}
     </>
   );
 };
