@@ -28,6 +28,7 @@ const specificPathTitles = {
 const getDisplayTitle = (pathname) => {
   if (specificPathTitles[pathname]) return specificPathTitles[pathname];
   if (/^\/orders\/[^/]+$/.test(pathname)) return "Order Details";
+  if (/^\/staff\/drivers\/\d+$/.test(pathname)) return "Driver Details";
   const matchedPath = Object.keys(routeTitleMap).find(
     (path) => pathname === path
   );

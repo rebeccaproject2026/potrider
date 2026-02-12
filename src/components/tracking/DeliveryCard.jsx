@@ -144,7 +144,7 @@ const DeliveryCard = ({
           </div>
 
           {/* ETA & Status & Progress Line */}
-          <div className="mb-3">
+          <div className="mb-1">
             <div className="flex items-center justify-between gap-2 mb-1">
               <p className="text-[11px] text-gray-500 font-medium truncate">
                 ETA: {eta}
@@ -162,13 +162,13 @@ const DeliveryCard = ({
           </div>
 
           {/* Address */}
-          <p className="text-[11px] text-gray-500 mb-3 pb-3 border-b border-gray-100 leading-tight">
+          <p className="text-[11px] text-gray-500 mb-1 pb-3 border-b border-gray-100 leading-tight">
             {address}
           </p>
 
           {/* Total Orders with box icon */}
           <div>
-            <div className="flex items-center gap-1.5 mb-2">
+            <div className="flex items-center gap-1.5 mb-1">
               <Icon
                 icon="mdi:package-variant-closed"
                 className="w-4 h-4 text-gray-700 shrink-0"
