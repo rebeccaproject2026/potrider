@@ -723,7 +723,7 @@ const Tracking = () => {
       </div>
 
       {/* Map section */}
-      <div className="flex-1 min-h-[560px] flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="flex-1 min-h-[560px] flex flex-col bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
         {/* Map container with overlays */}
         <div className="relative flex-1 min-h-[520px]">
           {/* Top Control Bar: Map Toggle | Status Cards | Delivery Toggle */}
