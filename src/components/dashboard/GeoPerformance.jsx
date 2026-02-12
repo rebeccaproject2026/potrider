@@ -179,11 +179,11 @@ const GeoPerformance = ({ defaultQuery = "" }) => {
             <div className="relative">
                 <div
                     ref={mapContainerRef}
-                    className="w-full h-[350px] rounded-lg overflow-hidden"
+                    className="w-full h-[350px] rounded-sm overflow-hidden"
                 />
 
                 {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-sm">
                         <div className="text-gray-600">Loading...</div>
                     </div>
                 )}

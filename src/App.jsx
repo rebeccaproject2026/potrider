@@ -22,6 +22,7 @@ import PageNotFound from "./pages/pnf/PageNotFound";
 import AIAdministrator from "./pages/staff/AIAdministrator";
 import AddDriver from "./pages/staff/addDriver/AddDriver";
 import Drivers from "./pages/staff/drivers/Drivers";
+import DriverDetailView from "./pages/staff/drivers/DriverDetailView";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route path="ai-admin" element={<AIAdministrator />} />
             <Route path="add-driver" element={<AddDriver />} />
             <Route path="drivers" element={<Drivers />} />
+            <Route path="drivers/:id" element={<DriverDetailView />} />
           </Route>
 
           <Route path="support" element={<Support />} />
