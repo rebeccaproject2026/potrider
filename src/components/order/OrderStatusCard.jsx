@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InfoBox from './InfoBox';
 import OrderMapSection from './OrderMapSection';
+import { getDeliveryBadgeIcon } from '../../utils/orderUtils';
 import { CircleCheckBig, CircleQuestionMark, PackageCheck, RotateCw, Truck } from 'lucide-react';
 
 const OrderStatusCard = ({
@@ -8,7 +9,7 @@ const OrderStatusCard = ({
   showMap = false,
   showActions = true,
   showPaymentSummary = true,
-  type = 'pending', // 'pending' | 'delivered' | 'cancelled' | 'inprogress'
+  type = 'PENDING', // 'pending' | 'delivered' | 'cancelled' | 'inprogress'
 }) => {
   // Initialize map visibility based on showMap prop and type
   const [isMapVisible, setIsMapVisible] = useState(showMap && type === 'inprogress');
@@ -25,7 +26,7 @@ const OrderStatusCard = ({
         icon: 'bg-green-500',
         text: 'text-green-600',
         bg: 'bg-green-100',
-      dot: 'bg-[#00B159]',
+        dot: 'bg-[#00B159]',
       },
       cancelled: {
         icon: 'bg-red-500',
@@ -60,7 +61,6 @@ const OrderStatusCard = ({
             Cancel Order
           </button>
           <button className="px-3 py-2.5 bg-[#E3EEFF] text-[#0066FF] rounded-sm text-[14px] font-medium  transition-colors cursor-pointer flex items-center gap-1">
-            <RotateCw className='w-4 h-4' />
             Edit Order
           </button>
         </>
@@ -71,7 +71,8 @@ const OrderStatusCard = ({
             <CircleQuestionMark className='w-4 h-4' />
             Complaint
           </button>
-          <button className="px-3 py-2.5 bg-(--color-secondary) text-white rounded-sm text-[14px] font-medium hover:bg-blue-600 transition-colors cursor-pointer">
+          <button className="px-3 py-2.5 bg-(--color-secondary) text-white rounded-sm text-[14px] font-medium hover:bg-blue-600 transition-colors cursor-pointer flex items-center gap-1">
+            <RotateCw className='w-4 h-4' />
             Reorder
           </button>
         </>
@@ -154,9 +155,13 @@ const OrderStatusCard = ({
       {/* Header with Address and Action Buttons */}
       <div className="flex justify-between items-center mb-2 pb-1">
         <div className="flex items-center gap-2 flex-1">
-          <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${colors.dot}`}>
-            <Truck className='w-4 h-4 fill-white' />
-          </div>
+          <img
+            src={getDeliveryBadgeIcon(type)}
+            width="36"
+            height="36"
+            alt="Delivery Status"
+            className="shrink-0"
+          />
           <span className="text-[14.5px] font-semibold text-[#3E3834]">
             {orderData?.address || '123 Main Street, Toronto, ON M5J 2N8'}
           </span>
