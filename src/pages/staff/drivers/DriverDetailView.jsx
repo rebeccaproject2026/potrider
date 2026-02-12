@@ -15,9 +15,11 @@ import {
   ReceiptText,
   BanknoteArrowDown,
   ChartNoAxesColumnIncreasing,
+  ChevronDown,
 } from "lucide-react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Chart from "react-apexcharts";
 import DatePickerMap from "../../../components/DatePickerMap";
 import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
 import OrderPage from "../../../components/order/OrderPage";
@@ -54,11 +56,260 @@ const DETAIL_STATS = [
   { label: "Rating", value: "4.8" },
 ];
 
-const DriverDetailView = () => {
+const PAYROLL_HISTORY = [
+  {
+    id: 1,
+    description: "50 hrs Payment - Paid by Master - 12 Dec 2024 at 9:30 pm",
+    amount: "$340",
+  },
+  {
+    id: 2,
+    description: "55 hrs Payment - Paid by Master - 12 Dec 2024 at 9:30 pm",
+    amount: "$440",
+  },
+  {
+    id: 3,
+    description: "45 hrs Payment - Paid by Master - 01 Jan 2025 at 9:30 pm",
+    amount: "$240",
+  },
+  {
+    id: 4,
+    description: "52 hrs Payment - Paid by Master - 15 Feb 2025 at 9:30 pm",
+    amount: "$360",
+  },
+  {
+    id: 5,
+    description: "65 hrs Payment - Paid by Master - 11 Mar 2025 at 9:30 pm",
+    amount: "$440",
+  },
+  {
+    id: 6,
+    description: "23 hrs Payment - Paid by Master - 12 Mar 2025 at 9:30 pm",
+    amount: "$140",
+  },
+  {
+    id: 7,
+    description: "47 hrs Payment - Paid by Master - 12 Apr 2025 at 9:30 pm",
+    amount: "$320",
+  },
+];
+
+const LOG_ACTIVITY = [
+  {
+    id: 1,
+    date: "12 Dec 2025",
+    activities: [
+      { time: "Online 2:00 pm", type: "online" },
+      { time: "Offline 4:00 pm", type: "offline" },
+      { time: "Online 6:00 pm", type: "online" },
+    ],
+    totalHours: "5 hrs",
+    activities_hr: [{ hour: "2 hrs" }, { hour: ".5 hrs" }, { hour: "2 hrs" }],
+  },
+  {
+    id: 2,
+    date: "11 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "6 hrs",
+  },
+  {
+    id: 3,
+    date: "10 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 4,
+    date: "09 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "10 hrs",
+  },
+  {
+    id: 5,
+    date: "07 Jan 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "4 hrs",
+  },
+  {
+    id: 6,
+    date: "29 Jan 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 7,
+    date: "26 Feb 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "3 hrs",
+  },
+  {
+    id: 8,
+    date: "20 March 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "4 hrs",
+  },
+  {
+    id: 9,
+    date: "18 Apr 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 10,
+    date: "17 May 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "8 hrs",
+  },
+  {
+    id: 11,
+    date: "16 Jun 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 12,
+    date: "11 Jul 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+  {
+    id: 13,
+    date: "30 Jul 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+  {
+    id: 14,
+    date: "11 Aug 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+];
+
+const DriverDetailView = ({ data }) => {
+  const chartData = data || {
+    categories: Array.from({ length: 30 }, (_, i) => String(i + 1)),
+    series: [
+      {
+        name: "Delivered",
+        data: [
+          120, 90, 130, 100, 140, 110, 80, 150, 100, 70, 50, 120, 100, 120, 70,
+          100, 120, 80, 110, 80, 100, 70, 120, 100, 120, 100, 80, 110, 90, 140,
+        ],
+      },
+      {
+        name: "Rescheduled",
+        data: [
+          100, 80, 90, 80, 100, 90, 70, 100, 90, 80, 60, 100, 90, 100, 70, 90,
+          100, 80, 90, 80, 90, 80, 100, 90, 100, 90, 80, 90, 80, 100,
+        ],
+      },
+      {
+        name: "Cancelled",
+        data: [
+          120, 90, 100, 90, 120, 100, 80, 120, 100, 90, 70, 120, 100, 120, 80,
+          100, 120, 90, 100, 90, 100, 90, 120, 100, 120, 100, 90, 100, 90, 120,
+        ],
+      },
+    ],
+  };
+
+  const chartOptions = {
+    chart: {
+      type: "bar",
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "70%",
+      },
+    },
+    xaxis: {
+      categories: Array.from({ length: 30 }, (_, i) =>
+        String(i + 1).padStart(2, "0"),
+      ),
+      labels: {
+        style: {
+          fontSize: "11px",
+          colors: "#666",
+        },
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 500,
+      tickAmount: 5,
+      labels: {
+        style: {
+          fontSize: "11px",
+          colors: "#666",
+        },
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      fontSize: "12px",
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 10,
+      },
+      itemMargin: {
+        horizontal: 10,
+        vertical: 0,
+      },
+    },
+    colors: ["#00B159", "#0066FF", "#F44336"],
+    dataLabels: {
+      enabled: false,
+    },
+    grid: {
+      borderColor: "#f1f1f1",
+      strokeDashArray: 3,
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " items";
+        },
+      },
+    },
+  };
+
   const navigate = useNavigate();
   const [isHired, setIsHired] = useState(true);
   const [period, setPeriod] = useState({ start: null, end: null });
   const [activeTab, setActiveTab] = useState("live-status");
+  const [expandedLogIds, setExpandedLogIds] = useState([]);
+
+  const toggleLogExpand = (logId) => {
+    setExpandedLogIds((prev) =>
+      prev.includes(logId)
+        ? prev.filter((id) => id !== logId)
+        : [...prev, logId]
+    );
+  };
 
   const onDateUpdate = useCallback(
     ({ start, end }) => setPeriod({ start, end }),
