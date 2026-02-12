@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useState, useMemo } from "react";
 import DatePickerMap from "../../../components/DatePickerMap";
 import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
@@ -191,6 +191,7 @@ const DRIVERS_DATA = [
 ];
 
 const Drivers = () => {
+  const navigate = useNavigate();
   const [period, setPeriod] = useState({ start: null, end: null });
   const [search, setSearch] = useState("");
   const [statusTab, setStatusTab] = useState("all");
@@ -332,9 +333,10 @@ const Drivers = () => {
       {
         id: "action",
         header: "Action",
-        cell: () => (
+        cell: ({ row }) => (
           <button
             type="button"
+            onClick={() => navigate(`/staff/drivers/${row.original.id}`)}
             className="inline-flex items-center justify-center gap-1 text-[#0066FF] hover:text-blue-700 text-[12px] font-semibold cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5 stroke-2" />
