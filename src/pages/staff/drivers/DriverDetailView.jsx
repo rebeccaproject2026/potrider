@@ -479,58 +479,163 @@ const DriverDetailView = ({ data }) => {
       </div>
 
       {/* Track Deliveries Section */}
-      {/* Tab Content */}
-      {activeTab === "live-status" && (
-        <div>
-          {/* Live Status - Single Card with Map */}
-          <OrderStatusCard
-            orderData={{
-              address: '123 Main Street, Toronto, ON M5J 2N8',
-              orderId: '302011',
-              driver: 'Jack Benson',
-              orderAmount: '1325.26',
-              orderQuantity: '10 Items',
-              orderCreated: '5 Mar 2024',
-              orderCreatedTime: '10:30 pm',
-              deliveryDate: '15 Jan 2025 Today',
-              eta: '11:30 pm',
-              soldQuantity: '2.36g',
-              receivedAmount: '1025.35',
-              unpaidCollection: '1025.35',
-              paidCollection: '25.35',
-              deliveryStarted: '12/14/2024 at 06:53 pm',
-              approximateArrival: '12/14/2024, 08:12 PM',
-            }}
-            showMap={true}
-            showActions={true}
-            showPaymentSummary={false}
-            type="inprogress"
-          />
-        </div>
-      )}
-      {activeTab === "order-history" && (
-        <OrderPage
-          showFilters={true}
-          showMap={false}
-          pageType="all"
-        />
-      )}
-      {activeTab === "log-activity" && (
-        <div className="text-center py-8 text-gray-500">
-          Log Activity content coming soon...
-        </div>
-      )}
-      {activeTab === "payroll-history" && (
-        <div className="text-center py-8 text-gray-500">
-          Payroll History content coming soon...
-        </div>
-      )}
-      {activeTab === "performance" && (
-        <div className="text-center py-8 text-gray-500">
-          Performance content coming soon...
-        </div>
-      )}
 
+
+      <div className="bg-white rounded-sm border border-gray-200 p-4">
+        {/* Tab Content */}
+        <div className="">
+          {activeTab === "live-status" && (
+            <div>
+              {/* Live Status - Single Card with Map */}
+              <OrderStatusCard
+                orderData={{
+                  address: '123 Main Street, Toronto, ON M5J 2N8',
+                  orderId: '302011',
+                  driver: 'Jack Benson',
+                  orderAmount: '1325.26',
+                  orderQuantity: '10 Items',
+                  orderCreated: '5 Mar 2024',
+                  orderCreatedTime: '10:30 pm',
+                  deliveryDate: '15 Jan 2025 Today',
+                  eta: '11:30 pm',
+                  soldQuantity: '2.36g',
+                  receivedAmount: '1025.35',
+                  unpaidCollection: '1025.35',
+                  paidCollection: '25.35',
+                  deliveryStarted: '12/14/2024 at 06:53 pm',
+                  approximateArrival: '12/14/2024, 08:12 PM',
+                }}
+                showMap={true}
+                showActions={true}
+                showPaymentSummary={false}
+                type="inprogress"
+              />
+            </div>
+          )}
+          {activeTab === "order-history" && (
+            <OrderPage
+              showFilters={true}
+              showMap={false}
+              pageType="all"
+            />
+          )}
+          {activeTab === "log-activity" && (
+            <div className="py-4">
+              {/* Summary Cards */}
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                <div className="bg-[#CEF1E0] p-2 rounded-sm text-center">
+                  <p className="text-sm font-semibold text-[#00B159]">
+                    Online Time
+                  </p>
+                  <p className="text-lg font-bold text-[#00B159]">112.5 hrs</p>
+                </div>
+                <div className="bg-[#FFF5E5] p-2 rounded-sm text-center">
+                  <p className="text-sm font-semibold text-[#FF9800]">
+                    Offline Time
+                  </p>
+                  <p className="text-lg font-bold text-[#FF9800]">30 hrs</p>
+                </div>
+              </div>
+
+              {/* Activity Log */}
+              <div className="">
+                {LOG_ACTIVITY.map((log, index) => {
+                  const isExpanded = expandedLogIds.includes(log.id);
+                  return (
+                    <div key={index} className="relative flex  gap-4">
+                      {/* Left side: Vertical line and dot */}
+                      <div className="relative flex flex-col items-center">
+                        {/* Dot */}
+                        <div className="relative z-10 w-3 h-3 bg-[#E3EEFF] rounded-full ring-2 ring-white shrink-0"></div>
+                        {/* Vertical line extending down */}
+                        {index < LOG_ACTIVITY.length - 1 && (
+                          <div className="w-[1.6px] bg-[#E3EEFF] grow h-6"></div>
+                        )}
+                      </div>
+
+                      {/* Right side: Content */}
+                      <div className="flex-1 -mt-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-[15px] font-medium text-gray-900">
+                              {log.date}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-gray-900">
+                              {log.totalHours}
+                            </span>
+                            <button
+                              onClick={() => toggleLogExpand(log.id)}
+                              className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            >
+                              <ChevronDown
+                                className={`w-5 h-5 text-[#C2C6CE] transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
+                                  }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Expanded Content */}
+                        {isExpanded && log.activities.length > 0 && (
+                          <div className="mt-3 pb-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="space-y-1">
+                                {log.activities.map((activity, idx) => (
+                                  <p key={idx} className="text-xs text-gray-600">
+                                    {activity.time}
+                                  </p>
+                                ))}
+                              </div>
+                              <div className="space-y-1 text-right">
+                                {log.activities_hr.map((activity, idx) => (
+                                  <p key={idx} className="text-xs text-gray-600">
+                                    {activity.hour}
+                                  </p>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "payroll-history" && (
+            <div className="space-y-4">
+              {PAYROLL_HISTORY.map((payment) => (
+                <div
+                  key={payment.id}
+                  className="flex items-center justify-between bg-white border-b border-[#F0F1F3] pb-4"
+                >
+                  <p className="text-sm text-black font-medium">
+                    {payment.description}
+                  </p>
+                  <span className="text-sm font-bold text-black">
+                    {payment.amount}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "performance" && (
+            <div className="py-4">
+              <Chart
+                options={chartOptions}
+                series={chartData.series}
+                type="bar"
+                height={350}
+              />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
