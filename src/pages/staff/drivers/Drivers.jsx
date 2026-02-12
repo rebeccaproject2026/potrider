@@ -14,6 +14,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import AreaCodesDrawer from "../addDriver/AreaCodesDrawer";
+import DriverDetailsDrawer from "../addDriver/DriverDetailsDrawer";
 
 const CARD_DATA = [
   {
@@ -197,6 +199,9 @@ const Drivers = () => {
   const [statusTab, setStatusTab] = useState("all");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [selectedDriverFilter, setSelectedDriverFilter] = useState("all");
+  const [isAreaCodesDrawerOpen, setIsAreaCodesDrawerOpen] = useState(false);
+  const [isDriverDetailsDrawerOpen, setIsDriverDetailsDrawerOpen] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState(null);
 
   const onDateUpdate = useCallback(
     ({ start, end }) => setPeriod({ start, end }),
@@ -268,10 +273,16 @@ const Drivers = () => {
       {
         accessorKey: "areaCodes",
         header: "Area Codes",
-        cell: ({ getValue }) => (
+        cell: ({ getValue, row }) => (
           <div className="flex items-center gap-2">
             <span className="text-[#3F4753] text-[12px] font-normal">{getValue()}</span>
-            <Eye className="w-3.5 h-3.5 text-[#0066FF] cursor-pointer" />
+            <Eye 
+              className="w-3.5 h-3.5 text-[#0066FF] cursor-pointer" 
+              onClick={() => {
+                setSelectedDriver(row.original);
+                setIsAreaCodesDrawerOpen(true);
+              }}
+            />
           </div>
         ),
       },
@@ -545,6 +556,34 @@ const Drivers = () => {
           </div>
         </div>
       </div>
+      
+      {/* Area Codes Drawer */}
+      <AreaCodesDrawer
+        isOpen={isAreaCodesDrawerOpen}
+        onClose={() => {
+          setIsAreaCodesDrawerOpen(false);
+          setTimeout(() => setSelectedDriver(null), 300);
+        }}
+        driver={selectedDriver}
+        onViewMoreDetails={(driver) => {
+          setIsAreaCodesDrawerOpen(false);
+          setIsDriverDetailsDrawerOpen(true);
+        }}
+        onHire={(driver) => {
+          console.log('Hire driver:', driver);
+          // Add hire logic here
+        }}
+      />
+      
+      {/* Driver Details Drawer */}
+      <DriverDetailsDrawer
+        isOpen={isDriverDetailsDrawerOpen}
+        onClose={() => {
+          setIsDriverDetailsDrawerOpen(false);
+          setTimeout(() => setSelectedDriver(null), 300);
+        }}
+        driver={selectedDriver}
+      />
     </div>
   );
 };
