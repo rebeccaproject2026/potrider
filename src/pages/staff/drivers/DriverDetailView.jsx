@@ -22,6 +22,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Chart from "react-apexcharts";
 import DatePickerMap from "../../../components/DatePickerMap";
 import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
+import DriverDetailsDrawer from "../../staff/addDriver/DriverDetailsDrawer";
 import OrderPage from "../../../components/order/OrderPage";
 import OrderStatusCard from "../../../components/order/OrderStatusCard";
 
@@ -302,6 +303,7 @@ const DriverDetailView = ({ data }) => {
   const [period, setPeriod] = useState({ start: null, end: null });
   const [activeTab, setActiveTab] = useState("live-status");
   const [expandedLogIds, setExpandedLogIds] = useState([]);
+  const [isContactDrawerOpen, setIsContactDrawerOpen] = useState(false);
 
   const toggleLogExpand = (logId) => {
     setExpandedLogIds((prev) =>
@@ -334,7 +336,10 @@ const DriverDetailView = ({ data }) => {
                 <MessageCircleMore className="h-4 w-4 stroke-2" />
               </h1>
               <div className="flex items-center gap-4">
-                <button className="text-sm border-b text-black font-semibold flex items-center gap-1">
+                <button 
+                  onClick={() => setIsContactDrawerOpen(true)}
+                  className="text-sm border-b text-black font-semibold flex items-center gap-1 cursor-pointer"
+                >
                   <Eye className="w-4 h-4 stroke-2" />
                   Contact Info
                 </button>
@@ -639,6 +644,13 @@ const DriverDetailView = ({ data }) => {
           </div>
         )}
       </div>
+
+      {/* Driver Details Drawer */}
+      <DriverDetailsDrawer
+        isOpen={isContactDrawerOpen}
+        onClose={() => setIsContactDrawerOpen(false)}
+        driver={{ driverName: "David Doe" }}
+      />
     </div>
   );
 };
