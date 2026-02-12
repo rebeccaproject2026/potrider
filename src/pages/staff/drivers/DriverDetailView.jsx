@@ -12,13 +12,14 @@ import {
   Coins,
   MapPin,
   History,
-  ReceiptCent,
   ReceiptText,
   BanknoteArrowDown,
   ChartNoAxesColumnIncreasing,
+  ChevronDown,
 } from "lucide-react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Chart from "react-apexcharts";
 import DatePickerMap from "../../../components/DatePickerMap";
 import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
 
@@ -53,11 +54,260 @@ const DETAIL_STATS = [
   { label: "Rating", value: "4.8" },
 ];
 
-const DriverDetailView = () => {
+const PAYROLL_HISTORY = [
+  {
+    id: 1,
+    description: "50 hrs Payment - Paid by Master - 12 Dec 2024 at 9:30 pm",
+    amount: "$340",
+  },
+  {
+    id: 2,
+    description: "55 hrs Payment - Paid by Master - 12 Dec 2024 at 9:30 pm",
+    amount: "$440",
+  },
+  {
+    id: 3,
+    description: "45 hrs Payment - Paid by Master - 01 Jan 2025 at 9:30 pm",
+    amount: "$240",
+  },
+  {
+    id: 4,
+    description: "52 hrs Payment - Paid by Master - 15 Feb 2025 at 9:30 pm",
+    amount: "$360",
+  },
+  {
+    id: 5,
+    description: "65 hrs Payment - Paid by Master - 11 Mar 2025 at 9:30 pm",
+    amount: "$440",
+  },
+  {
+    id: 6,
+    description: "23 hrs Payment - Paid by Master - 12 Mar 2025 at 9:30 pm",
+    amount: "$140",
+  },
+  {
+    id: 7,
+    description: "47 hrs Payment - Paid by Master - 12 Apr 2025 at 9:30 pm",
+    amount: "$320",
+  },
+];
+
+const LOG_ACTIVITY = [
+  {
+    id: 1,
+    date: "12 Dec 2025",
+    activities: [
+      { time: "Online 2:00 pm", type: "online" },
+      { time: "Offline 4:00 pm", type: "offline" },
+      { time: "Online 6:00 pm", type: "online" },
+    ],
+    totalHours: "5 hrs",
+    activities_hr: [{ hour: "2 hrs" }, { hour: ".5 hrs" }, { hour: "2 hrs" }],
+  },
+  {
+    id: 2,
+    date: "11 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "6 hrs",
+  },
+  {
+    id: 3,
+    date: "10 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 4,
+    date: "09 Dec 2024",
+    activities: [],
+    activities_hr: [],
+    totalHours: "10 hrs",
+  },
+  {
+    id: 5,
+    date: "07 Jan 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "4 hrs",
+  },
+  {
+    id: 6,
+    date: "29 Jan 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 7,
+    date: "26 Feb 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "3 hrs",
+  },
+  {
+    id: 8,
+    date: "20 March 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "4 hrs",
+  },
+  {
+    id: 9,
+    date: "18 Apr 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 10,
+    date: "17 May 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "8 hrs",
+  },
+  {
+    id: 11,
+    date: "16 Jun 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "7 hrs",
+  },
+  {
+    id: 12,
+    date: "11 Jul 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+  {
+    id: 13,
+    date: "30 Jul 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+  {
+    id: 14,
+    date: "11 Aug 2025",
+    activities: [],
+    activities_hr: [],
+    totalHours: "2 hrs",
+  },
+];
+
+const DriverDetailView = ({ data }) => {
+  const chartData = data || {
+    categories: Array.from({ length: 30 }, (_, i) => String(i + 1)),
+    series: [
+      {
+        name: "Delivered",
+        data: [
+          120, 90, 130, 100, 140, 110, 80, 150, 100, 70, 50, 120, 100, 120, 70,
+          100, 120, 80, 110, 80, 100, 70, 120, 100, 120, 100, 80, 110, 90, 140,
+        ],
+      },
+      {
+        name: "Rescheduled",
+        data: [
+          100, 80, 90, 80, 100, 90, 70, 100, 90, 80, 60, 100, 90, 100, 70, 90,
+          100, 80, 90, 80, 90, 80, 100, 90, 100, 90, 80, 90, 80, 100,
+        ],
+      },
+      {
+        name: "Cancelled",
+        data: [
+          120, 90, 100, 90, 120, 100, 80, 120, 100, 90, 70, 120, 100, 120, 80,
+          100, 120, 90, 100, 90, 100, 90, 120, 100, 120, 100, 90, 100, 90, 120,
+        ],
+      },
+    ],
+  };
+
+  const chartOptions = {
+    chart: {
+      type: "bar",
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "70%",
+      },
+    },
+    xaxis: {
+      categories: Array.from({ length: 30 }, (_, i) =>
+        String(i + 1).padStart(2, "0"),
+      ),
+      labels: {
+        style: {
+          fontSize: "11px",
+          colors: "#666",
+        },
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 500,
+      tickAmount: 5,
+      labels: {
+        style: {
+          fontSize: "11px",
+          colors: "#666",
+        },
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      fontSize: "12px",
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 10,
+      },
+      itemMargin: {
+        horizontal: 10,
+        vertical: 0,
+      },
+    },
+    colors: ["#00B159", "#0066FF", "#F44336"],
+    dataLabels: {
+      enabled: false,
+    },
+    grid: {
+      borderColor: "#f1f1f1",
+      strokeDashArray: 3,
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " items";
+        },
+      },
+    },
+  };
+
   const navigate = useNavigate();
   const [isHired, setIsHired] = useState(true);
   const [period, setPeriod] = useState({ start: null, end: null });
   const [activeTab, setActiveTab] = useState("live-status");
+  const [expandedLogIds, setExpandedLogIds] = useState([]);
+
+  const toggleLogExpand = (logId) => {
+    setExpandedLogIds((prev) =>
+      prev.includes(logId)
+        ? prev.filter((id) => id !== logId)
+        : [...prev, logId]
+    );
+  };
 
   const onDateUpdate = useCallback(
     ({ start, end }) => setPeriod({ start, end }),
@@ -234,7 +484,7 @@ const DriverDetailView = () => {
       {/* Track Deliveries Section */}
       <div className="bg-white rounded-sm border border-gray-200 p-4">
         {/* Tab Content */}
-        <div className="mt-4">
+        <div className="">
           {activeTab === "live-status" && (
             <div className="text-center py-8 text-gray-500">
               Live Status content coming soon...
@@ -246,18 +496,119 @@ const DriverDetailView = () => {
             </div>
           )}
           {activeTab === "log-activity" && (
-            <div className="text-center py-8 text-gray-500">
-              Log Activity content coming soon...
+            <div className="py-4">
+              {/* Summary Cards */}
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                <div className="bg-[#CEF1E0] p-2 rounded-sm text-center">
+                  <p className="text-sm font-semibold text-[#00B159]">
+                    Online Time
+                  </p>
+                  <p className="text-lg font-bold text-[#00B159]">112.5 hrs</p>
+                </div>
+                <div className="bg-[#FFF5E5] p-2 rounded-sm text-center">
+                  <p className="text-sm font-semibold text-[#FF9800]">
+                    Offline Time
+                  </p>
+                  <p className="text-lg font-bold text-[#FF9800]">30 hrs</p>
+                </div>
+              </div>
+
+              {/* Activity Log */}
+              <div className="">
+                {LOG_ACTIVITY.map((log, index) => {
+                  const isExpanded = expandedLogIds.includes(log.id);
+                  return (
+                    <div key={index} className="relative flex  gap-4">
+                      {/* Left side: Vertical line and dot */}
+                      <div className="relative flex flex-col items-center">
+                        {/* Dot */}
+                        <div className="relative z-10 w-3 h-3 bg-[#E3EEFF] rounded-full ring-2 ring-white shrink-0"></div>
+                        {/* Vertical line extending down */}
+                        {index < LOG_ACTIVITY.length - 1 && (
+                          <div className="w-[1.6px] bg-[#E3EEFF] grow h-6"></div>
+                        )}
+                      </div>
+
+                      {/* Right side: Content */}
+                      <div className="flex-1 -mt-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-[15px] font-medium text-gray-900">
+                              {log.date}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-gray-900">
+                              {log.totalHours}
+                            </span>
+                            <button
+                              onClick={() => toggleLogExpand(log.id)}
+                              className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            >
+                              <ChevronDown
+                                className={`w-5 h-5 text-[#C2C6CE] transition-transform duration-200 ${
+                                  isExpanded ? "rotate-180" : ""
+                                }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Expanded Content */}
+                        {isExpanded && log.activities.length > 0 && (
+                          <div className="mt-3 pb-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="space-y-1">
+                                {log.activities.map((activity, idx) => (
+                                  <p key={idx} className="text-xs text-gray-600">
+                                    {activity.time}
+                                  </p>
+                                ))}
+                              </div>
+                              <div className="space-y-1 text-right">
+                                {log.activities_hr.map((activity, idx) => (
+                                  <p key={idx} className="text-xs text-gray-600">
+                                    {activity.hour}
+                                  </p>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
+
           {activeTab === "payroll-history" && (
-            <div className="text-center py-8 text-gray-500">
-              Payroll History content coming soon...
+            <div className="space-y-4">
+              {PAYROLL_HISTORY.map((payment) => (
+                <div
+                  key={payment.id}
+                  className="flex items-center justify-between bg-white border-b border-[#F0F1F3] pb-4"
+                >
+                  <p className="text-sm text-black font-medium">
+                    {payment.description}
+                  </p>
+                  <span className="text-sm font-bold text-black">
+                    {payment.amount}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
+
           {activeTab === "performance" && (
-            <div className="text-center py-8 text-gray-500">
-              Performance content coming soon...
+            <div className="py-4">
+              <Chart
+                options={chartOptions}
+                series={chartData.series}
+                type="bar"
+                height={350}
+              />
             </div>
           )}
         </div>
