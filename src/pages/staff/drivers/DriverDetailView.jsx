@@ -12,7 +12,6 @@ import {
   Coins,
   MapPin,
   History,
-  ReceiptCent,
   ReceiptText,
   BanknoteArrowDown,
   ChartNoAxesColumnIncreasing,
@@ -21,6 +20,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import DatePickerMap from "../../../components/DatePickerMap";
 import FinanceSummaryCard from "../../../components/finances/FinanceSummaryCard";
+import OrderPage from "../../../components/order/OrderPage";
+import OrderStatusCard from "../../../components/order/OrderStatusCard";
 
 if (typeof import.meta.env.VITE_MAPBOX_ACCESS_TOKEN !== "undefined") {
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -174,55 +175,50 @@ const DriverDetailView = () => {
           <div className="flex items-center gap-2 border border-[#969696] bg-white rounded-sm p-0.5">
             <button
               onClick={() => setActiveTab("live-status")}
-              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${
-                activeTab === "live-status"
-                  ? "bg-[#0066FF] text-white"
-                  : "text-[#212121]"
-              }`}
+              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${activeTab === "live-status"
+                ? "bg-[#0066FF] text-white"
+                : "text-[#212121]"
+                }`}
             >
               <MapPin className="w-4 h-4" />
               Live Status
             </button>
             <button
               onClick={() => setActiveTab("order-history")}
-              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${
-                activeTab === "order-history"
-                  ? "bg-[#0066FF] text-white"
-                  : "text-[#212121]"
-              }`}
+              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${activeTab === "order-history"
+                ? "bg-[#0066FF] text-white"
+                : "text-[#212121]"
+                }`}
             >
               <History className="h-4 w-4" />
               Order History
             </button>
             <button
               onClick={() => setActiveTab("log-activity")}
-              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${
-                activeTab === "log-activity"
-                  ? "bg-[#0066FF] text-white"
-                  : "text-[#212121]"
-              }`}
+              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${activeTab === "log-activity"
+                ? "bg-[#0066FF] text-white"
+                : "text-[#212121]"
+                }`}
             >
               <ReceiptText className="w-4 h-4" />
               Log Activity
             </button>
             <button
               onClick={() => setActiveTab("payroll-history")}
-              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${
-                activeTab === "payroll-history"
-                  ? "bg-[#0066FF] text-white"
-                  : "text-[#212121]"
-              }`}
+              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${activeTab === "payroll-history"
+                ? "bg-[#0066FF] text-white"
+                : "text-[#212121]"
+                }`}
             >
               <BanknoteArrowDown className="h-4 w-4" />
               Payroll History
             </button>
             <button
               onClick={() => setActiveTab("performance")}
-              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${
-                activeTab === "performance"
-                  ? "bg-[#0066FF] text-white"
-                  : "text-[#212121]"
-              }`}
+              className={`flex items-center gap-2 w-37.5 justify-center py-2 rounded-sm text-sm font-medium cursor-pointer transition-colors ${activeTab === "performance"
+                ? "bg-[#0066FF] text-white"
+                : "text-[#212121]"
+                }`}
             >
               <ChartNoAxesColumnIncreasing className="h-4 w-4 stroke-4" />
               Performance
@@ -232,36 +228,58 @@ const DriverDetailView = () => {
       </div>
 
       {/* Track Deliveries Section */}
-      <div className="bg-white rounded-sm border border-gray-200 p-4">
-        {/* Tab Content */}
-        <div className="mt-4">
-          {activeTab === "live-status" && (
-            <div className="text-center py-8 text-gray-500">
-              Live Status content coming soon...
-            </div>
-          )}
-          {activeTab === "order-history" && (
-            <div className="text-center py-8 text-gray-500">
-              Order History content coming soon...
-            </div>
-          )}
-          {activeTab === "log-activity" && (
-            <div className="text-center py-8 text-gray-500">
-              Log Activity content coming soon...
-            </div>
-          )}
-          {activeTab === "payroll-history" && (
-            <div className="text-center py-8 text-gray-500">
-              Payroll History content coming soon...
-            </div>
-          )}
-          {activeTab === "performance" && (
-            <div className="text-center py-8 text-gray-500">
-              Performance content coming soon...
-            </div>
-          )}
+      {/* Tab Content */}
+      {activeTab === "live-status" && (
+        <div>
+          {/* Live Status - Single Card with Map */}
+          <OrderStatusCard
+            orderData={{
+              address: '123 Main Street, Toronto, ON M5J 2N8',
+              orderId: '302011',
+              driver: 'Jack Benson',
+              orderAmount: '1325.26',
+              orderQuantity: '10 Items',
+              orderCreated: '5 Mar 2024',
+              orderCreatedTime: '10:30 pm',
+              deliveryDate: '15 Jan 2025 Today',
+              eta: '11:30 pm',
+              soldQuantity: '2.36g',
+              receivedAmount: '1025.35',
+              unpaidCollection: '1025.35',
+              paidCollection: '25.35',
+              deliveryStarted: '12/14/2024 at 06:53 pm',
+              approximateArrival: '12/14/2024, 08:12 PM',
+            }}
+            showMap={true}
+            showActions={true}
+            showPaymentSummary={false}
+            type="inprogress"
+          />
         </div>
-      </div>
+      )}
+      {activeTab === "order-history" && (
+        <OrderPage
+          showFilters={true}
+          showMap={false}
+          pageType="all"
+        />
+      )}
+      {activeTab === "log-activity" && (
+        <div className="text-center py-8 text-gray-500">
+          Log Activity content coming soon...
+        </div>
+      )}
+      {activeTab === "payroll-history" && (
+        <div className="text-center py-8 text-gray-500">
+          Payroll History content coming soon...
+        </div>
+      )}
+      {activeTab === "performance" && (
+        <div className="text-center py-8 text-gray-500">
+          Performance content coming soon...
+        </div>
+      )}
+
     </div>
   );
 };
