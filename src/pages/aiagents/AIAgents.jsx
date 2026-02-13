@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import ConversationList from "../../components/aiagent/ConversationList";
 import ChatWindow from "../../components/aiagent/ChatWindow";
 import CustomerDetailsPanel from "../../components/aiagent/CustomerDetailsPanel";
-
+import avtar1 from "../../assets/images/self-portrait-beautiful-chinese-girl 1.png"
+import avtar2 from "../../assets/images/self-portrait-beautiful-chinese-girl2.png"
+import avtar3 from "../../assets/images/self-portrait-beautiful-chinese-girl3.png"
+import avtar4 from "../../assets/images/self-portrait-beautiful-chinese-girl4.png"
 const MOCK_CONVERSATIONS = [
   {
     id: "1",
@@ -12,10 +15,10 @@ const MOCK_CONVERSATIONS = [
     roleLabel: "Existing Customer",
     lastMessage: "omg, this is amazing 😂",
     time: "20m",
-    unreadCount: 99,
+    unreadCount: 100,
     status: "human_sent",
     platformIcons: ["outlook", "gmail", "rss", "chat", "whatsapp", "messenger", "tiktok", "linkedin", "telegram", "slack", "instagram"],
-    avatar: null,
+    avatar: avtar1,
   },
   {
     id: "2",
@@ -27,7 +30,7 @@ const MOCK_CONVERSATIONS = [
     unreadCount: 50,
     status: "new",
     platformIcons: ["outlook", "gmail", "whatsapp"],
-    avatar: null,
+    avatar: avtar2,
   },
   {
     id: "3",
@@ -39,7 +42,7 @@ const MOCK_CONVERSATIONS = [
     unreadCount: 9,
     status: "ai_sent",
     platformIcons: ["outlook", "gmail", "chat", "whatsapp", "messenger", "tiktok", "linkedin", "instagram"],
-    avatar: null,
+    avatar: avtar3,
   },
   {
     id: "4",
@@ -51,22 +54,98 @@ const MOCK_CONVERSATIONS = [
     unreadCount: null,
     status: "scheduled",
     platformIcons: ["outlook", "gmail", "slack"],
-    avatar: null,
+    avatar: avtar4,
+  },
+  {
+    id: "5",
+    name: "John Doe",
+    role: "staff",
+    roleLabel: "Staff",
+    lastMessage: "All set for tomorrow.",
+    time: "12:20 PM",
+    unreadCount: null,
+    status: "scheduled",
+    platformIcons: ["outlook", "gmail", "slack"],
+    avatar: avtar1,
+  },
+  {
+    id: "6",
+    name: "John Doe",
+    role: "staff",
+    roleLabel: "Staff",
+    lastMessage: "All set for tomorrow.",
+    time: "12:20 PM",
+    unreadCount: null,
+    status: "scheduled",
+    platformIcons: ["outlook", "gmail", "slack"],
+    avatar: avtar2,
+  },
+  {
+    id: "7",
+    name: "John Doe",
+    role: "staff",
+    roleLabel: "Staff",
+    lastMessage: "All set for tomorrow.",
+    time: "12:20 PM",
+    unreadCount: null,
+    status: "scheduled",
+    platformIcons: ["outlook", "gmail", "slack"],
+    avatar: avtar3,
   },
 ];
 
 const MOCK_MESSAGES = [
   {
     isAgent: false,
-    text: "I ordered XYZ product 1 OZ mistakenly can u change it to 1/2 OZ for me?",
+    text: "When will my order receive?",
     timestamp: "11:49 AM - 25 Jul, 2025",
     humanResponseButton: false,
   },
   {
     isAgent: true,
+    text: "Can you give order number?",
+    timestamp: "11:51 AM - 25 Jul, 2025",
+    humanResponseButton: false,
+    responseType: "Knowledgebase",
+  },
+  {
+    isAgent: false,
+    text: "#1234562541",
+    timestamp: "11:49 AM - 25 Jul, 2025",
+    humanResponseButton: false,
+  },
+  {
+    isAgent: true,
+    text: "As I can see in my records you placed an order 30 mins ago. You will receive your order by 10:00 PM Today",
+    timestamp: "11:51 AM - 25 Jul, 2025",
+    humanResponseButton: false,
+    responseType: "AI Response",
+  },
+  {
+    isAgent: false,
+    text: "Good to know that, can i connect to Human agent to discuss more about product?",
+    timestamp: "11:49 AM - 25 Jul, 2025",
+    humanResponseButton: false,
+  },
+  {
+    isAgent: true,
+    text: "Sure, Connecting to Human Agent.",
+    timestamp: "11:51 AM - 25 Jul, 2025",
+    humanResponseButton: false,
+    responseType: "AI Response",
+  },
+  {
+    isAgent: true,
     text: "Hi, I am Paul - Online Order Manager from The Leaf Collection, Pickering. How may I assist you today?",
     timestamp: "11:51 AM - 25 Jul, 2025",
-    humanResponseButton: true,
+    humanResponseButton: false,
+    responseType: "Human Response",
+  },
+  {
+    isAgent: false,
+    text: "I ordered XYZ product 1 OZ mistakenly can u change it to 1/2 OZ for me?",
+    timestamp: "11:49 AM - 25 Jul, 2025",
+    humanResponseButton: false,
   },
   {
     isAgent: true,
@@ -98,6 +177,7 @@ const getCustomerDetails = (conv) => {
       phone: "+1 123 456 7890",
       lastActive: "20m",
       roleLabel: "Existing Customer",
+      avatar: null,
       location: "Las Vegas, Nevada, United States",
       localTime: "06:16 pm local time",
       ordersHistory: {
@@ -119,6 +199,7 @@ const getCustomerDetails = (conv) => {
     phone: "+1 123 456 7890",
     lastActive: conv.time,
     roleLabel: conv.roleLabel,
+    avatar: conv.avatar,
     location: "Las Vegas, Nevada, United States",
     localTime: "06:16 pm local time",
     ordersHistory: {
@@ -167,11 +248,11 @@ const AIAgents = () => {
     () =>
       activeConversation
         ? {
-            name: activeConversation.name,
-            avatar: activeConversation.avatar,
-            roleLabel: activeConversation.roleLabel,
-            lastActive: activeConversation.time,
-          }
+          name: activeConversation.name,
+          avatar: activeConversation.avatar,
+          roleLabel: activeConversation.roleLabel,
+          lastActive: activeConversation.time,
+        }
         : null,
     [activeConversation]
   );
@@ -187,7 +268,7 @@ const AIAgents = () => {
   };
 
   return (
-    <div className="flex flex-1 min-h-0 min-w-0 bg-[#F2F2F2] -mx-2 -mb-2">
+    <div className="flex flex-1 min-h-0 min-w-0 bg-[#F2F2F2] -mx-2 -mb-2 gap-2 p-1">
       <ConversationList
         search={search}
         onSearchChange={setSearch}

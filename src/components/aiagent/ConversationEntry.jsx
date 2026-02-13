@@ -21,78 +21,95 @@ const ConversationEntry = ({
     status === "human_sent"
       ? "Human Sent"
       : status === "new"
-      ? "New"
-      : status === "ai_sent"
-      ? "AI Sent"
-      : status === "scheduled"
-      ? "Scheduled"
-      : statusLabel || "";
+        ? "New"
+        : status === "ai_sent"
+          ? "AI Sent"
+          : status === "scheduled"
+            ? "Scheduled"
+            : statusLabel || "";
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left rounded-sm  bg-white transition-colors hover:bg-gray-50/80 ${
-        isActive ? "ring-2 ring-(--color-secondary)/30 bg-blue-50/50" : ""
-      }`}
-      style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+      className={`w-full text-left transition-colors hover:bg-gray-50 ${isActive ? "bg-gray-50" : ""
+        }`}
     >
-      <div className="flex gap-3 p-3">
-        <div className="shrink-0 w-[55px] h-[55px] rounded-[4px] bg-gray-200 overflow-hidden flex items-center justify-center">
+      <div className="flex gap-3 px-1.5 py-1.5 border-b border-gray-100">
+        {/* Avatar - 56x56px rounded */}
+        <div className="shrink-0 w-[60px] h-[60px] rounded-sm bg-gray-200 overflow-hidden flex items-center justify-center">
           {avatar ? (
             <img src={avatar} alt="" className="w-full h-full object-cover" />
           ) : (
-            <span className="text-gray-500 font-semibold text-sm">
+            <span className="text-gray-500 font-semibold text-lg">
               {name?.charAt(0) || "?"}
             </span>
           )}
         </div>
 
-        <div className="flex-1 min-w-0 flex flex-col">
-          <span className="inline-flex px-2 py-0.5 rounded-[3px] text-[10px] font-medium bg-gray-700 text-white shrink-0 w-fit">
+        {/* Content */}
+        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+
+          {/* Row 1: Role */}
+          <span className="inline-flex px-1 py-1 rounded-sm text-[11px] font-semibold bg-[#555] text-white w-fit">
             {roleLabel || role}
           </span>
 
-          <div className="flex items-center justify-between gap-2 mt-1">
-            <p className="font-bold text-black text-sm truncate min-w-0 flex-1">
+          {/* Row 2: Name + Time */}
+          <div className="flex justify-between items-center">
+            <p className="font-semibold text-[17px] mt-0.5 text-black truncate">
               {name}
             </p>
-            <span className="text-[11px] text-gray-500 shrink-0">{time}</span>
+
+            <span className="text-[14px] text-[#525252] font-semibold shrink-0">
+              {time}
+            </span>
           </div>
 
-          {unreadCount != null && unreadCount > 0 && (
-            <div className="flex justify-end mt-0.5">
-              <span
-                className="inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-green-500 text-white"
-                style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}
-              >
+          {/* Row 3: Message + Unread */}
+          <div className="flex justify-between items-center">
+            <p className="text-[13px] font-[450] text-[#696969]  truncate">
+              {lastMessage}
+            </p>
+
+            {unreadCount != null && unreadCount > 0 && (
+              <span className="inline-flex items-center justify-center
+        min-w-[30px] h-[24px] px-1.5
+        rounded-sm text-[13px] font-semibold
+        bg-[var(--color-primary)] text-white shrink-0">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
-            </div>
-          )}
-          <p className="text-[12px] text-gray-500 mt-0.5 line-clamp-2">
-            {lastMessage}
-          </p>
+            )}
+          </div>
 
-          {statusText && (
-            <span className="text-[11px] text-gray-500 flex items-center gap-1.5 mt-1.5">
-              <StatusIcon
-                className="w-3.5 h-3.5 shrink-0 text-black"
-                strokeWidth={2.5}
-              />
-              <span className="truncate">{statusText}</span>
-            </span>
-          )}
+          {/* Row 4: Status + Icons */}
+          <div className="flex items-center justify-between gap-3">
 
-          {platformIcons.length > 0 && (
-            <div
-              className="self-end mt-2 inline-flex items-center justify-end rounded-lg bg-white px-1.5 py-1 border border-gray-100"
-              style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}
-            >
-              <PlatformIconsRow platformKeys={platformIcons} max={11} />
-            </div>
-          )}
+            {/* Left: Status */}
+            {statusText && (
+              <div className="flex items-center gap-1 whitespace-nowrap shrink-0">
+                <StatusIcon
+                  className="w-3 h-3 text-[#000000CC] shrink-0"
+                  strokeWidth={2}
+                />
+                <span className="text-[12.5px] font-semibold text-[#000000CC] font-medium">
+                  {statusText}
+                </span>
+              </div>
+            )}
+
+            {/* Right: Platform Icons */}
+            {platformIcons.length > 0 && (
+              <div className="flex items-center shrink-0">
+                <PlatformIconsRow platformKeys={platformIcons} max={11} />
+              </div>
+            )}
+
+          </div>
+
+
         </div>
+
       </div>
     </button>
   );

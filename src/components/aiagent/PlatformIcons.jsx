@@ -1,10 +1,5 @@
 import { Icon } from "@iconify/react";
 
-/**
- * Social / communication platform icons - exact match to reference:
- * White circular backgrounds, flat branded logos (Outlook, Gmail, RSS, Chat, WhatsApp,
- * Messenger, TikTok, LinkedIn, Telegram, Slack, Instagram).
- */
 export const PLATFORM_ICONS = {
   outlook: { icon: "simple-icons:microsoftoutlook", color: "#0078D4" },
   gmail: { icon: "simple-icons:gmail", color: "#EA4335" },
@@ -17,33 +12,33 @@ export const PLATFORM_ICONS = {
   telegram: { icon: "simple-icons:telegram", color: "#26A5E4" },
   slack: { icon: "simple-icons:slack", color: "#4A154B" },
   instagram: { icon: "simple-icons:instagram", color: "#E4405F" },
-  voice: { icon: "mdi:rss", color: "#000000" },
 };
 
-const PlatformIconsRow = ({ platformKeys = [], max = 11, className = "" }) => {
+const PlatformIconsRow = ({ platformKeys = [], max = 11 }) => {
   const list = (platformKeys || []).slice(0, max).filter(Boolean);
-  if (list.length === 0) return null;
+  if (!list.length) return null;
 
   return (
-    <div className={`flex items-center justify-end flex-wrap ${className}`}>
+    <div className="flex items-center justify-end whitespace-nowrap">
       {list.map((key, i) => {
         const config = PLATFORM_ICONS[key] || PLATFORM_ICONS.chat;
-        const isLast = i === list.length - 1;
+
         return (
-          <span
+          <div
             key={`${key}-${i}`}
-            className={`w-6 h-6 rounded-full border border-gray-200 flex items-center justify-center bg-white shadow-sm relative shrink-0 ${
-              !isLast ? "-mr-2" : ""
-            }`}
-            style={{ zIndex: i }}
-            title={key}
+            className="w-6.5 h-6.5 rounded-full bg-white flex items-center justify-center border border-gray-100 relative"
+            style={{
+              marginLeft: i === 0 ? 0 : -12,
+              zIndex: list.length - i,
+              boxShadow: "0 4px 10px rgba(0,0,0,0.12)",
+            }}
           >
             <Icon
               icon={config.icon}
-              className="w-3.5 h-3.5"
+              className="w-4 h-4"
               style={{ color: config.color }}
             />
-          </span>
+          </div>
         );
       })}
     </div>
