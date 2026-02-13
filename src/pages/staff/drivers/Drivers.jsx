@@ -531,7 +531,7 @@ const Drivers = () => {
                 <button
                   key={pageNum}
                   onClick={() => table.setPageIndex(pageNum - 1)}
-                  className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
+                  className={`min-w-7 px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
                     ? "bg-blue-600 text-white border border-blue-600"
                     : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                     }`}
