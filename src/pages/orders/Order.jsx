@@ -1,7 +1,6 @@
 import { useCallback, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ordersIcon from "../../assets/images/orders.svg";
-import { Icon } from "@iconify/react";
 import DatePickerMap from "../../components/DatePickerMap";
 import OrdersTable from "../../components/order/OrdersTable";
 import OrderAnalytics from "../../components/order/OrderAnalytics";

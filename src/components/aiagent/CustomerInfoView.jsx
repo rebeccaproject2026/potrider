@@ -4,7 +4,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 /**
  * Customer Information View - Shows customer details, map, orders summary, and additional info
  */
-const CustomerInfoView = ({ profile, mapEmbedUrl, onViewFullProfile }) => {
+const CustomerInfoView = ({ profile, mapEmbedUrl, onViewFullProfile, openOrderHisorty }) => {
   const [ordersOpen, setOrdersOpen] = useState(true);
   const [additionalOpen, setAdditionalOpen] = useState(true);
 
@@ -56,7 +56,7 @@ const CustomerInfoView = ({ profile, mapEmbedUrl, onViewFullProfile }) => {
           <div className="px-4 pb-2 pt-1 space-y-1 text-[15px] text-[#4a4a4a]">
             <p className="leading-relaxed"><span className="font-semibold">Total Orders:</span> <strong className="font-bold text-[#000]">{profile.ordersHistory.totalOrders}</strong></p>
             <p className="leading-relaxed"><span className="font-semibold">Total Spending on Order:</span> <strong className="font-bold text-[#000]">{profile.ordersHistory.totalSpending}</strong></p>
-            <p className="leading-relaxed"><span className="font-semibold">Last Order on:</span> <strong className="font-bold text-sm underline text-[#000]">{profile.ordersHistory.lastOrderOn}</strong></p>
+            <p className="leading-relaxed cursor-pointer" onClick={openOrderHisorty}><span className="font-semibold">Last Order on:</span> <strong className="font-bold text-sm underline text-[#000]">{profile.ordersHistory.lastOrderOn}</strong></p>
             <p className="leading-relaxed"><span className="font-semibold">Last Order Qty:</span> <strong className="font-bold text-[#000]">{profile.ordersHistory.lastOrderQty}</strong></p>
             <p className="leading-relaxed"><span className="font-semibold">Last Order Amount:</span> <strong className="font-bold text-[#000]">{profile.ordersHistory.lastOrderAmount}</strong></p>
           </div>

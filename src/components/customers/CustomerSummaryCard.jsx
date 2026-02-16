@@ -15,26 +15,25 @@ const CustomerSummaryCard = ({
 }) => {
   return (
     <div className="bg-white rounded-sm shadow-md p-2.5 border border-gray-100">
-      <p className={`text-sm font-semibold ${titleColor} mb-2`}>{title}</p>
+      <p className={`text-xs font-semibold ${titleColor} mb-2`}>{title}</p>
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div
             className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${iconBgColor} ${iconColor}`}
           >
             <User className="w-5 h-5" />
           </div>
-          <span className="text-xl font-bold text-gray-900">{count}</span>
+          <span className="text-xl font-semibold text-gray-900">{count}</span>
         </div>
-        <span className="text-sm font-medium text-green-600 shrink-0">
+        <span className="text-sm font-bold text-green-600 shrink-0">
           {change}
         </span>
       </div>
       <button
-        type="button"
         onClick={onView}
-        className="mt-2 flex items-center gap-1.5 text-gray-500 hover:text-gray-700 text-sm font-medium"
+        className="text-[12px] text-[#3F4753] flex items-center gap-1 font-bold underline hover:underline mt-2 cursor-pointer"
       >
-        <Eye className="w-4 h-4" />
+        <Eye className="w-4 h-4 " aria-hidden="true" />
         View
       </button>
     </div>

@@ -1,4 +1,4 @@
-import { Paperclip, Send } from "lucide-react";
+import { BookText, Paperclip, Send } from "lucide-react";
 import { useState } from "react";
 
 /**
@@ -67,12 +67,9 @@ const AIKnowledgeBaseView = () => {
             {msg.type === 'ai' ? (
               <>
                 {/* AI Avatar - Left */}
-                <div className="w-10 h-10 rounded-full bg-gray-200 border-2 border-gray-300 shrink-0 flex items-center justify-center">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <rect x="4" y="6" width="16" height="3" rx="1" />
-                    <rect x="4" y="10.5" width="16" height="3" rx="1" />
-                    <rect x="4" y="15" width="16" height="3" rx="1" />
-                  </svg>
+                <div className="w-10 h-10 rounded-full bg-white border border-black shrink-0 flex items-center justify-center">
+                  <BookText size={20} className="text-gray-700"
+                  />
                 </div>
 
                 {/* AI Message */}

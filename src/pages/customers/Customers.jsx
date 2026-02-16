@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import DatePickerMap from "../../components/DatePickerMap";
 import CustomerSummaryCard from "../../components/customers/CustomerSummaryCard";
+import QuantityTimelineDrawer from "../../components/common/QuantityTimelineDrawer";
 
 const FILTER_TABS = [
   { key: "all", label: "All", count: 18 },
@@ -246,7 +247,129 @@ const Customers = () => {
     pageSize: 10,
   });
 
+  // Timeline drawer state
+  const [timelineConfig, setTimelineConfig] = useState({
+    isOpen: false,
+    title: "",
+    items: [],
+  });
+
   const onDateUpdate = useCallback(() => { }, []);
+
+  // Handle opening timeline drawer
+  const handleOpenTimeline = useCallback((card) => {
+    let timelineItems = [];
+
+    // Different data based on card type
+    if (card.title === "New Customers") {
+      timelineItems = [
+        {
+          first: "12 Dec 2023",
+          second: "25",
+          details: [
+            { first: "John Doe - onboard - At 9:30pm by Dispatcher name" },
+            { first: "Noah John - onboard - At 8:30pm by Dispatcher name" }
+          ]
+        },
+        {
+          first: "11 Dec 2023",
+          second: "60",
+          details: [
+            { first: "John Doe - onboard - At 9:30pm by Dispatcher name" },
+            { first: "Noah John - onboard - At 8:30pm by Dispatcher name" }
+          ]
+        },
+        {
+          first: "10 Dec 2023",
+          second: "100",
+          details: []
+        },
+        {
+          first: "09 Dec 2023",
+          second: "703",
+          details: []
+        }
+      ];
+    } else if (card.title === "Active Customers") {
+      timelineItems = [
+        {
+          first: "12 Dec 2023",
+          second: "25",
+          details: [
+            { first: "Client name is active at 9:30 pm" },
+            { first: "Client name is active at 9:30 am" }
+          ]
+        },
+        {
+          first: "11 Dec 2023",
+          second: "60",
+          details: [
+            { first: "Client name is active at 9:30 pm" },
+            { first: "Client name is active at 9:30 am" }
+          ]
+        },
+        {
+          first: "10 Dec 2023",
+          second: "100",
+          details: [
+            { first: "Client name is active at 9:30 pm" },
+            { first: "Client name is active at 9:30 am" }
+          ]
+        },
+        {
+          first: "09 Dec 2023",
+          second: "703",
+          details: [
+            { first: "Client name is active at 9:30 pm" },
+            { first: "Client name is active at 9:30 am" }
+          ]
+        }
+      ];
+    } else if (card.title === "Inactive Customers") {
+      timelineItems = [
+        {
+          first: "12 Dec 2023",
+          second: "25",
+          details: [
+            { first: "Client name is inactive from 9:30 pm" },
+            { first: "Client name is inactive from 9:30 am" }
+          ]
+        },
+        {
+          first: "11 Dec 2023",
+          second: "60",
+          details: [
+            { first: "Client name is inactive from 9:30 pm" },
+            { first: "Client name is inactive from 9:30 am" }
+          ]
+        },
+        {
+          first: "10 Dec 2023",
+          second: "100",
+          details: []
+        },
+        {
+          first: "09 Dec 2023",
+          second: "703",
+          details: []
+        }
+      ];
+    }
+
+    setTimelineConfig({
+      isOpen: true,
+      title: card.title,
+      items: timelineItems,
+    });
+  }, []);
+
+  const handleCloseTimeline = useCallback(() => {
+    setTimelineConfig({
+      isOpen: false,
+      title: "",
+      items: [],
+    });
+  }, []);
 
   const columns = useMemo(
     () =>
@@ -311,7 +434,7 @@ const Customers = () => {
             iconBgColor={card.iconBgColor}
             iconColor={card.iconColor}
             titleColor={card.titleColor}
-            onView={() => { }}
+            onView={() => handleOpenTimeline(card)}
           />
         ))}
       </div>
@@ -502,6 +625,14 @@ const Customers = () => {
           </div>
         </div>
       </div>
+
+      {/* Quantity Timeline Drawer */}
+      <QuantityTimelineDrawer
+        isOpen={timelineConfig.isOpen}
+        onClose={handleCloseTimeline}
+        title={timelineConfig.title}
+        items={timelineConfig.items}
+      />
     </div>
   );
 };
