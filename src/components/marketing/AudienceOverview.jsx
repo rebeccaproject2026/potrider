@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Chart from "react-apexcharts";
 import { AUDIENCE_TABS, GENDER_DATA, AGE_RANGE_DATA } from "../../data/marketingData";
-import { genderDonutOptions, genderDonutSeries } from "../../config/marketingChartConfig";
+import { genderOuterDonutOptions, genderOuterDonutSeries, genderInnerDonutOptions, genderInnerDonutSeries } from "../../config/marketingChartConfig";
 
 const AudienceOverview = ({ showLabels = true, title = "Audience Overview", customLabels = null }) => {
   const [audienceTab, setAudienceTab] = useState("this-week");
@@ -62,16 +62,29 @@ const AudienceOverview = ({ showLabels = true, title = "Audience Overview", cust
             )}
           </div>
 
-          {/* Donut Chart */}
+          {/* Donut Chart - Two Circles */}
           <div className="flex items-center justify-between">
-            <div className="w-40 h-40">
-              <Chart
-                options={genderDonutOptions}
-                series={genderDonutSeries}
-                type="radialBar"
-                width="160"
-                height="160"
-              />
+            <div className="w-40 h-40 relative">
+              {/* Outer Circle */}
+              <div className="absolute inset-0">
+                <Chart
+                  options={genderOuterDonutOptions}
+                  series={genderOuterDonutSeries}
+                  type="donut"
+                  width="160"
+                  height="160"
+                />
+              </div>
+              {/* Inner Circle */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Chart
+                  options={genderInnerDonutOptions}
+                  series={genderInnerDonutSeries}
+                  type="donut"
+                  width="100"
+                  height="100"
+                />
+              </div>
             </div>
 
             {/* Legend */}

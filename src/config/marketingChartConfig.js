@@ -28,8 +28,8 @@ export const campaignChartOptions = {
   },
   yaxis: {
     min: 0,
-    max: 16,
-    tickAmount: 4,
+    max: 12.5,
+    tickAmount: 5,
     labels: {
       style: {
         fontSize: "10px",
@@ -107,11 +107,11 @@ export const campaignChartOptions = {
 export const campaignChartSeries = [
   {
     name: "Emails",
-    data: [12, 9, 7.5, 9, 6],
+    data: [12.5, 9, 7.5, 8, 5.5],
   },
   {
     name: "Sales",
-    data: [0, 2, 5, 8, 3],
+    data: [2.3, 1, 4.5, 7, 3],
   },
 ];
 
@@ -502,43 +502,111 @@ export const campaignStatsChartOptions = {
   },
 };
 
-// Gender Donut Chart Configuration - Radial Bar Style
-export const genderDonutOptions = {
+// Gender Donut Chart Configuration - Outer Circle (Female & Unknown)
+export const genderOuterDonutOptions = {
   chart: {
-    type: "radialBar",
+    type: "donut",
   },
   plotOptions: {
-    radialBar: {
-      offsetY: 0,
-      startAngle: 0,
-      endAngle: 270,
-      hollow: {
-        margin: 5,
-        size: "30%",
-        background: "transparent",
+    pie: {
+      donut: {
+        size: "75%",
+        labels: {
+          show: false,
+        },
       },
-      dataLabels: {
-        show: false,
-      },
-      track: {
-        show: true,
-        background: "#f0f0f0",
-        strokeWidth: "100%",
-        opacity: 0.3,
-      },
+      expandOnClick: false,
     },
   },
-  colors: ["#FF9800", "#4CAF50", "#FFE0B2", "#212121"],
-  labels: ["Female", "Male", "Another Identity", "Unknown"],
+  dataLabels: {
+    enabled: false,
+  },
+  colors: ["#FF9800", "#212121"],
+  labels: ["Female", "Unknown"],
   legend: {
     show: false,
   },
   stroke: {
-    lineCap: "round",
+    show: true,
+    width: 8,
+    colors: ["#ffffff"],
+  },
+  states: {
+    hover: {
+      filter: {
+        type: "none",
+      },
+    },
+    active: {
+      filter: {
+        type: "none",
+      },
+    },
+  },
+  tooltip: {
+    enabled: true,
+    y: {
+      formatter: function (val) {
+        return val + "%";
+      },
+    },
   },
 };
 
-export const genderDonutSeries = [70.8, 20.8, 0.81, 0.88];
+export const genderOuterDonutSeries = [70.8, 20];
+
+// Gender Donut Chart Configuration - Inner Circle (Male & Another Identity)
+export const genderInnerDonutOptions = {
+  chart: {
+    type: "donut",
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: "75%",
+        labels: {
+          show: false,
+        },
+      },
+      expandOnClick: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  colors: ["#4CAF50", "#FFE0B2"],
+  labels: ["Male", "Another Identity"],
+  legend: {
+    show: false,
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ["#ffffff"],
+  },
+  states: {
+    hover: {
+      filter: {
+        type: "none",
+      },
+    },
+    active: {
+      filter: {
+        type: "none",
+      },
+    },
+  },
+  tooltip: {
+    enabled: true,
+    y: {
+      formatter: function (val) {
+        return val + "%";
+      },
+    },
+  },
+};
+
+export const genderInnerDonutSeries = [20.8, 10];
 
 // Function to generate campaign stats chart series based on selected campaign
 export const getCampaignStatsChartSeries = (selectedCampaign) => [

@@ -29,11 +29,9 @@ import {
 } from "../../config/marketingChartConfig";
 import DatePickerMap from "../../components/DatePickerMap";
 
-
-
 const Marketing = () => {
   const [activeTab, setActiveTab] = useState("email-campaign");
-    const [period, setPeriod] = useState({ start: null, end: null });
+  const [period, setPeriod] = useState({ start: null, end: null });
   const [campaignStatsTab, setCampaignStatsTab] = useState("this-week");
 
   const onDateUpdate = useCallback(
@@ -115,7 +113,14 @@ const Marketing = () => {
       {/* Tab Content */}
       <div className="">
         {activeTab === "email-campaign" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <div>
+              <DatePickerMap
+                defaultItem={2}
+                onUpdate={onDateUpdate}
+                className="h-10 sm:*:w-76"
+              />
+            </div>
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {EMAIL_STATS_1.map((stat) => (
@@ -133,24 +138,27 @@ const Marketing = () => {
 
             {/* Campaign Statistics Section */}
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
-                    <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option>This Month</option>
-                      <option>Last Month</option>
-                      <option>This Year</option>
-                    </select>
+                    <div>
+                      <DatePickerMap
+                        defaultItem={2}
+                        onUpdate={onDateUpdate}
+                        className="h-10 sm:*:min-w-44! *:px-4! *:py-2!"
+                      />
+                    </div>
                   </div>
                   <Chart
                     options={campaignChartOptions}
                     series={campaignChartSeries}
                     type="line"
-                    height={185}
+                    height={196}
+                    className="min-h-49!"
                   />
                 </div>
 
@@ -204,7 +212,14 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "sms-campaign" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <div>
+              <DatePickerMap
+                defaultItem={2}
+                onUpdate={onDateUpdate}
+                className="h-10 sm:*:w-76"
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {EMAIL_STATS_2.map((stat) => (
                 <MarketingStatsCard
@@ -220,24 +235,27 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
-                    <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option>This Month</option>
-                      <option>Last Month</option>
-                      <option>This Year</option>
-                    </select>
+                    <div>
+                      <DatePickerMap
+                        defaultItem={2}
+                        onUpdate={onDateUpdate}
+                        className="h-10 sm:*:min-w-44! *:px-4! *:py-2! "
+                      />
+                    </div>
                   </div>
                   <Chart
                     options={campaignChartOptions}
                     series={smsCampaignChartSeries}
                     type="line"
-                    height={185}
+                    height={196}
+                    className="min-h-49!"
                   />
                 </div>
 
@@ -292,7 +310,11 @@ const Marketing = () => {
         {activeTab === "follow-up" && (
           <div className="flex flex-col gap-2">
             <div>
-               <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} className="h-10 sm:*:w-76" />
+              <DatePickerMap
+                defaultItem={2}
+                onUpdate={onDateUpdate}
+                className="h-10 sm:*:w-76"
+              />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {EMAIL_STATS_3.map((stat) => (
@@ -309,25 +331,27 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Chart */}
                 <div className="bg-white pt-1.5 px-1.5 rounded-sm shadow">
                   <div className="flex items-center justify-between ">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
-                    <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none ">
-                      <option>This Month</option>
-                      <option>Last Month</option>
-                      <option>This Year</option>
-                    </select>
+                     <div>
+                      <DatePickerMap
+                        defaultItem={2}
+                        onUpdate={onDateUpdate}
+                        className="h-10 sm:*:min-w-44! *:px-4! *:py-2! "
+                      />
+                    </div>
                   </div>
                   <Chart
                     options={followUpBarChartOptions}
                     series={followUpBarChartSeries}
                     type="bar"
-                    height={220}
-                    className="min-h-52!"
+                    height={200}
+                    className="min-h-50!"
                   />
                 </div>
 
@@ -380,7 +404,14 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "coupons" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <div>
+              <DatePickerMap
+                defaultItem={2}
+                onUpdate={onDateUpdate}
+                className="h-10 sm:*:w-76"
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {EMAIL_STATS_4.map((stat) => (
                 <MarketingStatsCard
@@ -396,24 +427,27 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
-                    <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option>This Month</option>
-                      <option>Last Month</option>
-                      <option>This Year</option>
-                    </select>
+                     <div>
+                      <DatePickerMap
+                        defaultItem={2}
+                        onUpdate={onDateUpdate}
+                        className="h-10 sm:*:min-w-44! *:px-4! *:py-2! "
+                      />
+                    </div>
                   </div>
                   <Chart
                     options={campaignChartOptions}
                     series={couponsCampaignChartSeries}
                     type="line"
-                    height={185}
+                    height={196}
+                    className="min-h-49!"
                   />
                 </div>
 
@@ -460,16 +494,21 @@ const Marketing = () => {
             </div>
 
             {/* Audience Overview Section */}
-            <AudienceOverview
-              showLabels={false}
-            />
+            <AudienceOverview showLabels={false} />
 
             {/* Recently Added Coupon Section */}
             <RecentlyAddedCoupon />
           </div>
         )}
         {activeTab === "featured-ads" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <div>
+              <DatePickerMap
+                defaultItem={2}
+                onUpdate={onDateUpdate}
+                className="h-10 sm:*:w-76"
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {EMAIL_STATS_5.map((stat) => (
                 <MarketingStatsCard
@@ -485,24 +524,27 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
-                    <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option>This Month</option>
-                      <option>Last Month</option>
-                      <option>This Year</option>
-                    </select>
+                     <div>
+                      <DatePickerMap
+                        defaultItem={2}
+                        onUpdate={onDateUpdate}
+                        className="h-10 sm:*:min-w-44! *:px-4! *:py-2! "
+                      />
+                    </div>
                   </div>
                   <Chart
                     options={campaignChartOptions}
                     series={featuredAdsCampaignChartSeries}
                     type="line"
-                    height={185}
+                    height={196}
+                    className="min-h-49!"
                   />
                 </div>
 

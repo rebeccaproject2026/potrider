@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Chart from "react-apexcharts";
 import { RECENTLY_ADDED_COUPONS } from "../../data/marketingData";
-import { couponBarChartOptions, getCouponBarChartSeries } from "../../config/marketingChartConfig";
+import {
+  couponBarChartOptions,
+  getCouponBarChartSeries,
+} from "../../config/marketingChartConfig";
+import DatePickerMap from "../DatePickerMap";
 
 const RecentlyAddedCoupon = () => {
-  const [selectedCoupon, setSelectedCoupon] = useState(RECENTLY_ADDED_COUPONS[0]);
+  const [selectedCoupon, setSelectedCoupon] = useState(
+    RECENTLY_ADDED_COUPONS[0],
+  );
+  const [period, setPeriod] = useState({ start: null, end: null });
+
+  const onDateUpdate = useCallback(
+    ({ start, end }) => setPeriod({ start, end }),
+    [],
+  );
 
   // Get chart series based on selected coupon
   const couponBarChartSeries = getCouponBarChartSeries(selectedCoupon);
@@ -15,11 +27,13 @@ const RecentlyAddedCoupon = () => {
         <h3 className="text-base font-semibold text-black">
           Recently Added Coupon
         </h3>
-        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none ">
-          <option>This Month</option>
-          <option>Last Month</option>
-          <option>This Year</option>
-        </select>
+        <div>
+          <DatePickerMap
+            defaultItem={2}
+            onUpdate={onDateUpdate}
+            className="h-10 sm:*:min-w-48! *:px-4! *:py-2! "
+          />
+        </div>
       </div>
 
       <div>
@@ -30,7 +44,7 @@ const RecentlyAddedCoupon = () => {
             value={selectedCoupon.id}
             onChange={(e) => {
               const coupon = RECENTLY_ADDED_COUPONS.find(
-                (c) => c.id === parseInt(e.target.value)
+                (c) => c.id === parseInt(e.target.value),
               );
               setSelectedCoupon(coupon);
             }}
@@ -47,17 +61,27 @@ const RecentlyAddedCoupon = () => {
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-4 text-sm">
             <span className="text-black font-medium text-[15px]">Detail :</span>
-            <span className="text-[#464646] font-medium">{selectedCoupon.detail}</span>
+            <span className="text-[#464646] font-medium">
+              {selectedCoupon.detail}
+            </span>
           </div>
 
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-black font-medium text-[15px]">Added on :</span>
-            <span className="text-[#464646] font-medium">{selectedCoupon.addedOn}</span>
+            <span className="text-black font-medium text-[15px]">
+              Added on :
+            </span>
+            <span className="text-[#464646] font-medium">
+              {selectedCoupon.addedOn}
+            </span>
           </div>
 
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-black font-medium text-[15px]">Expired on :</span>
-            <span className="text-[#464646] font-medium">{selectedCoupon.expiredOn}</span>
+            <span className="text-black font-medium text-[15px]">
+              Expired on :
+            </span>
+            <span className="text-[#464646] font-medium">
+              {selectedCoupon.expiredOn}
+            </span>
           </div>
         </div>
 

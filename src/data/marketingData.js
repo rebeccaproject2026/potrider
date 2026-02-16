@@ -109,9 +109,9 @@ export const AUDIENCE_TABS = [
 // Gender Data
 export const GENDER_DATA = [
   { label: "Female", percentage: "70.8%", color: "#FF9800" },
+  { label: "Unknown", percentage: "20%", color: "#212121" },
   { label: "Male", percentage: "20.8%", color: "#4CAF50" },
-  { label: "Another Identity", percentage: "0.81%", color: "#9E9E9E" },
-  { label: "Unknown", percentage: "0.88%", color: "#212121" },
+  { label: "Another Identity", percentage: "10%", color: "#FFE0B2" },
 ];
 
 // Age Range Data

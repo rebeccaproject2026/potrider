@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Chart from "react-apexcharts";
 import { RECENT_CAMPAIGNS } from "../../data/marketingData";
-import { campaignStatsChartOptions, getCampaignStatsChartSeries } from "../../config/marketingChartConfig";
+import {
+  campaignStatsChartOptions,
+  getCampaignStatsChartSeries,
+} from "../../config/marketingChartConfig";
+import DatePickerMap from "../DatePickerMap";
 
 const RecentlySentCampaigns = () => {
   const [selectedCampaign, setSelectedCampaign] = useState(RECENT_CAMPAIGNS[0]);
+  const [period, setPeriod] = useState({ start: null, end: null });
 
   // Get campaign stats chart series based on selected campaign
-  const campaignStatsChartSeries = getCampaignStatsChartSeries(selectedCampaign);
+  const campaignStatsChartSeries =
+    getCampaignStatsChartSeries(selectedCampaign);
+
+  const onDateUpdate = useCallback(
+    ({ start, end }) => setPeriod({ start, end }),
+    [],
+  );
 
   return (
     <div className="bg-white rounded-sm p-4">
@@ -15,11 +26,13 @@ const RecentlySentCampaigns = () => {
         <h3 className="text-base font-semibold text-black">
           Recently Sent Campaigns
         </h3>
-        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-          <option>This Month</option>
-          <option>Last Month</option>
-          <option>This Year</option>
-        </select>
+        <div>
+          <DatePickerMap
+            defaultItem={2}
+            onUpdate={onDateUpdate}
+            className="h-10 sm:*:min-w-48! *:px-4! *:py-2! "
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-[30%_70%] gap-2">
@@ -31,7 +44,7 @@ const RecentlySentCampaigns = () => {
               value={selectedCampaign.id}
               onChange={(e) => {
                 const campaign = RECENT_CAMPAIGNS.find(
-                  (c) => c.id === parseInt(e.target.value)
+                  (c) => c.id === parseInt(e.target.value),
                 );
                 setSelectedCampaign(campaign);
               }}
@@ -77,9 +90,7 @@ const RecentlySentCampaigns = () => {
             </div>
 
             <div className="flex">
-              <span className="text-black font-medium w-32">
-                Delivery at :
-              </span>
+              <span className="text-black font-medium w-32">Delivery at :</span>
               <span className="text-gray-600 font-medium">
                 {selectedCampaign.deliveryAt || "-"}
               </span>
