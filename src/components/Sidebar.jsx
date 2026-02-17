@@ -133,12 +133,12 @@ const Sidebar = ({ setSidebar }) => {
             onClick={handleNavClick}
             className={({ isActive }) =>
               `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${isActive && activeMenu === null
-                ? "bg-green-500 text-white"
+                ? "bg-[var(--color-primary)] text-white"
                 : "text-[#212121] hover:bg-green-100"
               }`
             }
           >
-           <Icon icon="hugeicons:customer-support" width="24" height="24" />
+            <Icon icon="hugeicons:customer-support" width="24" height="24" />
             Support
           </NavLink>
 
@@ -148,12 +148,12 @@ const Sidebar = ({ setSidebar }) => {
             onClick={handleNavClick}
             className={({ isActive }) =>
               `px-3 py-1.5 flex items-center gap-3 rounded transition-colors ${isActive && activeMenu === null
-                ? "bg-green-500 text-white"
+                ? "bg-[var(--color-primary)] text-white"
                 : "text-[#212121] hover:bg-green-100"
               }`
             }
           >
-           <Icon icon="lucide:settings" width="24" height="24" />
+            <Icon icon="lucide:settings" width="24" height="24" />
             Setting
           </NavLink>
         </div>
