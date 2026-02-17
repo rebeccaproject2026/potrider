@@ -319,7 +319,7 @@ const DriverDetailView = ({ data }) => {
   );
 
   return (
-    <div className="flex flex-col gap-2 min-w-0">
+    <div className="flex flex-col gap-2 min-w-0 px-2.5 py-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

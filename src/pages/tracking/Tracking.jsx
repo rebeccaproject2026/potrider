@@ -209,7 +209,7 @@ const getTrackingTableColumns = (onView, onDelete) => [
           </span>
           <Link
             to={`/customers/${row.customerId}`}
-            className="block font-bold text-[#000] hover:text-blue-600 underline hover:no-underline"
+            className="block font-bold text-black hover:text-blue-600 underline hover:no-underline"
           >
             {row.customer}
           </Link>
@@ -479,7 +479,7 @@ const Tracking = () => {
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [mapView]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -629,7 +629,7 @@ const Tracking = () => {
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   return (
-    <div className="flex flex-col gap-2 min-h-0">
+    <div className="flex flex-col gap-2 min-h-0 px-2.5 py-3">
       <h1 className="text-lg font-semibold text-gray-900 sr-only">Tracking</h1>
 
       {/* Global filters – 6 dropdowns */}
@@ -728,9 +728,9 @@ const Tracking = () => {
       </div>
 
       {/* Map section */}
-      <div className="flex-1 min-h-[560px] flex flex-col bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
+      <div className="flex-1 min-h-140 flex flex-col bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
         {/* Map container with overlays */}
-        <div className="relative flex-1 min-h-[520px]">
+        <div className="relative flex-1 min-h-130">
           {/* Top Control Bar: Map Toggle | Status Cards | Delivery Toggle */}
           <div className="absolute top-1 left-4 right-4 z-10 flex items-start justify-between pointer-events-none">
 
@@ -744,7 +744,7 @@ const Tracking = () => {
               >
                 Map
               </button>
-              <div className="w-[1px] h-5 bg-gray-200"></div>
+              <div className="w-px h-5 bg-gray-200"></div>
               <button
                 type="button"
                 onClick={() => setMapView("satellite")}
@@ -768,7 +768,7 @@ const Tracking = () => {
                         activeStatusFilter === filter.key ? null : filter.key
                       )
                     }
-                    className={`flex items-center justify-between gap-4 px-2 py-1 bg-white rounded-sm shadow-sm border transition-all min-w-[160px] h-11 ${activeStatusFilter === filter.key
+                    className={`flex items-center justify-between gap-4 px-2 py-1 bg-white rounded-sm shadow-sm border transition-all min-w-40 h-11 ${activeStatusFilter === filter.key
                       ? "ring-1 ring-gray-300 border-gray-300"
                       : "border-gray-200 hover:border-gray-300"
                       }`}
@@ -984,7 +984,7 @@ const Tracking = () => {
         <div className="shrink-0 p-3 min-w-0">
           <div className="grid grid-cols-3 gap-2">
             <div className="relative min-w-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-[15px] h-4 text-gray-400 pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.75 h-4 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search..."
@@ -1026,7 +1026,7 @@ const Tracking = () => {
 
         {/* Table */}
         <div className="order-list-table-table-container overflow-x-auto">
-          <table className="order-list-table table w-full min-w-[1100px] border-collapse">
+          <table className="order-list-table table w-full min-w-275 border-collapse">
             <thead className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-10">
               {trackingTable.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -1134,7 +1134,7 @@ const Tracking = () => {
                   key={pageNum}
                   type="button"
                   onClick={() => trackingTable.setPageIndex(pageNum - 1)}
-                  className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${trackingTable.getState().pagination.pageIndex + 1 ===
+                  className={`min-w-7 px-1.5 py-1 text-[12px] rounded ${trackingTable.getState().pagination.pageIndex + 1 ===
                     pageNum
                     ? "bg-blue-600 text-white border border-blue-600"
                     : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"

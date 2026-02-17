@@ -268,7 +268,7 @@ const AIAgents = () => {
   };
 
   return (
-    <div className="flex flex-1 min-h-0 min-w-0 bg-[#F2F2F2] -mx-2 -mb-2 gap-2 p-1">
+    <div className="flex flex-1 min-h-0 min-w-0 bg-[#F2F2F2]  gap-2 px-2.5 py-3">
       <ConversationList
         search={search}
         onSearchChange={setSearch}

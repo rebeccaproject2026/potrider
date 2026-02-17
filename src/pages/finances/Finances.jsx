@@ -84,12 +84,12 @@ const Finances = () => {
   );
 
   return (
-    <div className="flex flex-col gap-4 min-w-0">
+    <div className="flex flex-col gap-2 min-w-0 px-2.5 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {CARD_DATA.map((card) => (
           <FinanceSummaryCard
             key={card.title}
@@ -101,7 +101,7 @@ const Finances = () => {
         ))}
       </div>
 
-      <div className="bg-white rounded-sm shadow-sm p-4 h-full border border-gray-200 min-h-[500px]">
+      <div className="bg-white rounded-sm shadow-sm p-4 h-full border border-gray-200 min-h-125">
         <MultiSeriesLineChart
           series={chartSeries}
           colors={CHART_COLORS}

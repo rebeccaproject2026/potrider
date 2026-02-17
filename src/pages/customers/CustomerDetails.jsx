@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import DashboardAverageOrders from "../../components/dashboard/DashboardAverageOrders";
 import Select from "../../components/Select";
-import complaint from "../../assets/images/Button (1).png";
 import { Icon } from "@iconify/react";
 // Mock customer details by id (in real app would come from API)
 const getCustomerById = (id) => {
@@ -363,7 +362,7 @@ const CustomerDetails = () => {
     paymentStatus: "",
   });
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
-  const [chartDateRangeLabel, setChartDateRangeLabel] = useState(
+  const [chartDateRangeLabel] = useState(
     "Aug 1, 2025 - Aug 11, 2025"
   );
 
@@ -371,7 +370,7 @@ const CustomerDetails = () => {
     () =>
       getOrdersColumns(
         (row) => navigate(`/orders/${row.orderId}`),
-        (row) => { }
+        () => { }
       ),
     [navigate]
   );
@@ -421,7 +420,7 @@ const CustomerDetails = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
 
   return (
-    <div className="flex flex-col gap-4 min-w-0 pb-4">
+    <div className="flex flex-col gap-4 min-w-0 px-2.5 py-3">
       {/* Header: Back, Customer, avatar, name, join date | All Complains, Delete Client */}
       <div className="flex flex-wrap items-center justify-between gap-3 ">
         <div className="flex items-center gap-3 min-w-0">
@@ -492,7 +491,7 @@ const CustomerDetails = () => {
                 {config.label}
               </p>
               <div className="flex justify-between items-center gap-2">
-                <p className="text-xl font-bold text-[#000]">{value}</p>
+                <p className="text-xl font-bold text-black">{value}</p>
                 <p
                   className={`text-xs font-semibold mt-1 ${isPositive ? "text-green-600" : "text-red-600"
                     }`}
@@ -627,7 +626,7 @@ const CustomerDetails = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px] border-collapse">
+          <table className="w-full min-w-275 border-collapse">
             <thead className="bg-white border-b border-gray-200 sticky top-0 z-10 text-[3px]!important">
               {table.getHeaderGroups().map((hg) => (
                 <tr key={hg.id}>

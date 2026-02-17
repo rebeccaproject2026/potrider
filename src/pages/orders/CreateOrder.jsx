@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
@@ -432,7 +432,7 @@ const CreateOrder = () => {
   }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 flex-1 min-h-0 overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 flex-1 min-h-0 overflow-hidden px-2.5 py-3">
       {/* Left column – Create Order form (scrollable on its own) */}
       <div className="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden space-y-2 pr-1 hide-scrollbar">
         {/* Back arrow */}
@@ -729,7 +729,7 @@ const CreateOrder = () => {
                         </div>
 
                         {/* Item Total */}
-                        <p className="font-semibold text-sm text-gray-900 min-w-[60px] text-right">
+                        <p className="font-semibold text-sm text-gray-900 min-w-15 text-right">
                           {product.itemTotal}
                         </p>
 
@@ -761,8 +761,8 @@ const CreateOrder = () => {
                           }
                           className={`px-3 py-1 text-xs font-medium rounded-xs border transition
                     ${product.selectedSize === size
-                              ? "bg-[var(--color-primary)] text-white border-green-600"
-                              : "bg-white text-[#000] border-gray-300 hover:bg-gray-100"
+                              ? "bg-(--color-primary) text-white border-green-600"
+                              : "bg-white text-black border-gray-300 hover:bg-gray-100"
                             }
                   `}
                         >
@@ -784,14 +784,14 @@ const CreateOrder = () => {
             <button
               type="button"
               onClick={() => scrollCouponSlider("left")}
-              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-[#000] hover:bg-gray-200 transition-colors"
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-black hover:bg-gray-200 transition-colors"
             >
               <Icon icon="mdi:chevron-left" className="w-6 h-6" />
             </button>
             <button
               type="button"
               onClick={() => scrollCouponSlider("right")}
-              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-[#000] hover:bg-gray-200 transition-colors"
+              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded bg-white text-black hover:bg-gray-200 transition-colors"
             >
               <Icon icon="mdi:chevron-right" className="w-6 h-6" />
             </button>
@@ -809,10 +809,10 @@ const CreateOrder = () => {
               <div
                 key={coupon.id}
                 onClick={() => setSelectedCoupon(isApplied ? "" : coupon.id)}
-                className={`relative min-w-[180px] max-w-[220px] rounded-sm border border-gray-200 bg-white shadow-sm cursor-pointer transition-all hover:border-gray-300 flex flex-col`}
+                className={`relative min-w-45 max-w-55 rounded-sm border border-gray-200 bg-white shadow-sm cursor-pointer transition-all hover:border-gray-300 flex flex-col`}
               >
                 {isApplied && (
-                  <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[var(--color-primary)] flex items-center justify-center z-10">
+                  <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-(--color-primary) flex items-center justify-center z-10">
                     <Icon icon="mdi:check" className="w-4 h-4 text-white" />
                   </span>
                 )}
@@ -969,9 +969,9 @@ const CreateOrder = () => {
                 type="button"
                 onClick={() => handlePaymentMethodClick(option.id)}
                 className={`
-    relative z-[1]
+    relative z-1
     flex items-center justify-center gap-2
-    px-[5px] py-[12px]
+    px-1.25 py-3
     rounded-[5px]
     border border-[#a4a4a4]
     bg-white
@@ -1016,7 +1016,7 @@ const CreateOrder = () => {
         <div className="flex justify-end">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-2 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-2 py-2.5 bg-(--color-secondary) text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
           >
             <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
             Create & Save Order
@@ -1045,7 +1045,7 @@ const CreateOrder = () => {
                   header: "Product Name",
                   align: "left",
                   render: (row) => (
-                    <a href="#" className="text-[var(--color-secondary)] text-[12px] underline font-extralight">
+                    <a href="#" className="text-(--color-secondary) text-[12px] underline font-extralight">
                       {row.productName}
                     </a>
                   ),
@@ -1057,7 +1057,7 @@ const CreateOrder = () => {
                   header: "Action",
                   align: "left",
                   render: () => (
-                    <a href="#" className="text-[var(--color-secondary)] hover:underline text-xs font-semibold">
+                    <a href="#" className="text-(--color-secondary) hover:underline text-xs font-semibold">
                       View Recent Order
                     </a>
                   ),
@@ -1078,7 +1078,7 @@ const CreateOrder = () => {
       </div>
 
       {/* Right column – Invoice Preview (fixed height, scroll inside panel only) */}
-      <div className="w-full lg:w-[400px] shrink-0 flex flex-col min-h-0 lg:min-h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="w-full lg:w-100 shrink-0 flex flex-col min-h-0 lg:min-h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
           <h3 className="text-base font-semibold">Invoice Preview</h3>
           <div className="flex gap-2">

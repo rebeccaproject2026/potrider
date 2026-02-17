@@ -272,20 +272,21 @@ const Dashboard = () => {
 
 
   return (
-    <div className="p-4 md:p-4 min-h-screen">
+    <div className="px-2.5 py-3 min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <h1 className="text-2xl font-bold text-[#212121] mb-4 md:mb-0">
           👋 Hi, {user.fullName}
         </h1>
         <DatePickerMap
           defaultItem={2}
           onUpdate={(range) => setDateRange({ start: range.start, end: range.end })}
+          className="*:min-w-76"
         />
       </div>
 
       {/* Top Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
         {topStats.map((stat, index) => (
           <DashboardChart
             key={index}
@@ -302,7 +303,7 @@ const Dashboard = () => {
       </div>
 
       {/* Inventory and Orders Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-2">
         <InventoryHealth
           data={inventoryData}
           onViewAll={() => handleViewAll("Inventory")}
@@ -314,7 +315,7 @@ const Dashboard = () => {
       </div>
 
       {/* Average Orders Chart */}
-      <div className="mb-4">
+      <div className="mb-2">
         <DashboardAverageOrders
           data={averageOrdersData}
           onViewAll={() => handleViewAll("AverageOrders")}
@@ -322,7 +323,7 @@ const Dashboard = () => {
       </div>
 
       {/* Driver Status and Deliveries */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-2">
         <div className="lg:col-span-2">
           <DashboardDriverStatus
             data={driverStatusData}
@@ -336,7 +337,7 @@ const Dashboard = () => {
       </div>
 
       {/* GEO Performance and Most Selling Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-2 items-start">
         <GeoPerformance onViewAll={() => handleViewAll("GeoPerformance")} />
         <MostSellingArea
           data={mostSellingAreaData}
@@ -345,7 +346,7 @@ const Dashboard = () => {
       </div>
 
       {/* Bottom Row - Product, Driver, and Client Lists */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 items-start">
         <TopSellingProducts
           data={topSellingProductsData}
           onViewAll={() => handleViewAll("TopSellingProducts")}

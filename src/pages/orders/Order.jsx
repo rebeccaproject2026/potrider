@@ -12,6 +12,7 @@ import CustomerDetailsDrawer from "./CustomerDetailsDrawer";
 import ActionModal from "../../components/common/ActionModal";
 import Select from "../../components/Select";
 import { getOrdersColumns, getOrdersData } from "./ordersData";
+import { Plus } from "lucide-react";
 
 const DRIVERS_LIST = [
   { value: "Abou Zidan Houssin", label: "Abou Zidan Houssin" },
@@ -445,9 +446,9 @@ const Order = () => {
 
 
   return (
-    <div className="min-w-0 max-w-full  overflow-x-hidden pr-2">
+    <div className="min-w-0 max-w-full overflow-x-hidden px-2.5 py-3">
       {/* Header - fixed */}
-      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+      <div className="shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-2.5">
         <DatePickerMap
           defaultItem={2}
           onUpdate={handleDateUpdate}
@@ -456,9 +457,9 @@ const Order = () => {
         <div className="flex gap-4">
           <button
             onClick={() => navigate("/orders/create")}
-            className="flex items-center gap-2 px-2 py-2.5 cursor-pointer bg-[var(--color-primary)] text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
+            className="flex items-center gap-1 px-2 py-2.5 cursor-pointer bg-(--color-primary) text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
           >
-            + Create Order
+            <Plus /> Create Order
           </button>
         </div>
       </div>
@@ -476,7 +477,7 @@ const Order = () => {
       </div> */}
 
       {/* Delivery Section - fixed */}
-      <div className="flex-shrink-0 mb-4 min-w-0">
+      <div className="shrink-0 mb-2.5 min-w-0">
         <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Delivery</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
           {Object.values(deliveryOrders).map((item, idx) => (
@@ -490,7 +491,7 @@ const Order = () => {
         </div>
       </div>
       {/* Shipping Section - fixed */}
-      <div className="flex-shrink-0 mb-4 min-w-0">
+      <div className="shrink-0 mb-2.5 min-w-0">
         <h2 className="text-sm font-semibold text-[#000000] mb-2 ml-1">
           Shipping
         </h2>
@@ -545,7 +546,7 @@ const Order = () => {
         <div className="flex flex-col gap-2">
           {actionModal.type === "courier" && (
             <div>
-              <label className="block text-sm font-semibold text-[#000] mb-2">Drivers:</label>
+              <label className="block text-sm font-semibold text-black mb-2">Drivers:</label>
               <Select
                 options={DRIVERS_LIST}
                 value={assignValue}
@@ -557,7 +558,7 @@ const Order = () => {
           )}
           {actionModal.type === "payment" && (
             <div>
-              <label className="block text-sm font-semibold text-[#000] mb-2">Payment Status:</label>
+              <label className="block text-sm font-semibold text-black mb-2">Payment Status:</label>
               <Select
                 options={PAYMENT_STATUS_list}
                 value={assignValue}

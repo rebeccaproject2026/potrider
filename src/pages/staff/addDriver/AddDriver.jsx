@@ -155,7 +155,7 @@ const AddDriver = () => {
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 min-w-0 bg-gray-100 overflow-y-auto">
+    <div className="flex flex-col flex-1 min-h-0 min-w-0 bg-gray-100 overflow-y-auto px-2.5 py-3">
       <div className="flex-1 full-width w-full flex flex-col">
         <div className="bg-white rounded-sm border border-gray-200 shadow-sm p-2.5 flex-1 min-h-0 flex flex-col w-full max-w-none">
           {/* Tab Navigation */}

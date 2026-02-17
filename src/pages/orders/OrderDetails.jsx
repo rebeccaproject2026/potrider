@@ -138,7 +138,7 @@ const OrderDetails = () => {
   const isStepDisabled = (stepKey) => stepKey === "Ordered";
 
   return (
-    <div className="min-w-0 max-w-full  overflow-x-hidden">
+    <div className="min-w-0 max-w-full  overflow-x-hidden px-2.5 py-3">
       {/* <h1 className="text-lg font-semibold text-gray-900 mb-4">Order Details</h1> */}
 
       <div className="order-details-cols flex flex-col xl:flex-row gap-4">
@@ -183,7 +183,7 @@ const OrderDetails = () => {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <a href="#" className="text-base font-semibold text-[#000] underline">
+                <a href="#" className="text-base font-semibold text-black underline">
                   {item.name}
                 </a>
                 <p className="text-sm text-gray-500">Qty: {item.qty}</p>
@@ -274,10 +274,10 @@ const OrderDetails = () => {
 
         {/* Right column - Order Tracking (fixed slide-in on mobile when open) */}
         <div
-          className={`order-details-col-right shrink-0 w-full xl:max-w-[380px] bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden ${trackingOpen ? "order-details-tracking-open block" : "hidden"
+          className={`order-details-col-right shrink-0 w-full xl:max-w-95 bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden ${trackingOpen ? "order-details-tracking-open block" : "hidden"
             } xl:block`}
         >
-          <div className="bg-[var(--color-secondary)] text-white px-2.5 py-2 flex justify-between items-center shrink-0">
+          <div className="bg-(--color-secondary) text-white px-2.5 py-2 flex justify-between items-center shrink-0">
             <h3 className="text-lg font-semibold">Order Tracking</h3>
             <button
               type="button"
@@ -349,7 +349,7 @@ const OrderDetails = () => {
               type="button"
               onClick={handleSaveChanges}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-3 py-2.5 bg-[var(--color-secondary)] text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-3 py-2.5 bg-(--color-secondary) text-white text-sm font-semibold rounded-sm hover:bg-blue-700 disabled:opacity-50"
             >
               <Icon icon="mdi:content-save-outline" className="w-5 h-5" />
               Save Changes

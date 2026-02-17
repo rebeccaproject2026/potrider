@@ -54,7 +54,7 @@ const AddCustomer = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 min-w-0 bg-gray-100 overflow-y-auto">
+    <div className="flex flex-col flex-1 min-h-0 min-w-0 bg-gray-100 overflow-y-auto px-2.5 py-3">
       {/* Layout matches Add Inventory: px-4 pt-4 pb-4 for content area */}
       <div className="flex-1 full-width w-full flex flex-col">
         <div className="bg-white rounded-sm border border-gray-200 shadow-sm p-4 flex-1 min-h-0 flex flex-col w-full max-w-none">
@@ -88,7 +88,7 @@ const AddCustomer = () => {
               <label className="block text-sm font-medium text-[#212121] mb-0.5">
                 Phone Number
               </label>
-              <div className="flex border border-[#DDDDDD] rounded-sm bg-white overflow-hidden min-h-[38px]">
+              <div className="flex border border-[#DDDDDD] rounded-sm bg-white overflow-hidden min-h-9.5">
                 <select
                   value={phoneCode}
                   onChange={(e) => setPhoneCode(e.target.value)}
@@ -134,7 +134,7 @@ const AddCustomer = () => {
                 onChange={(e) => setHomeAddress(e.target.value)}
                 placeholder="Enter your address"
                 rows={3}
-                className="w-full px-3 py-4.5 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-y min-h-[80px]"
+                className="w-full px-3 py-4.5 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-y min-h-20"
               />
             </div>
 

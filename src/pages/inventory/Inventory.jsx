@@ -365,7 +365,7 @@ const Inventory = () => {
   });
 
   return (
-    <div className="flex flex-col gap-3 min-w-0">
+    <div className="flex flex-col gap-2 min-w-0 px-2.5 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} />
         <Link
@@ -436,7 +436,7 @@ const Inventory = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1000px] border-collapse">
+          <table className="w-full min-w-250 border-collapse">
             <thead className="bg-[#ffffff] border-b border-gray-200 sticky top-0 z-10">
               {table.getHeaderGroups().map((hg) => (
                 <tr key={hg.id}>
@@ -548,7 +548,7 @@ const Inventory = () => {
                 <button
                   key={pageNum}
                   onClick={() => table.setPageIndex(pageNum - 1)}
-                  className={`min-w-[28px] px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
+                  className={`min-w-7 px-1.5 py-1 text-[12px] rounded ${table.getState().pagination.pageIndex + 1 === pageNum
                     ? "bg-blue-600 text-white border border-blue-600"
                     : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                     }`}

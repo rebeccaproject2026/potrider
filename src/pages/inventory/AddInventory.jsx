@@ -250,7 +250,7 @@ Kush Kraft's Blue Gelato pre-rolls offer a refined twist on a fruity powerhouse.
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Description"
                   rows={2}
-                  className="w-full px-3 py-2 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-y min-h-[56px]"
+                  className="w-full px-3 py-2 text-sm border border-[#DDDDDD] rounded-sm bg-white font-medium placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-y min-h-14"
                 />
               </div>
             </div>
