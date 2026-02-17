@@ -21,7 +21,8 @@ import {
 } from "lucide-react";
 import DashboardAverageOrders from "../../components/dashboard/DashboardAverageOrders";
 import Select from "../../components/Select";
-
+import complaint from "../../assets/images/Button (1).png";
+import { Icon } from "@iconify/react";
 // Mock customer details by id (in real app would come from API)
 const getCustomerById = (id) => {
   const joinDate = "Jun 15, 2025";
@@ -460,15 +461,15 @@ const CustomerDetails = () => {
           <button
             type="button"
             onClick={handleAllComplains}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-orange-500 text-white rounded-sm font-medium text-sm hover:bg-orange-600"
+            className="inline-flex items-center gap-2 px-3 py-2.5 bg-[#FF9800] text-white rounded-sm font-medium text-sm "
           >
-            <MessageCircle className="w-4 h-4" />
+            <Icon icon="akar-icons:chat-question" className="w-5 h-5" />
             All Complains
           </button>
           <button
             type="button"
             onClick={handleDeleteClient}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-sm font-medium text-sm hover:bg-red-600"
+            className="inline-flex items-center gap-2 px-3 py-2.5 bg-[#F44336] text-white rounded-sm font-medium text-sm "
           >
             <Trash2 className="w-4 h-4" />
             Delete Client

@@ -386,6 +386,11 @@ const Tracking = () => {
     pageIndex: 0,
     pageSize: 6,
   });
+
+  // Map Popup Toggles
+  const [showOnline, setShowOnline] = useState(true);
+  const [showOffline, setShowOffline] = useState(true);
+
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const navigate = useNavigate();
@@ -821,9 +826,15 @@ const Tracking = () => {
           {/* Delivery cards overlay */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="relative w-full h-full pointer-events-auto">
-              {MOCK_DELIVERY_CARDS.filter(card =>
-                deliveryMode === 'delivery' ? true : card.driverName === 'Olivia Smith'
-              ).map((card) => (
+              {MOCK_DELIVERY_CARDS.filter(card => {
+                const modeMatch = deliveryMode === 'delivery' ? true : card.driverName === 'Olivia Smith';
+                if (!modeMatch) return false;
+
+                if (card.isOnline && !showOnline) return false;
+                if (!card.isOnline && !showOffline) return false;
+
+                return true;
+              }).map((card) => (
                 <div
                   key={card.id}
                   className="absolute pointer-events-auto"
@@ -851,33 +862,81 @@ const Tracking = () => {
           {/* Left bottom: stacked buttons + speech-bubble label (matches reference) */}
           <div className="absolute bottom-4 left-3 z-10 flex items-start gap-3">
             {/* Left stack */}
+            {/* Left stack of buttons with labels - Modified for dynamic labels */}
             <div className="flex flex-col gap-3">
-              {/* Online drivers icon button */}
-              <button
-                type="button"
-                className="w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center"
-                aria-label="Online drivers"
-              >
-                <span className="w-10 h-10 rounded-full bg-[#D4FFDA] flex items-center justify-center">
-                  <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
-                </span>
-              </button>
 
-              {/* Secondary icon button */}
-              <button
-                type="button"
-                className="w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center"
-                aria-label="Secondary"
-              >
-                <span className="w-10 h-10 rounded-full bg-[#FEECEB] flex items-center justify-center">
-                  <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
-                </span>
-              </button>
+              {/* Online drivers row */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowOnline(!showOnline)}
+                  className={`w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center shrink-0 transition-all ${!showOnline ? 'opacity-50 grayscale' : ''
+                    }`}
+                  aria-label="Online drivers"
+                  title={showOnline ? "Hide Online Drivers" : "Show Online Drivers"}
+                >
+                  <span className="w-10 h-10 rounded-full bg-[#D4FFDA] flex items-center justify-center">
+                    <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
+                  </span>
+                </button>
+
+                {/* Online Label */}
+                {showOnline && (
+                  <div className="relative bg-white rounded-xl border border-gray-200 shadow-md px-4 py-2 animate-in fade-in slide-in-from-left-2 duration-200">
+                    <span
+                      className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-white drop-shadow-[0_0_1px_rgba(0,0,0,0.2)]"
+                      aria-hidden
+                    />
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-sm font-medium text-gray-900">
+                        Online Drivers
+                      </span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {MOCK_DELIVERY_CARDS.filter(c => c.isOnline).length}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Offline drivers row */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowOffline(!showOffline)}
+                  className={`w-10 h-10 rounded-2xl bg-white border border-gray-200 shadow-md flex items-center justify-center shrink-0 transition-all ${!showOffline ? 'opacity-50 grayscale' : ''
+                    }`}
+                  aria-label="Offline drivers"
+                  title={showOffline ? "Hide Offline Drivers" : "Show Offline Drivers"}
+                >
+                  <span className="w-10 h-10 rounded-full bg-[#FEECEB] flex items-center justify-center">
+                    <Icon icon="mdi:radar" className="w-5 h-5 text-gray-900" />
+                  </span>
+                </button>
+
+                {/* Offline Label */}
+                {showOffline && (
+                  <div className="relative bg-white rounded-xl border border-gray-200 shadow-md px-4 py-2 animate-in fade-in slide-in-from-left-2 duration-200">
+                    <span
+                      className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-white drop-shadow-[0_0_1px_rgba(0,0,0,0.2)]"
+                      aria-hidden
+                    />
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-sm font-medium text-gray-900">
+                        Offline Drivers
+                      </span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {MOCK_DELIVERY_CARDS.filter(c => !c.isOnline).length}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Layers thumbnail button */}
               <button
                 type="button"
-                className="relative w-10 h-10 rounded-2xl overflow-hidden border border-gray-200 shadow-md"
+                className="relative w-10 h-10 rounded-2xl overflow-hidden border border-gray-200 shadow-md shrink-0"
                 aria-label="Layers"
               >
                 <div
@@ -895,19 +954,6 @@ const Tracking = () => {
               </button>
             </div>
 
-            {/* Speech bubble label aligned with first button */}
-            <div className="relative mt-2 bg-white rounded-xl border border-gray-200 shadow-md px-4 py-2">
-              <span
-                className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-white drop-shadow-[0_0_1px_rgba(0,0,0,0.2)]"
-                aria-hidden
-              />
-              <div className="flex items-baseline gap-3">
-                <span className="text-sm font-medium text-gray-900">
-                  Online Drivers
-                </span>
-                <span className="text-sm font-bold text-gray-900">925</span>
-              </div>
-            </div>
           </div>
 
           {/* Zoom controls – bottom right (only when map is active, mapbox adds its own; we add custom for placeholder) */}

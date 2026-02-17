@@ -48,7 +48,7 @@ const MostSellingArea = ({ data, onViewAll }) => {
         <h2 className="text-base font-semibold text-gray-800">Most Selling Area</h2>
         <button
           onClick={onViewAll}
-          className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
+          className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center cursor-pointer"
         >
           View All
         </button>

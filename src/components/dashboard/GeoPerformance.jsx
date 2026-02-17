@@ -4,7 +4,7 @@ import axios from "axios";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-const GeoPerformance = ({ defaultQuery = "" }) => {
+const GeoPerformance = ({ defaultQuery = "", onViewAll }) => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
 
@@ -168,8 +168,8 @@ const GeoPerformance = ({ defaultQuery = "" }) => {
             <div className="flex items-start justify-between mb-4">
                 <h2 className="text-base font-semibold text-gray-800">GEO Performance</h2>
                 <button
-                    onClick={() => console.log("View All GEO Performance")}
-                    className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 rounded-2xl items-center justify-center"
+                    onClick={onViewAll}
+                    className="text-[var(--color-primary)] hover:text-green-600 text-xs font-semibold bg-[#D4FFDA] py-1.5 px-4 cursor-pointer rounded-2xl items-center justify-center"
                 >
                     View All
                 </button>

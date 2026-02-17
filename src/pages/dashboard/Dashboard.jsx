@@ -11,6 +11,8 @@ import MostSellingArea from "../../components/dashboard/MostSellingArea";
 import TopSellingProducts from "../../components/dashboard/TopSellingProducts";
 import DriverPerformance from "../../components/dashboard/DriverPerformance";
 import NewClients from "../../components/dashboard/NewClients";
+import { useNavigate } from "react-router-dom";
+
 
 const Dashboard = () => {
   const user = {
@@ -19,7 +21,7 @@ const Dashboard = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [dateRange, setDateRange] = useState({ start: null, end: null });
-
+  const navigate = useNavigate();
   // Top stat cards data
   const topStats = [
     {
@@ -249,9 +251,25 @@ const Dashboard = () => {
 
   // Handler functions for "View All" buttons
   const handleViewAll = (section) => {
-    console.log(`View All clicked for: ${section}`);
-    // TODO: Navigate to respective pages when routing is set up
+    if (section === "Inventory") {
+      navigate("/inventory");
+    } else if (section === "Orders") {
+      navigate("/orders");
+    } else if (section === "DriverStatus") {
+      navigate("/staff/drivers");
+    } else if (section === "Deliveries") {
+      navigate("/tracking");
+    } else if (section === "GeoPerformance") {
+      navigate("/tracking");
+    } else if (section === "NewClients") {
+      navigate("/customers");
+    } else if (section === "TopSellingProducts") {
+      navigate("/inventory");
+    } else if (section === "DriverPerformance") {
+      navigate("/staff/drivers");
+    }
   };
+
 
   return (
     <div className="p-4 md:p-4 min-h-screen">
@@ -299,7 +317,7 @@ const Dashboard = () => {
       <div className="mb-4">
         <DashboardAverageOrders
           data={averageOrdersData}
-          onViewAll={() => handleViewAll("Average Orders")}
+          onViewAll={() => handleViewAll("AverageOrders")}
         />
       </div>
 
@@ -308,7 +326,7 @@ const Dashboard = () => {
         <div className="lg:col-span-2">
           <DashboardDriverStatus
             data={driverStatusData}
-            onViewAll={() => handleViewAll("Driver Status")}
+            onViewAll={() => handleViewAll("DriverStatus")}
           />
         </div>
         <DashboardDeliveries
@@ -319,10 +337,10 @@ const Dashboard = () => {
 
       {/* GEO Performance and Most Selling Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 items-start">
-        <GeoPerformance />
+        <GeoPerformance onViewAll={() => handleViewAll("GeoPerformance")} />
         <MostSellingArea
           data={mostSellingAreaData}
-          onViewAll={() => handleViewAll("Most Selling Area")}
+          onViewAll={() => handleViewAll("MostSellingArea")}
         />
       </div>
 
@@ -330,15 +348,15 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
         <TopSellingProducts
           data={topSellingProductsData}
-          onViewAll={() => handleViewAll("Top Selling Products")}
+          onViewAll={() => handleViewAll("TopSellingProducts")}
         />
         <DriverPerformance
           data={driverPerformanceData}
-          onViewAll={() => handleViewAll("Driver Performance")}
+          onViewAll={() => handleViewAll("DriverPerformance")}
         />
         <NewClients
           data={newClientsData}
-          onViewAll={() => handleViewAll("New Clients")}
+          onViewAll={() => handleViewAll("NewClients")}
         />
       </div>
     </div>

@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import DatePickerMap from "../../components/DatePickerMap";
 import InventorySummaryCard from "../../components/inventory/InventorySummaryCard";
+import inventoryImg1 from "../../assets/images/inventory-icon-1.webp";
+import inventoryImg2 from "../../assets/images/inventory-icon-2.webp";
+import inventoryImg3 from "../../assets/images/inventory-icon-3.webp";
 
 const SUMMARY = [
   {
@@ -25,18 +28,21 @@ const SUMMARY = [
     count: 210,
     bgLight: "bg-[#D4FFDA]",
     textColor: "text-[var(--color-primary)]",
+    image: inventoryImg1
   },
   {
     label: "Low Stock",
     count: 10,
     bgLight: "bg-[#FFF5E5]",
     textColor: "text-[#FF9800]",
+    image: inventoryImg2
   },
   {
     label: "Out of Stock",
     count: 25,
     bgLight: "bg-[#FEECEB]",
     textColor: "text-[#F44336]",
+    image: inventoryImg3
   },
 ];
 
@@ -160,9 +166,9 @@ const getInventoryColumns = (onView, onDelete) => [
 const INVENTORY_DATA = [
   {
     id: "1",
-    product: "Willo Wonderful Watermelon",
-    category: "Edible",
-    subcategory: "Gummies",
+    product: "Backwoods Honey",
+    category: "Accessory",
+    subcategory: "Blunt Wrap",
     status: "Active",
     cost: "$9.25",
     salePrice: "$16.99",
@@ -170,13 +176,13 @@ const INVENTORY_DATA = [
     totalStock: "200 Grams In-Stock",
     soldAmount: "$1925.52",
     soldQty: "150 Grams",
-    reorder: "20",
+    reorder: "2",
   },
   {
     id: "2",
-    product: "Willo Wonderful Watermelon",
-    category: "Edible",
-    subcategory: "Gummies",
+    product: "Backwoods Banana",
+    category: "Accessory",
+    subcategory: "Blunt Wrap",
     status: "Active",
     cost: "$9.25",
     salePrice: "$16.99",
@@ -184,13 +190,13 @@ const INVENTORY_DATA = [
     totalStock: "200 Grams In-Stock",
     soldAmount: "$1925.52",
     soldQty: "150 Grams",
-    reorder: "20",
+    reorder: "2",
   },
   {
     id: "3",
-    product: "Willo Wonderful Watermelon",
-    category: "Edible",
-    subcategory: "Gummies",
+    product: "Raw King Slim Rolling Paper",
+    category: "Accessory",
+    subcategory: "Rolling Paper",
     status: "Active",
     cost: "$9.25",
     salePrice: "$16.99",
@@ -198,13 +204,13 @@ const INVENTORY_DATA = [
     totalStock: "200 Grams In-Stock",
     soldAmount: "$1925.52",
     soldQty: "150 Grams",
-    reorder: "20",
+    reorder: "2",
   },
   {
     id: "4",
-    product: "Willo Wonderful Watermelon",
-    category: "Edible",
-    subcategory: "Gummies",
+    product: "Backwoods Honey Berry",
+    category: "Accessory",
+    subcategory: "Blunt Wrap",
     status: "Active",
     cost: "$9.25",
     salePrice: "$16.99",
@@ -216,7 +222,63 @@ const INVENTORY_DATA = [
   },
   {
     id: "5",
-    product: "Willo Wonderful Watermelon",
+    product: "Raw Single Wide Rolling Paper",
+    category: "Accessory",
+    subcategory: "Rolling Paper",
+    status: "Active",
+    cost: "$9.25",
+    salePrice: "$16.99",
+    updated: "2025-07-08 06:55:03",
+    totalStock: "0 Grams Out of Stock",
+    soldAmount: "$0.00",
+    soldQty: "0 Grams",
+    reorder: "20",
+  },
+  {
+    id: "6",
+    product: "Backwoods Honey Bourbon	",
+    category: "Accessory",
+    subcategory: "Blunt Wrap",
+    status: "Active",
+    cost: "$9.25",
+    salePrice: "$16.99",
+    updated: "2025-07-08 06:55:03",
+    totalStock: "0 Grams Out of Stock",
+    soldAmount: "$0.00",
+    soldQty: "0 Grams",
+    reorder: "20",
+  },
+  {
+    id: "7",
+    product: "Elements Distillate Girl Scout Cookies",
+    category: "Concentrate",
+    subcategory: "Distillate",
+    status: "Active",
+    cost: "$9.25",
+    salePrice: "$16.99",
+    updated: "2025-07-08 06:55:03",
+    totalStock: "0 Grams Out of Stock",
+    soldAmount: "$0.00",
+    soldQty: "0 Grams",
+    reorder: "20",
+  },
+  {
+    id: "8",
+    product: "Willo Wild Sherbet (Shatter)",
+    category: "Concentrate",
+    subcategory: "Shatter",
+    status: "Active",
+    cost: "$9.25",
+    salePrice: "$16.99",
+    updated: "2025-07-08 06:55:03",
+    totalStock: "0 Grams Out of Stock",
+    soldAmount: "$0.00",
+    soldQty: "0 Grams",
+    reorder: "2",
+  },
+  {
+    id: "9",
+    product: "Willo Tropical Punch",
     category: "Edible",
     subcategory: "Gummies",
     status: "Active",
@@ -226,7 +288,21 @@ const INVENTORY_DATA = [
     totalStock: "0 Grams Out of Stock",
     soldAmount: "$0.00",
     soldQty: "0 Grams",
-    reorder: "20",
+    reorder: "2",
+  },
+  {
+    id: "10",
+    product: "Euphoria Extractions Shatter Chews",
+    category: "Edible",
+    subcategory: "Gummies",
+    status: "Active",
+    cost: "$9.25",
+    salePrice: "$16.99",
+    updated: "2025-07-08 06:55:03",
+    totalStock: "0 Grams Out of Stock",
+    soldAmount: "$0.00",
+    soldQty: "0 Grams",
+    reorder: "2",
   },
 ];
 
@@ -309,6 +385,7 @@ const Inventory = () => {
             count={item.count}
             textColor={item.textColor}
             bgLight={item.bgLight}
+            image={item.image}
           />
         ))}
       </div>
