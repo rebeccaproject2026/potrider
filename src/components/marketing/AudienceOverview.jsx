@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Chart from "react-apexcharts";
 import { AUDIENCE_TABS, GENDER_DATA, AGE_RANGE_DATA } from "../../data/marketingData";
-import { genderOuterDonutOptions, genderOuterDonutSeries, genderInnerDonutOptions, genderInnerDonutSeries } from "../../config/marketingChartConfig";
+import { genderFemaleDonutOptions, genderFemaleDonutSeries, genderUnknownDonutOptions, genderUnknownDonutSeries, genderMaleDonutOptions, genderMaleDonutSeries, genderAnotherIdentityDonutOptions, genderAnotherIdentityDonutSeries } from "../../config/marketingChartConfig";
 
 const AudienceOverview = ({ showLabels = true, title = "Audience Overview", customLabels = null }) => {
   const [audienceTab, setAudienceTab] = useState("this-week");
@@ -62,27 +62,47 @@ const AudienceOverview = ({ showLabels = true, title = "Audience Overview", cust
             )}
           </div>
 
-          {/* Donut Chart - Two Circles */}
+          {/* Donut Chart - Four Separate Circles */}
           <div className="flex items-center justify-between">
             <div className="w-40 h-40 relative">
-              {/* Outer Circle */}
-              <div className="absolute inset-0">
+              {/* Outer Circle - Female (Orange) */}
+              <div className="absolute inset-0 flex justify-center items-center">
                 <Chart
-                  options={genderOuterDonutOptions}
-                  series={genderOuterDonutSeries}
+                  options={genderFemaleDonutOptions}
+                  series={genderFemaleDonutSeries}
                   type="donut"
                   width="160"
                   height="160"
                 />
               </div>
-              {/* Inner Circle */}
+              {/* Outer Circle - Unknown (Black) - Thinner */}
+              <div className="absolute inset-0 flex justify-center items-center">
+                <Chart
+                  options={genderUnknownDonutOptions}
+                  series={genderUnknownDonutSeries}
+                  type="donut"
+                  width="155"
+                  height="155"
+                />
+              </div>
+              {/* Inner Circle - Male (Green) */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <Chart
-                  options={genderInnerDonutOptions}
-                  series={genderInnerDonutSeries}
+                  options={genderMaleDonutOptions}
+                  series={genderMaleDonutSeries}
                   type="donut"
-                  width="100"
-                  height="100"
+                  width="120"
+                  height="120"
+                />
+              </div>
+              {/* Inner Circle - Another Identity (Light Peach) */}
+              <div className="absolute inset-0 flex justify-center items-center">
+                <Chart
+                  options={genderAnotherIdentityDonutOptions}
+                  series={genderAnotherIdentityDonutSeries}
+                  type="donut"
+                  width="115"
+                  height="115"
                 />
               </div>
             </div>
