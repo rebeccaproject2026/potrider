@@ -1,29 +1,18 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-import dashboardIocon from "../assets/images/dashboard.svg";
-import ordersIocon from "../assets/images/orders.svg";
-import trackingIocon from "../assets/images/tracking.svg";
-import inventoryIocon from "../assets/images/inventory.svg";
-import financeIocon from "../assets/images/finance.svg";
-import customersIocon from "../assets/images/customers.svg";
-import aiagentIocon from "../assets/images/aiagent.svg";
-import marketingIocon from "../assets/images/marketing.svg";
-import staffIocon from "../assets/images/staff.svg";
-import supportIocon from "../assets/images/support.svg";
-import settingIocon from "../assets/images/settings.svg";
 import portriderLogo from "../assets/images/potrider-logo.svg";
+import { Icon } from "@iconify/react";
 
 const navItems = [
-  { to: "/", label: "Dashboard", Icon: dashboardIocon },
-  { to: "/orders", label: "Orders", Icon: ordersIocon },
-  { to: "/tracking", label: "Tracking", Icon: trackingIocon },
-  { to: "/inventory", label: "Inventory", Icon: inventoryIocon },
-  { to: "/finances", label: "Finances", Icon: financeIocon },
-  { to: "/customers", label: "Customers", Icon: customersIocon },
-  { to: "/ai-agent", label: "AI Agent", Icon: aiagentIocon },
-  { to: "/marketing", label: "Marketing", Icon: marketingIocon },
+  { to: "/", label: "Dashboard", Icon: <Icon icon="solar:widget-2-outline" width="24" height="24" /> },
+  { to: "/orders", label: "Orders", Icon: <Icon icon="solar:documents-linear" width="24" height="24" /> },
+  { to: "/tracking", label: "Tracking", Icon: <Icon icon="hugeicons:shipment-tracking" width="24" height="24" /> },
+  { to: "/inventory", label: "Inventory", Icon: <Icon icon="streamline-ultimate:drugs-cannabis" width="24" height="24" /> },
+  { to: "/finances", label: "Finances", Icon: <Icon icon="fluent:wallet-credit-card-16-regular" width="24" height="24" /> },
+  { to: "/customers", label: "Customers", Icon: <Icon icon="mynaui:users-group" width="24" height="24" /> },
+  { to: "/ai-agent", label: "AI Agent", Icon: <Icon icon="tabler:messages" width="24" height="24" /> },
+  { to: "/marketing", label: "Marketing", Icon: <Icon icon="tabler:speakerphone" width="24" height="24" /> },
 ];
 
 const Sidebar = ({ setSidebar }) => {
@@ -71,7 +60,7 @@ const Sidebar = ({ setSidebar }) => {
                 }`
               }
             >
-              <img src={Icon} className="w-5 h-5" alt={label} />
+              {Icon}
               {label}
             </NavLink>
           ))}
@@ -85,7 +74,7 @@ const Sidebar = ({ setSidebar }) => {
               }`}
           >
             <div className="flex items-center gap-3">
-              <img src={staffIocon} className="w-5 h-5" alt="Staff" />
+              <Icon icon="fluent:people-team-20-regular" width="24" height="24" />
               Staff
             </div>
             {staffOpen ? (
@@ -149,7 +138,7 @@ const Sidebar = ({ setSidebar }) => {
               }`
             }
           >
-            <img src={supportIocon} className="w-5 h-5" alt="Support" />
+           <Icon icon="hugeicons:customer-support" width="24" height="24" />
             Support
           </NavLink>
 
@@ -164,7 +153,7 @@ const Sidebar = ({ setSidebar }) => {
               }`
             }
           >
-            <img src={settingIocon} className="w-5 h-5" alt="Setting" />
+           <Icon icon="lucide:settings" width="24" height="24" />
             Setting
           </NavLink>
         </div>
