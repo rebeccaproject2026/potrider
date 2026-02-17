@@ -393,7 +393,7 @@ const Inventory = () => {
       <div className="min-w-0 bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
         <div className="p-3 border-b border-gray-200">
           <div className="flex items-center gap-2">
-            <div className="w-full">
+            <div className="w-full relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
