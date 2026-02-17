@@ -502,15 +502,70 @@ export const campaignStatsChartOptions = {
   },
 };
 
-// Gender Donut Chart Configuration - Outer Circle (Female & Unknown)
-export const genderOuterDonutOptions = {
+// Gender Donut Chart Configuration - Outer Circle Female (Orange)
+export const genderFemaleDonutOptions = {
   chart: {
     type: "donut",
   },
   plotOptions: {
     pie: {
       donut: {
-        size: "75%",
+        size: "90%",
+        labels: {
+          show: false,
+        },
+      },
+      expandOnClick: false,
+      borderRadius: 100,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  colors: ["#FF9800", "transparent"],
+  labels: ["Female", "Other"],
+  legend: {
+    show: false,
+  },
+  stroke: {
+    show: true,
+    width: 0,
+    colors: ["#ffffff"],
+    lineCap: "round",
+  },
+  states: {
+    hover: {
+      filter: {
+        type: "none",
+      },
+    },
+    active: {
+      filter: {
+        type: "none",
+      },
+    },
+  },
+  tooltip: {
+    enabled: true,
+    y: {
+      formatter: function (val) {
+        return val + "%";
+      },
+    },
+  },
+};
+
+export const genderFemaleDonutSeries = [80, 20];
+
+// Gender Donut Chart Configuration - Outer Circle Unknown (Black) - Thinner
+export const genderUnknownDonutOptions = {
+  chart: {
+    type: "donut",
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: "96%",
         labels: {
           show: false,
         },
@@ -521,14 +576,68 @@ export const genderOuterDonutOptions = {
   dataLabels: {
     enabled: false,
   },
-  colors: ["#FF9800", "#212121"],
-  labels: ["Female", "Unknown"],
+  colors: ["transparent", "#212121"],
+  labels: ["Other", "Unknown"],
   legend: {
     show: false,
   },
   stroke: {
     show: true,
-    width: 8,
+    width: 0,
+    colors: ["#ffffff"],
+    lineCap: "round",
+  },
+  states: {
+    hover: {
+      filter: {
+        type: "none",
+      },
+    },
+    active: {
+      filter: {
+        type: "none",
+      },
+    },
+  },
+  tooltip: {
+    enabled: true,
+    y: {
+      formatter: function (val) {
+        return val + "%";
+      },
+    },
+  },
+};
+
+export const genderUnknownDonutSeries = [80, 20];
+
+// Gender Donut Chart Configuration - Inner Circle Male (Green)
+export const genderMaleDonutOptions = {
+  chart: {
+    type: "donut",
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: "88%",
+        labels: {
+          show: false,
+        },
+      },
+      expandOnClick: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  colors: ["#4CAF50", "transparent"],
+  labels: ["Male", "Other"],
+  legend: {
+    show: false,
+  },
+  stroke: {
+    show: true,
+    width: 0,
     colors: ["#ffffff"],
   },
   states: {
@@ -553,17 +662,17 @@ export const genderOuterDonutOptions = {
   },
 };
 
-export const genderOuterDonutSeries = [70.8, 20];
+export const genderMaleDonutSeries = [55, 45];
 
-// Gender Donut Chart Configuration - Inner Circle (Male & Another Identity)
-export const genderInnerDonutOptions = {
+// Gender Donut Chart Configuration - Inner Circle Another Identity (Light Peach)
+export const genderAnotherIdentityDonutOptions = {
   chart: {
     type: "donut",
   },
   plotOptions: {
     pie: {
       donut: {
-        size: "75%",
+        size: "95%",
         labels: {
           show: false,
         },
@@ -574,14 +683,14 @@ export const genderInnerDonutOptions = {
   dataLabels: {
     enabled: false,
   },
-  colors: ["#4CAF50", "#FFE0B2"],
-  labels: ["Male", "Another Identity"],
+  colors: ["transparent", "#FFE0B2"],
+  labels: ["Other", "Another Identity"],
   legend: {
     show: false,
   },
   stroke: {
     show: true,
-    width: 2,
+    width: 0,
     colors: ["#ffffff"],
   },
   states: {
@@ -606,7 +715,7 @@ export const genderInnerDonutOptions = {
   },
 };
 
-export const genderInnerDonutSeries = [20.8, 10];
+export const genderAnotherIdentityDonutSeries = [55, 45];
 
 // Function to generate campaign stats chart series based on selected campaign
 export const getCampaignStatsChartSeries = (selectedCampaign) => [
