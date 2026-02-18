@@ -370,14 +370,14 @@ const Inventory = () => {
         <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} />
         <Link
           to="/inventory/add"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm hover:opacity-90 font-semibold text-sm"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-(--color-primary) text-white rounded-sm hover:opacity-90 font-semibold text-sm whitespace-nowrap"
         >
           <span className="text-lg leading-none">+</span>
           Add Inventory
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {SUMMARY.map((item) => (
           <InventorySummaryCard
             key={item.label}

@@ -85,7 +85,7 @@ const Finances = () => {
 
   return (
     <div className="flex flex-col gap-2 min-w-0 px-2.5 py-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
         <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} />
       </div>
 

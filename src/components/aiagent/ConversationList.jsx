@@ -12,7 +12,7 @@ const ConversationList = ({
   onSelect,
 }) => {
   return (
-    <div className="flex flex-col rounded-sm overflow-hidden min-w-0 w-full max-w-[320px] shrink-0 ">
+    <div className="flex flex-col rounded-sm overflow-hidden min-w-0 w-full sm:max-w-[320px] shrink-0 ">
       {/* Search Bar */}
       <div className="shrink-0 mb-2">
         <div className="flex items-center gap-1">

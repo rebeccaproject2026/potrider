@@ -446,20 +446,20 @@ const Order = () => {
 
 
   return (
-    <div className="min-w-0 max-w-full overflow-x-hidden px-2.5 py-3">
+    <div className="min-w-0 max-w-full overflow-x-hidden px-2.5 sm:px-2.5 md:px-2.5 py-3">
       {/* Header - fixed */}
-      <div className="shrink-0 flex flex-col md:flex-row md:items-center md:justify-between mb-2.5">
+      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2.5">
         <DatePickerMap
           defaultItem={2}
           onUpdate={handleDateUpdate}
         />
 
-        <div className="flex gap-4">
+        <div className="flex gap-2 sm:gap-4">
           <button
             onClick={() => navigate("/orders/create")}
-            className="flex items-center gap-1 px-2 py-2.5 cursor-pointer bg-(--color-primary) text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm"
+            className="flex items-center justify-center gap-1 px-3 py-2.5 cursor-pointer bg-(--color-primary) text-white rounded-sm hover:bg-green-600 transition-colors font-semibold text-sm whitespace-nowrap flex-1 sm:flex-none"
           >
-            <Plus /> Create Order
+            <Plus className="w-4 h-4" /> Create Order
           </button>
         </div>
       </div>
@@ -479,7 +479,7 @@ const Order = () => {
       {/* Delivery Section - fixed */}
       <div className="shrink-0 mb-2.5 min-w-0">
         <h2 className="text-sm font-semibold text-gray-800 mb-2 ml-1">Delivery</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 min-w-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 min-w-0">
           {Object.values(deliveryOrders).map((item, idx) => (
             <OrderSummaryCard
               key={idx}
@@ -496,7 +496,7 @@ const Order = () => {
           Shipping
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 min-w-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 min-w-0">
           {Object.values({
             0: ordersSummary.shipping,
             1: ordersSummary.processing,

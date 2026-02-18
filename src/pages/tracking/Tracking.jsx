@@ -633,7 +633,7 @@ const Tracking = () => {
       <h1 className="text-lg font-semibold text-gray-900 sr-only">Tracking</h1>
 
       {/* Global filters – 6 dropdowns */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         <Select
           value={period}
           onChange={(e) => setPeriod(e.target.value)}
@@ -732,7 +732,7 @@ const Tracking = () => {
         {/* Map container with overlays */}
         <div className="relative flex-1 min-h-130">
           {/* Top Control Bar: Map Toggle | Status Cards | Delivery Toggle */}
-          <div className="absolute top-1 left-4 right-4 z-10 flex items-start justify-between pointer-events-none">
+          <div className="absolute top-1 left-2 sm:left-4 right-2 sm:right-4 z-10 flex flex-col sm:flex-row items-start justify-between gap-2 pointer-events-none">
 
             {/* Left: Map/Satellite */}
             <div className="flex items-center rounded bg-white shadow-sm border border-gray-200 pointer-events-auto h-9 overflow-hidden">
@@ -756,7 +756,7 @@ const Tracking = () => {
             </div>
 
             {/* Right Group: Status Counts + Delivery/Shipping */}
-            <div className="flex items-center gap-0 min-w-0 justify-end">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 min-w-0 w-full sm:w-auto justify-end">
               {/* Status Counts */}
               <div className="flex items-center gap-1 pointer-events-auto overflow-x-auto hide-scrollbar px-2 py-1">
                 {STATUS_FILTERS.map((filter) => (
@@ -860,10 +860,10 @@ const Tracking = () => {
           </div>
 
           {/* Left bottom: stacked buttons + speech-bubble label (matches reference) */}
-          <div className="absolute bottom-4 left-3 z-10 flex items-start gap-3">
+          <div className="absolute bottom-4 left-2 sm:left-3 z-10 flex items-start gap-2 sm:gap-3">
             {/* Left stack */}
             {/* Left stack of buttons with labels - Modified for dynamic labels */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2 sm:gap-3">
 
               {/* Online drivers row */}
               <div className="flex items-center gap-3">
@@ -982,7 +982,7 @@ const Tracking = () => {
       <div className="min-w-0 shrink-0 bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
         {/* Single row: Search | All Order Status | All/Online/Offline tabs */}
         <div className="shrink-0 p-3 min-w-0">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             <div className="relative min-w-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.75 h-4 text-gray-400 pointer-events-none" />
               <input

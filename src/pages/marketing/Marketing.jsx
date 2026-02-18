@@ -42,10 +42,10 @@ const Marketing = () => {
   return (
     <div className="flex flex-col gap-2 px-2.5 py-3">
       {/* Tabs */}
-      <div className="flex items-center justify-between bg-white">
+      <div className="flex items-center justify-between bg-white overflow-x-auto">
         <button
           onClick={() => setActiveTab("email-campaign")}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative cursor-pointer w-full ${
+          className={`px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium transition-colors relative cursor-pointer w-full whitespace-nowrap ${
             activeTab === "email-campaign"
               ? "text-[#109F22]"
               : "text-[#464646] hover:text-gray-900"
@@ -58,7 +58,7 @@ const Marketing = () => {
         </button>
         <button
           onClick={() => setActiveTab("sms-campaign")}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative cursor-pointer w-full ${
+          className={`px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium transition-colors relative cursor-pointer w-full whitespace-nowrap ${
             activeTab === "sms-campaign"
               ? "text-[#109F22]"
               : "text-[#464646] hover:text-gray-900"
@@ -71,7 +71,7 @@ const Marketing = () => {
         </button>
         <button
           onClick={() => setActiveTab("follow-up")}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative cursor-pointer w-full ${
+          className={`px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium transition-colors relative cursor-pointer w-full whitespace-nowrap ${
             activeTab === "follow-up"
               ? "text-[#109F22]"
               : "text-[#464646] hover:text-gray-900"
@@ -84,7 +84,7 @@ const Marketing = () => {
         </button>
         <button
           onClick={() => setActiveTab("coupons")}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative cursor-pointer w-full ${
+          className={`px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium transition-colors relative cursor-pointer w-full whitespace-nowrap ${
             activeTab === "coupons"
               ? "text-[#109F22]"
               : "text-[#464646] hover:text-gray-900"
@@ -97,7 +97,7 @@ const Marketing = () => {
         </button>
         <button
           onClick={() => setActiveTab("featured-ads")}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative cursor-pointer w-full ${
+          className={`px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium transition-colors relative cursor-pointer w-full whitespace-nowrap ${
             activeTab === "featured-ads"
               ? "text-[#109F22]"
               : "text-[#464646] hover:text-gray-900"
@@ -113,7 +113,7 @@ const Marketing = () => {
       {/* Tab Content */}
       <div className="">
         {activeTab === "email-campaign" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <DatePickerMap
                 defaultItem={2}
@@ -122,7 +122,7 @@ const Marketing = () => {
               />
             </div>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {EMAIL_STATS_1.map((stat) => (
                 <MarketingStatsCard
                   key={stat.id}
@@ -138,7 +138,7 @@ const Marketing = () => {
 
             {/* Campaign Statistics Section */}
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
                   <div className="flex items-center justify-between">
@@ -212,7 +212,7 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "sms-campaign" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <DatePickerMap
                 defaultItem={2}
@@ -220,7 +220,7 @@ const Marketing = () => {
                 className="h-10 sm:*:w-76"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {EMAIL_STATS_2.map((stat) => (
                 <MarketingStatsCard
                   key={stat.id}
@@ -235,10 +235,10 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
@@ -308,7 +308,7 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "follow-up" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <DatePickerMap
                 defaultItem={2}
@@ -316,7 +316,7 @@ const Marketing = () => {
                 className="h-10 sm:*:w-76"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {EMAIL_STATS_3.map((stat) => (
                 <MarketingStatsCard
                   key={stat.id}
@@ -331,10 +331,10 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Chart */}
                 <div className="bg-white pt-1.5 px-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between ">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
@@ -404,7 +404,7 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "coupons" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <DatePickerMap
                 defaultItem={2}
@@ -412,7 +412,7 @@ const Marketing = () => {
                 className="h-10 sm:*:w-76"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {EMAIL_STATS_4.map((stat) => (
                 <MarketingStatsCard
                   key={stat.id}
@@ -427,10 +427,10 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>
@@ -501,7 +501,7 @@ const Marketing = () => {
           </div>
         )}
         {activeTab === "featured-ads" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <DatePickerMap
                 defaultItem={2}
@@ -509,7 +509,7 @@ const Marketing = () => {
                 className="h-10 sm:*:w-76"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {EMAIL_STATS_5.map((stat) => (
                 <MarketingStatsCard
                   key={stat.id}
@@ -524,10 +524,10 @@ const Marketing = () => {
             </div>
 
             <div className="">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Chart */}
                 <div className="bg-white p-1.5 rounded-sm shadow">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                     <h3 className="text-base font-semibold text-gray-900">
                       Campaign Statistics
                     </h3>

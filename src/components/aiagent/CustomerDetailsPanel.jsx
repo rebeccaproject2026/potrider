@@ -35,7 +35,7 @@ const CustomerDetailsPanel = ({ customer, onViewFullProfile }) => {
   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51552.0788!2d-115.1767!3d36.1146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c8d3e57b38f81d%3A0x1!2sLas%20Vegas%2C%20NV!5e0!3m2!1sen!2sus!4v1234567890";
 
   return (
-    <div className="flex rounded-sm overflow-hidden bg-white min-w-0 w-full max-w-[400px] shrink-0 shadow-sm">
+    <div className="flex rounded-sm overflow-hidden bg-white min-w-0 w-full sm:max-w-[400px] shrink-0 shadow-sm">
       {/* Narrow left column: icon buttons stacked */}
       <div className="flex flex-col gap-2 p-2 border-r border-gray-200 shrink-0 bg-white">
         <button

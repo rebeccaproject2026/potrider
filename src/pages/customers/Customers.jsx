@@ -412,11 +412,11 @@ const Customers = () => {
   return (
     <div className="flex flex-col gap-2 min-w-0 px-2.5 py-3">
       {/* Header: This Month (left) + Add Customer (right) */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
         <DatePickerMap defaultItem={2} onUpdate={onDateUpdate} />
         <Link
           to="/customers/add"
-          className="inline-flex items-center gap-2 px-3 py-2.5 bg-(--color-primary) text-white rounded-sm shadow-sm hover:opacity-90 font-semibold text-sm"
+          className="inline-flex items-center justify-center gap-2 px-3 py-2.5 bg-(--color-primary) text-white rounded-sm shadow-sm hover:opacity-90 font-semibold text-sm whitespace-nowrap"
         >
           <Plus className="w-5 h-5" />
           Add Customer
@@ -424,7 +424,7 @@ const Customers = () => {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {SUMMARY_CARDS.map((card) => (
           <CustomerSummaryCard
             key={card.title}
