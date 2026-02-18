@@ -14,10 +14,10 @@ const NotificationItem = ({ item, onClick }) => {
                 }`}
             onClick={onClick}
         >
-            <div className="mr-3 w-[42px] h-[42px] shrink-0">
+            <div className="mr-2 w-[42px] h-[38px] shrink-0">
                 {/* Using a placeholder if image fails, or generic icon */}
                 <img
-                    src={`/images/${icon}`}
+                    src={icon}
                     alt="icon"
                     className="w-full h-full object-cover rounded"
                     onError={(e) => {

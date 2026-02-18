@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, ChevronRight } from 'lucide-react';
 import NotificationItem from './NotificationItem';
+import deliveryIcon from '../../assets/images/delivered-icon-2.png';
+import newOrder from '../../assets/images/new-order-icon-1.png';
+import supportIcon from '../../assets/images/potrider-logo.svg';
 
 const NotificationDropdown = ({ isOpen, onClose }) => {
     const [activeTab, setActiveTab] = useState(0); // 0: General, 1: Messages
@@ -30,15 +33,15 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
             title: 'Order #12345 Delivered',
             description: 'Your order has been successfully delivered by Driver John.',
             createdAt: '2023-10-25T10:00:00Z',
-            icon: 'delivery-icon.png', // Placeholder path
+            icon: deliveryIcon, // Placeholder path
             hasRead: false,
         },
         {
             _id: '2',
-            title: 'New Message from Support',
-            description: 'You have a new message regarding your inquiry.',
+            title: 'New order',
+            description: 'You have a new order for product XYZ.',
             createdAt: '2023-10-24T14:30:00Z',
-            icon: 'support-icon.png',
+            icon: newOrder,
             hasRead: true,
         },
         {
@@ -46,7 +49,7 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
             title: 'System Update',
             description: 'System maintenance scheduled for tonight at 2 AM.',
             createdAt: '2023-10-23T09:15:00Z',
-            icon: 'system-icon.png',
+            icon: supportIcon,
             hasRead: true,
         }
     ];
